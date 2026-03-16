@@ -1,0 +1,18 @@
+{
+  "facts": {
+    "user_name": {
+      "value": "solo",
+      "confidence": 0.3,
+      "ts": 1771284000.2934344,
+      "updates": 1
+    },
+    "user_profession": {
+      "value": "solo yo",
+      "confidence": 0.3,
+      "ts": 1771284000.294341,
+      "updates": 1
+    }
+  },
+  "preferences": {},
+  "query_clusters": {}
+}

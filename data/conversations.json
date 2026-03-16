@@ -1,0 +1,970 @@
+{
+  "successful_patterns": [
+    {
+      "message_length": 3,
+      "response_length": 7,
+      "message_type": "question",
+      "response_style": "concise",
+      "timestamp": 1771264187.0084014
+    },
+    {
+      "message_length": 5,
+      "response_length": 7,
+      "message_type": "question",
+      "response_style": "concise",
+      "timestamp": 1771264190.8870795
+    },
+    {
+      "message_length": 7,
+      "response_length": 7,
+      "message_type": "question",
+      "response_style": "concise",
+      "timestamp": 1771264195.3087814
+    },
+    {
+      "message_length": 3,
+      "response_length": 3,
+      "message_type": "question",
+      "response_style": "concise",
+      "timestamp": 1771264715.5349169
+    },
+    {
+      "message_length": 5,
+      "response_length": 11,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771264718.3140848
+    },
+    {
+      "message_length": 7,
+      "response_length": 15,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771264728.1857083
+    },
+    {
+      "message_length": 7,
+      "response_length": 16,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771264733.031975
+    },
+    {
+      "message_length": 2,
+      "response_length": 1,
+      "message_type": "statement",
+      "response_style": "concise",
+      "timestamp": 1771264749.6067672
+    },
+    {
+      "message_length": 3,
+      "response_length": 11,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771264758.3098345
+    },
+    {
+      "message_length": 2,
+      "response_length": 30,
+      "message_type": "question",
+      "response_style": "detailed",
+      "timestamp": 1771264773.3758643
+    },
+    {
+      "message_length": 5,
+      "response_length": 11,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771264806.9699082
+    },
+    {
+      "message_length": 6,
+      "response_length": 7,
+      "message_type": "search_request",
+      "response_style": "balanced",
+      "timestamp": 1771264829.8587515
+    },
+    {
+      "message_length": 6,
+      "response_length": 7,
+      "message_type": "search_request",
+      "response_style": "balanced",
+      "timestamp": 1771264841.7452843
+    },
+    {
+      "message_length": 3,
+      "response_length": 17,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771265686.1817656
+    },
+    {
+      "message_length": 5,
+      "response_length": 7,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771265699.9735978
+    },
+    {
+      "message_length": 1,
+      "response_length": 15,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771265716.7791216
+    },
+    {
+      "message_length": 7,
+      "response_length": 16,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771265727.4464266
+    },
+    {
+      "message_length": 7,
+      "response_length": 15,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771265737.7827225
+    },
+    {
+      "message_length": 6,
+      "response_length": 7,
+      "message_type": "search_request",
+      "response_style": "balanced",
+      "timestamp": 1771265752.7080135
+    },
+    {
+      "message_length": 1,
+      "response_length": 15,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771265756.2273848
+    },
+    {
+      "message_length": 3,
+      "response_length": 17,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771266601.9422162
+    },
+    {
+      "message_length": 7,
+      "response_length": 16,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771266608.0198164
+    },
+    {
+      "message_length": 7,
+      "response_length": 15,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771266611.6674414
+    },
+    {
+      "message_length": 5,
+      "response_length": 17,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771266626.0961404
+    },
+    {
+      "message_length": 6,
+      "response_length": 21,
+      "message_type": "search_request",
+      "response_style": "balanced",
+      "timestamp": 1771266638.7303505
+    },
+    {
+      "message_length": 3,
+      "response_length": 17,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771267014.962253
+    },
+    {
+      "message_length": 5,
+      "response_length": 17,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771267021.4722178
+    },
+    {
+      "message_length": 6,
+      "response_length": 21,
+      "message_type": "search_request",
+      "response_style": "balanced",
+      "timestamp": 1771267032.9784749
+    },
+    {
+      "message_length": 7,
+      "response_length": 16,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771267041.3270032
+    },
+    {
+      "message_length": 7,
+      "response_length": 15,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771267047.441821
+    },
+    {
+      "message_length": 3,
+      "response_length": 7,
+      "message_type": "statement",
+      "response_style": "balanced",
+      "timestamp": 1771267067.3441968
+    },
+    {
+      "message_length": 3,
+      "response_length": 16,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771267560.292827
+    },
+    {
+      "message_length": 7,
+      "response_length": 16,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771267564.878511
+    },
+    {
+      "message_length": 7,
+      "response_length": 15,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771267571.9509454
+    },
+    {
+      "message_length": 5,
+      "response_length": 30,
+      "message_type": "question",
+      "response_style": "detailed",
+      "timestamp": 1771267579.4135554
+    },
+    {
+      "message_length": 6,
+      "response_length": 21,
+      "message_type": "search_request",
+      "response_style": "balanced",
+      "timestamp": 1771267609.371149
+    },
+    {
+      "message_length": 7,
+      "response_length": 15,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771267633.924973
+    },
+    {
+      "message_length": 3,
+      "response_length": 23,
+      "message_type": "statement",
+      "response_style": "balanced",
+      "timestamp": 1771267859.9242976
+    },
+    {
+      "message_length": 6,
+      "response_length": 10,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771267962.7193031
+    },
+    {
+      "message_length": 8,
+      "response_length": 10,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771268019.8718123
+    },
+    {
+      "message_length": 1,
+      "response_length": 9,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771268031.1424692
+    },
+    {
+      "message_length": 1,
+      "response_length": 9,
+      "message_type": "statement",
+      "response_style": "balanced",
+      "timestamp": 1771268040.8974864
+    },
+    {
+      "message_length": 6,
+      "response_length": 10,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771268061.2721426
+    },
+    {
+      "message_length": 5,
+      "response_length": 30,
+      "message_type": "question",
+      "response_style": "detailed",
+      "timestamp": 1771268289.4002151
+    },
+    {
+      "message_length": 7,
+      "response_length": 16,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771268304.2030027
+    },
+    {
+      "message_length": 3,
+      "response_length": 17,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771268309.7123652
+    },
+    {
+      "message_length": 2,
+      "response_length": 30,
+      "message_type": "question",
+      "response_style": "detailed",
+      "timestamp": 1771268320.4824994
+    },
+    {
+      "message_length": 2,
+      "response_length": 30,
+      "message_type": "question",
+      "response_style": "detailed",
+      "timestamp": 1771268468.5143435
+    },
+    {
+      "message_length": 2,
+      "response_length": 30,
+      "message_type": "question",
+      "response_style": "detailed",
+      "timestamp": 1771268470.042649
+    },
+    {
+      "message_length": 2,
+      "response_length": 30,
+      "message_type": "question",
+      "response_style": "detailed",
+      "timestamp": 1771268471.5721972
+    },
+    {
+      "message_length": 6,
+      "response_length": 10,
+      "message_type": "statement",
+      "response_style": "balanced",
+      "timestamp": 1771268499.7787142
+    },
+    {
+      "message_length": 3,
+      "response_length": 17,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771270420.19858
+    },
+    {
+      "message_length": 7,
+      "response_length": 16,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771270425.1552777
+    },
+    {
+      "message_length": 2,
+      "response_length": 30,
+      "message_type": "question",
+      "response_style": "detailed",
+      "timestamp": 1771270432.7482588
+    },
+    {
+      "message_length": 6,
+      "response_length": 66,
+      "message_type": "search_request",
+      "response_style": "detailed",
+      "timestamp": 1771270447.9814227
+    },
+    {
+      "message_length": 6,
+      "response_length": 66,
+      "message_type": "search_request",
+      "response_style": "detailed",
+      "timestamp": 1771270473.6730194
+    },
+    {
+      "message_length": 6,
+      "response_length": 21,
+      "message_type": "search_request",
+      "response_style": "balanced",
+      "timestamp": 1771270474.271678
+    },
+    {
+      "message_length": 7,
+      "response_length": 16,
+      "message_type": "question",
+      "response_style": "balanced",
+      "timestamp": 1771270485.5637753
+    },
+    {
+      "message_length": 5,
+      "response_length": 30,
+      "message_type": "question",
+      "response_style": "detailed",
+      "timestamp": 1771270491.101339
+    },
+    {
+      "message_length": 5,
+      "response_length": 30,
+      "message_type": "question",
+      "response_style": "detailed",
+      "timestamp": 1771270496.917035
+    },
+    {
+      "user_length": 3,
+      "response_length": 16,
+      "has_question": true,
+      "has_greeting": true,
+      "feedback": 0.6,
+      "ts": 1771273045.6893196
+    },
+    {
+      "user_length": 7,
+      "response_length": 15,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771273051.8484015
+    },
+    {
+      "user_length": 7,
+      "response_length": 15,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771273069.2477453
+    },
+    {
+      "user_length": 5,
+      "response_length": 17,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771273079.8619223
+    },
+    {
+      "user_length": 7,
+      "response_length": 15,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771273457.8663607
+    },
+    {
+      "user_length": 7,
+      "response_length": 15,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771273771.2623806
+    },
+    {
+      "user_length": 7,
+      "response_length": 15,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771274109.0732875
+    },
+    {
+      "user_length": 7,
+      "response_length": 15,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771274114.1876893
+    },
+    {
+      "user_length": 3,
+      "response_length": 13,
+      "has_question": true,
+      "has_greeting": true,
+      "feedback": 0.6,
+      "ts": 1771279551.898325
+    },
+    {
+      "user_length": 7,
+      "response_length": 17,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771279568.561822
+    },
+    {
+      "user_length": 5,
+      "response_length": 54,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771279589.0498734
+    },
+    {
+      "user_length": 3,
+      "response_length": 15,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771279611.7103608
+    },
+    {
+      "user_length": 7,
+      "response_length": 19,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771279627.7632008
+    },
+    {
+      "user_length": 1,
+      "response_length": 16,
+      "has_question": false,
+      "has_greeting": true,
+      "feedback": 0.6,
+      "ts": 1771279639.9194102
+    },
+    {
+      "user_length": 6,
+      "response_length": 17,
+      "has_question": false,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771279651.5802383
+    },
+    {
+      "user_length": 7,
+      "response_length": 48,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771281734.9211621
+    },
+    {
+      "user_length": 7,
+      "response_length": 48,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771281735.7245295
+    },
+    {
+      "user_length": 3,
+      "response_length": 26,
+      "has_question": true,
+      "has_greeting": true,
+      "feedback": 0.6,
+      "ts": 1771281777.5818725
+    },
+    {
+      "user_length": 3,
+      "response_length": 26,
+      "has_question": true,
+      "has_greeting": true,
+      "feedback": 0.8,
+      "ts": 1771281778.3933034
+    },
+    {
+      "user_length": 5,
+      "response_length": 94,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771281822.8877213
+    },
+    {
+      "user_length": 5,
+      "response_length": 94,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771281823.7039063
+    },
+    {
+      "user_length": 6,
+      "response_length": 102,
+      "has_question": false,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771281920.3528216
+    },
+    {
+      "user_length": 3,
+      "response_length": 33,
+      "has_question": true,
+      "has_greeting": true,
+      "feedback": 0.6,
+      "ts": 1771283727.9183109
+    },
+    {
+      "user_length": 3,
+      "response_length": 33,
+      "has_question": true,
+      "has_greeting": true,
+      "feedback": 0.8,
+      "ts": 1771283728.663205
+    },
+    {
+      "user_length": 5,
+      "response_length": 72,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771283780.1378253
+    },
+    {
+      "user_length": 5,
+      "response_length": 72,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771283780.2454352
+    },
+    {
+      "user_length": 77,
+      "response_length": 109,
+      "has_question": false,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771284031.6890082
+    },
+    {
+      "user_length": 77,
+      "response_length": 109,
+      "has_question": false,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771284031.8141346
+    },
+    {
+      "user_length": 7,
+      "response_length": 93,
+      "has_question": false,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771284187.5715024
+    },
+    {
+      "user_length": 7,
+      "response_length": 93,
+      "has_question": false,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771284187.6829515
+    },
+    {
+      "user_length": 6,
+      "response_length": 101,
+      "has_question": false,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771284306.287098
+    },
+    {
+      "user_length": 13,
+      "response_length": 47,
+      "has_question": false,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771284609.4592545
+    },
+    {
+      "user_length": 13,
+      "response_length": 47,
+      "has_question": false,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771284610.2598495
+    },
+    {
+      "user_length": 1,
+      "response_length": 20,
+      "has_question": false,
+      "has_greeting": true,
+      "feedback": 0.6,
+      "ts": 1771285640.1162698
+    },
+    {
+      "user_length": 1,
+      "response_length": 20,
+      "has_question": false,
+      "has_greeting": true,
+      "feedback": 0.8,
+      "ts": 1771285640.2253747
+    },
+    {
+      "user_length": 3,
+      "response_length": 36,
+      "has_question": true,
+      "has_greeting": true,
+      "feedback": 0.6,
+      "ts": 1771285897.1144378
+    },
+    {
+      "user_length": 3,
+      "response_length": 36,
+      "has_question": true,
+      "has_greeting": true,
+      "feedback": 0.8,
+      "ts": 1771285897.2265916
+    },
+    {
+      "user_length": 5,
+      "response_length": 52,
+      "has_question": false,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771285926.755461
+    },
+    {
+      "user_length": 5,
+      "response_length": 52,
+      "has_question": false,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771285926.8665535
+    },
+    {
+      "user_length": 3,
+      "response_length": 33,
+      "has_question": true,
+      "has_greeting": true,
+      "feedback": 0.6,
+      "ts": 1771289541.2709546
+    },
+    {
+      "user_length": 3,
+      "response_length": 33,
+      "has_question": true,
+      "has_greeting": true,
+      "feedback": 0.8,
+      "ts": 1771289541.3817556
+    },
+    {
+      "user_length": 2,
+      "response_length": 33,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771289622.5708838
+    },
+    {
+      "user_length": 2,
+      "response_length": 33,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771289623.3883307
+    },
+    {
+      "user_length": 3,
+      "response_length": 55,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771289687.6224446
+    },
+    {
+      "user_length": 3,
+      "response_length": 62,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771289781.2308931
+    },
+    {
+      "user_length": 3,
+      "response_length": 62,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771289781.3380213
+    },
+    {
+      "user_length": 3,
+      "response_length": 33,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771289847.6510413
+    },
+    {
+      "user_length": 3,
+      "response_length": 33,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771289847.7570205
+    },
+    {
+      "user_length": 3,
+      "response_length": 10,
+      "has_question": true,
+      "has_greeting": true,
+      "feedback": 0.6,
+      "ts": 1771292092.0213006
+    },
+    {
+      "user_length": 2,
+      "response_length": 138,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771292146.8742604
+    },
+    {
+      "user_length": 3,
+      "response_length": 10,
+      "has_question": true,
+      "has_greeting": true,
+      "feedback": 0.8,
+      "ts": 1771292147.555984
+    },
+    {
+      "user_length": 3,
+      "response_length": 58,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771292193.9556956
+    },
+    {
+      "user_length": 3,
+      "response_length": 58,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771292194.067136
+    },
+    {
+      "user_length": 3,
+      "response_length": 15,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771301778.3040128
+    },
+    {
+      "user_length": 3,
+      "response_length": 15,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771301778.4124002
+    },
+    {
+      "user_length": 3,
+      "response_length": 40,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771303395.9516735
+    },
+    {
+      "user_length": 3,
+      "response_length": 40,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771303396.0735803
+    },
+    {
+      "user_length": 3,
+      "response_length": 63,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771303455.4558263
+    },
+    {
+      "user_length": 3,
+      "response_length": 63,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771303455.5715826
+    },
+    {
+      "user_length": 2,
+      "response_length": 255,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771304259.6013632
+    },
+    {
+      "user_length": 2,
+      "response_length": 255,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771304260.4523335
+    },
+    {
+      "user_length": 3,
+      "response_length": 193,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771304984.88748
+    },
+    {
+      "user_length": 3,
+      "response_length": 193,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771304985.0468442
+    },
+    {
+      "user_length": 7,
+      "response_length": 54,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771305161.3222592
+    },
+    {
+      "user_length": 7,
+      "response_length": 54,
+      "has_question": true,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771305161.4357877
+    },
+    {
+      "user_length": 4,
+      "response_length": 80,
+      "has_question": false,
+      "has_greeting": false,
+      "feedback": 0.6,
+      "ts": 1771305268.001439
+    },
+    {
+      "user_length": 4,
+      "response_length": 80,
+      "has_question": false,
+      "has_greeting": false,
+      "feedback": 0.8,
+      "ts": 1771305268.1161616
+    }
+  ],
+  "failed_patterns": [
+    {
+      "message_length": 6,
+      "response_length": 21,
+      "message_type": "search_request",
+      "response_style": "balanced",
+      "timestamp": 1771270476.8274913
+    }
+  ],
+  "topics": {}
+}
