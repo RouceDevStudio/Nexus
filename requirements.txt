@@ -1,0 +1,15 @@
+# NEXUS - Dependencias Python completas
+# Instalar con: pip install -r requirements.txt --break-system-packages (Termux)
+# o: pip install -r requirements.txt (entorno normal / Render)
+
+# ─── Core Numérico ───────────────────────────
+numpy>=1.24.0
+
+# ─── Base de datos ───────────────────────────
+pymongo>=4.6.0          # Cliente MongoDB Atlas
+dnspython>=2.4.0        # Necesario para resolver URIs mongodb+srv://
+
+# ─── (Opcional) Groq SDK oficial ─────────────
+# El proyecto usa urllib directamente así que NO es obligatorio,
+# pero si en el futuro querés usar el SDK oficial descomentá esta línea:
+# groq>=0.4.0
