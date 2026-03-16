@@ -1,0 +1,2376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#050507">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NEXUS AI">
+<title>NEXUS — Neural Intelligence</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ═══ PWA BANNER ═══ -->
+<div class="pwa-banner" id="pwa-banner">
+  <div class="pwa-banner-icon">⚡</div>
+  <div class="pwa-banner-text">
+    <strong>Instalar NEXUS</strong>
+    <span>Pantalla completa · sin barras del navegador</span>
+  </div>
+  <div class="pwa-banner-btns">
+    <button class="pwa-install-btn" id="pwa-install-btn">Instalar</button>
+    <button class="pwa-dismiss-btn" onclick="dismissPWA()">✕</button>
+  </div>
+</div>
+
+<!-- ═══ AUTH SCREEN ═══ -->
+<div class="auth-screen" id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-logo">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26A7 7 0 0 0 19 9c0-3.87-3.13-7-7-7zm1 15h-2v-1h2v1zm.87-3.87c-.31.19-.87.5-.87 1.87h-2c0-2 1.05-2.59 1.57-2.9.56-.34 1.43-.87.43-1.6-.46-.32-.87-.37-1.22-.35-.66.04-1.28.58-1.56 1.35l-1.84-.76C8.87 8.74 10.35 7.1 12.07 7c.67-.04 1.64.06 2.56.71C16.23 8.75 16 10.38 14.04 11.5c-.2.11-.92.54-1.17.63z"/></svg>
+      </div>
+      <h1>NEXUS AI</h1>
+      <p>Neural Intelligence System</p>
+    </div>
+    <div class="auth-body">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Ingresar</button>
+        <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Registrarse</button>
+      </div>
+      <div id="auth-error" class="auth-error" style="display:none"></div>
+      <div id="form-login">
+        <div class="auth-field">
+          <label>Email o usuario</label>
+          <input type="text" id="login-identifier" placeholder="tu@email.com" autocomplete="username">
+        </div>
+        <div class="auth-field">
+          <label>Contraseña</label>
+          <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="auth-submit" id="login-btn" onclick="doLogin()">Ingresar a NEXUS</button>
+        <div class="auth-hint">¿No tienes cuenta? <span style="color:var(--accent3);cursor:pointer" onclick="switchAuthTab('register')">Regístrate gratis</span></div>
+      </div>
+      <div id="form-register" style="display:none">
+        <div class="auth-field">
+          <label>Nombre de usuario</label>
+          <input type="text" id="reg-username" placeholder="nexus_user" autocomplete="username">
+        </div>
+        <div class="auth-field">
+          <label>Email</label>
+          <input type="email" id="reg-email" placeholder="tu@email.com" autocomplete="email">
+        </div>
+        <div class="auth-field">
+          <label>Contraseña</label>
+          <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+        </div>
+        <button class="auth-submit" id="register-btn" onclick="doRegister()">Crear cuenta</button>
+        <div class="auth-hint">¿Ya tienes cuenta? <span style="color:var(--accent3);cursor:pointer" onclick="switchAuthTab('login')">Ingresar</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MAIN APP ═══ -->
+<div class="app" id="main-app" style="display:none">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26A7 7 0 0 0 19 9c0-3.87-3.13-7-7-7zm1 15h-2v-1h2v1zm.87-3.87c-.31.19-.87.5-.87 1.87h-2c0-2 1.05-2.59 1.57-2.9.56-.34 1.43-.87.43-1.6-.46-.32-.87-.37-1.22-.35-.66.04-1.28.58-1.56 1.35l-1.84-.76C8.87 8.74 10.35 7.1 12.07 7c.67-.04 1.64.06 2.56.71C16.23 8.75 16 10.38 14.04 11.5c-.2.11-.92.54-1.17.63z"/></svg>
+      </div>
+      <div class="brand">
+        <div class="brand-name">NEXUS</div>
+        <div class="brand-sub" id="header-sub">Neural AI</div>
+      </div>
+      <span class="brain-ver-badge base" id="brain-ver-badge" title="Versión del motor neural activo">
+        <span class="brain-ver-dot"></span>
+        <span id="brain-ver-label">Nexus Base</span>
+      </span>
+    </div>
+    <div class="header-right">
+      <div class="thinking-pill" id="thinking-pill">
+        <div class="thinking-orbs"><span></span><span></span><span></span></div>
+        Pensando
+      </div>
+      <div class="status-pill" id="status-pill">
+        <div class="status-dot" id="status-dot"></div>
+        <span id="status-text">...</span>
+      </div>
+      <button class="btn-icon" id="history-btn" title="Historial">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+      </button>
+      <button class="btn-icon" id="new-btn" title="Nuevo chat">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Banners -->
+  <div class="ollama-banner" id="ollama-banner">
+    <div class="ollama-banner-left"><div class="ollama-banner-dot"></div><span>Ollama local activo</span></div>
+    <button class="ollama-banner-btn" onclick="closeOllamaBanner()">✕</button>
+  </div>
+  <div class="ollama-offline-banner" id="ollama-offline-banner">
+    <span>Sin LLM · ¿Querés más poder?</span>
+    <button class="ollama-offline-btn" onclick="showOllamaSetup()">Instalar Ollama</button>
+  </div>
+  <div class="limit-banner" id="limit-banner">
+    <div class="limit-banner-text" id="limit-banner-text">⚡ Límite diario alcanzado. Actualiza a Premium para mensajes ilimitados.</div>
+    <button class="limit-upgrade-btn" onclick="switchMainTab('payment')">Actualizar a Ultra</button>
+  </div>
+
+  <!-- ═══ TAB PANELS ═══ -->
+
+  <!-- CHAT PANEL -->
+  <div class="tab-panel active" id="panel-chat">
+    <div class="messages" id="messages">
+      <div class="welcome" id="welcome-screen">
+        <div class="welcome-glyph">
+          <svg viewBox="0 0 80 80" fill="none" width="52" height="52"><line x1="40" y1="6" x2="40" y2="74" stroke="#a855f7" stroke-width="8" stroke-linecap="round"/><line x1="6" y1="40" x2="74" y2="40" stroke="#a855f7" stroke-width="8" stroke-linecap="round"/><line x1="15" y1="15" x2="65" y2="65" stroke="#a855f7" stroke-width="8" stroke-linecap="round"/><line x1="65" y1="15" x2="15" y2="65" stroke="#a855f7" stroke-width="8" stroke-linecap="round"/></svg>
+        </div>
+        <h2>¿En qué puedo ayudarte?</h2>
+        <p>Inteligencia artificial con redes neuronales propias y memoria episódica. Aprendo de cada conversación.</p>
+        <div class="suggestions">
+          <button class="sug" onclick="sendMessage('Hola! ¿Cómo estás hoy?')"><span class="sug-icon">👋</span><span>Salúdame</span><span class="sug-text">Empieza a chatear</span></button>
+          <button class="sug" onclick="sendMessage('¿Cómo funcionas internamente?')"><span class="sug-icon">🔬</span><span>Cómo funciono</span><span class="sug-text">Mi arquitectura neural</span></button>
+          <button class="sug" onclick="sendMessage('¿Quién te creó y cuál es tu historia?')"><span class="sug-icon">👤</span><span>Mi creador</span><span class="sug-text">Historia y origen</span></button>
+          <button class="sug" onclick="sendMessage('¿Qué puedes hacer por mí?')"><span class="sug-icon">⚡</span><span>Capacidades</span><span class="sug-text">Todo lo que puedo hacer</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- File preview bar -->
+    <div class="file-preview-bar" id="file-preview-bar" style="display:none">
+      <div class="file-preview-inner" id="file-preview-inner"></div>
+      <button class="file-add-btn" id="file-add-btn" onclick="document.getElementById('file-input').click()" title="Agregar segundo archivo para comparar" style="display:none">＋</button>
+      <button class="file-preview-clear" onclick="clearAttachment()" title="Quitar archivos">✕</button>
+    </div>
+
+    <div class="input-zone">
+      <!-- Hidden file input -->
+      <input type="file" id="file-input" style="display:none" onchange="handleFileSelect(event)" multiple
+        accept="image/*,.pdf,.docx,.doc,.xlsx,.xls,.txt,.md,.js,.ts,.jsx,.tsx,.py,.cpp,.c,.h,.cs,.java,.go,.rs,.php,.rb,.sh,.sql,.yaml,.yml,.json,.html,.css,.xml,.csv,.zip">
+      <div class="input-row">
+        <button class="attach-btn" id="attach-btn" onclick="document.getElementById('file-input').click()" title="Adjuntar archivo (imágenes, PDF, código, docs...)">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5a2.5 2.5 0 0 1 5 0v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5a2.5 2.5 0 0 0 5 0V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/></svg>
+        </button>
+        <textarea id="input" placeholder="Escribe tu mensaje…" rows="1" onkeydown="handleKey(event)"></textarea>
+        <button class="send-btn" id="send-btn" onclick="sendMessage()">
+          <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+        </button>
+      </div>
+      <div class="hint" id="hint">NEXUS listo · 📎 adjunta imágenes, PDF, código y más · Enter para enviar</div>
+    </div>
+  </div>
+
+  <!-- STATS PANEL -->
+  <div class="tab-panel" id="panel-stats">
+    <div class="stats-panel">
+      <div class="busy-notice" id="busy-notice"><span>⏳</span><span>Las estadísticas se actualizarán al terminar</span></div>
+      <div class="section-label">Actividad Neural</div>
+      <div class="stat-row"><div class="stat-label">Rank Loss</div><div class="stat-val" id="rank-loss">—</div></div>
+      <div class="pbar"><div class="pbar-fill" id="progress" style="width:0%"></div></div>
+      <div class="stat-row"><div class="stat-label">Intent Loss</div><div class="stat-val" id="intent-loss">—</div></div>
+      <div class="section-label">Memoria Episódica</div>
+      <div class="stat-row"><div class="stat-label">Vocabulario</div><div class="stat-val" id="vocab">—</div></div>
+      <div class="stat-row"><div class="stat-label">Episodios</div><div class="stat-val" id="episodes">—</div></div>
+      <div class="stat-row"><div class="stat-label">Entrenamientos</div><div class="stat-val" id="trainings">—</div></div>
+      <div class="stat-row"><div class="stat-label">Consultas totales</div><div class="stat-val" id="queries">—</div></div>
+      <div class="section-label">Motor de Lenguaje</div>
+      <div class="llm-card" id="llm-card">
+        <div class="llm-card-dot"></div>
+        <div class="llm-card-info"><h4 id="llm-name">—</h4><p id="llm-status">Verificando...</p></div>
+      </div>
+      <div class="section-label">Ollama Local</div>
+      <div class="ollama-local-card" id="ollama-local-card" onclick="showOllamaSetup()">
+        <div class="ollama-local-dot" id="ollama-local-dot"></div>
+        <div class="ollama-local-info"><h4 id="ollama-local-name">Verificando...</h4><p id="ollama-local-status">Toca para ver instrucciones</p></div>
+      </div>
+      <div class="section-label">Base de Datos</div>
+      <div class="stat-row"><div class="stat-label">Usuarios</div><div class="stat-val" id="db-users">—</div></div>
+      <div class="stat-row"><div class="stat-label">Mensajes guardados</div><div class="stat-val" id="db-messages">—</div></div>
+      <button class="stat-refresh-btn" onclick="loadStats(true)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Actualizar estadísticas
+      </button>
+    </div>
+  </div>
+
+  <!-- PROFILE PANEL -->
+  <div class="tab-panel" id="panel-profile">
+    <div class="profile-panel">
+      <div class="profile-avatar" id="profile-avatar">🧠</div>
+      <div class="profile-name" id="profile-display-name">—</div>
+      <div class="profile-email" id="profile-email-display">—</div>
+
+      <div class="plan-badge" id="plan-badge">
+        <div class="plan-badge-icon" id="plan-icon">🆓</div>
+        <div class="plan-badge-info">
+          <h3 id="plan-name">Plan Gratuito</h3>
+          <p id="plan-desc">10 mensajes disponibles</p>
+          <p id="plan-expiry" style="font-size:11px;margin-top:2px;display:none"></p>
+        </div>
+      </div>
+
+      <div class="msg-counter" id="msg-counter">
+        <div class="msg-counter-label">Mensajes usados hoy <span id="counter-reset-time" style="color:var(--text3);font-size:10px"></span></div>
+        <div class="msg-counter-bar"><div class="msg-counter-fill" id="counter-fill" style="width:0%"></div></div>
+        <div class="msg-counter-text" id="counter-text">0 / 10 mensajes</div>
+      </div>
+
+      <div class="profile-section">
+        <div class="profile-section-head">
+          <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+          Editar Perfil
+        </div>
+        <div class="profile-field">
+          <label>Nombre visible</label>
+          <input type="text" id="edit-display-name" placeholder="Tu nombre">
+        </div>
+        <div class="profile-field">
+          <label>Nombre de usuario</label>
+          <input type="text" id="edit-username" placeholder="username">
+        </div>
+        <div style="padding:0 16px 14px">
+          <div id="profile-msg" style="display:none;font-size:12px;margin-bottom:10px;padding:8px 12px;border-radius:8px;"></div>
+          <button class="profile-save-btn" id="profile-save-btn" onclick="saveProfile()">Guardar cambios</button>
+        </div>
+      </div>
+
+      <div class="profile-section" id="brain-info-card" style="margin-bottom:8px">
+        <div class="profile-section-head">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26A7 7 0 0 0 19 9c0-3.87-3.13-7-7-7zm1 15h-2v-1h2v1zm.87-3.87c-.31.19-.87.5-.87 1.87h-2c0-2 1.05-2.59 1.57-2.9.56-.34 1.43-.87.43-1.6-.46-.32-.87-.37-1.22-.35-.66.04-1.28.58-1.56 1.35l-1.84-.76C8.87 8.74 10.35 7.1 12.07 7c.67-.04 1.64.06 2.56.71C16.23 8.75 16 10.38 14.04 11.5c-.2.11-.92.54-1.17.63z"/></svg>
+          Motor Neural Activo
+        </div>
+        <div style="padding:14px 16px" id="brain-info-body"></div>
+      </div>
+
+      <button class="logout-btn" onclick="doLogout()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+        Cerrar sesión
+      </button>
+
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <a href="terminos-condiciones.html" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:transparent;border:1px solid var(--border);border-radius:var(--r-sm);font-family:inherit;font-size:12px;font-weight:500;color:var(--text3);cursor:pointer;text-decoration:none;transition:all .15s">
+          Términos y Condiciones
+        </a>
+        <a href="politica-privacidad.html" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:transparent;border:1px solid var(--border);border-radius:var(--r-sm);font-family:inherit;font-size:12px;font-weight:500;color:var(--text3);cursor:pointer;text-decoration:none;transition:all .15s">
+          Política de Privacidad
+        </a>
+      </div>
+      <div style="text-align:center;margin-top:10px;font-size:10px;color:var(--text3);font-family:'Space Mono',monospace">
+        NEXUS AI © 2026 · v12.0 · 🇨🇴 Colombia
+      </div>
+    </div>
+  </div>
+
+  <!-- PAYMENT PANEL -->
+  <div class="tab-panel" id="panel-payment">
+    <div class="payment-panel">
+      <div id="payment-already-premium" style="display:none;text-align:center;padding:32px 20px">
+        <div style="font-size:56px;margin-bottom:16px" id="premium-icon">✨</div>
+        <h2 style="font-size:22px;font-weight:700;margin-bottom:8px;font-family:'Syne',sans-serif" id="premium-title">¡Ya eres Ultra!</h2>
+        <p style="font-size:14px;color:var(--text2);line-height:1.6" id="premium-desc">Tienes acceso al cerebro NEXUS v12.0 APEX con motor emocional PAD-3D, 3 redes afectivas y vocabulario infinito.</p>
+        <div id="plan-expiry-info" style="margin-top:16px;font-size:13px;color:var(--text3)"></div>
+        <div style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:rgba(94,255,67,.08);border:1px solid rgba(94,255,67,.2);border-radius:99px;margin-top:16px;font-size:13px;color:var(--neon)" id="premium-badge-line">
+          <span>⚡</span> NEXUS v12.0 APEX Ultra Activo
+        </div>
+      </div>
+      <div id="payment-form-area">
+        <div class="payment-hero">
+          <div class="payment-hero-icon">🧬</div>
+          <h2>NEXUS v12.0 APEX — Ultra</h2>
+          <p>Motor emocional PAD-3D con 3 redes afectivas, 8 redes neuronales dinámicas, hasta 3M parámetros, vocabulario infinito y aprendizaje que nunca se estanca.</p>
+        </div>
+        <div class="payment-features">
+          <div class="payment-feature"><div class="payment-feature-icon">🧬</div><div class="payment-feature-text"><h4>8 redes DynamicNeuralNet</h4><p>Se auto-expanden +25% cuando se saturan — hasta 3M parámetros en total</p></div></div>
+          <div class="payment-feature"><div class="payment-feature-icon">🎭</div><div class="payment-feature-text"><h4>Motor emocional PAD-3D</h4><p>_AffectNet + _ContextNet + _RegulationNet con ensemble 40/25/20/15%</p></div></div>
+          <div class="payment-feature"><div class="payment-feature-icon">♾️</div><div class="payment-feature-text"><h4>InfiniteEmbeddings activo</h4><p>Vocabulario sin límite vs tope de 16,384 en el plan free</p></div></div>
+          <div class="payment-feature"><div class="payment-feature-icon">🎯</div><div class="payment-feature-text"><h4>Búsqueda semántica real</h4><p>Cosine similarity — entiende significado, no solo palabras</p></div></div>
+          <div class="payment-feature"><div class="payment-feature-icon">📉</div><div class="payment-feature-text"><h4>LR Scheduler automático</h4><p>Evita el estancamiento — el cerebro se optimiza solo</p></div></div>
+          <div class="payment-feature"><div class="payment-feature-icon">⚡</div><div class="payment-feature-text"><h4>3 pasadas de entrenamiento</h4><p>Por cada mensaje — el free solo hace 2</p></div></div>
+          <div class="payment-feature"><div class="payment-feature-icon">💬</div><div class="payment-feature-text"><h4>Mensajes ilimitados</h4><p>Sin restricciones diarias ni mensuales</p></div></div>
+        </div>
+        <div class="payment-price">
+          <div class="price-amount">$10.00</div>
+          <div class="price-period">USD · Renovación mensual automática</div>
+        </div>
+        <div style="background:rgba(94,255,67,.04);border:1px solid rgba(94,255,67,.08);border-radius:12px;padding:12px 14px;margin:0 16px 16px;font-size:12px;color:var(--text2);line-height:1.6">
+          ⚠️ <strong style="color:var(--neon)">¿Cómo funciona?</strong> Paga $10 al mes vía PayPal. Cada mes verificamos tu pago — si está activo, tienes NEXUS v12.0 APEX Ultra con motor emocional PAD-3D y cerebro dinámico ilimitado.
+        </div>
+        <button class="paypal-btn" onclick="openPayPal()">
+          <span class="paypal-logo">Pay</span><span class="paypal-logo" style="color:#009CDE">Pal</span>
+          <span>Activar NEXUS Ultra v12.0 — $10/mes</span>
+        </button>
+        <div class="payment-msg">🔒 Pago seguro procesado por PayPal</div>
+        <div class="payment-success" id="payment-success">
+          <div class="success-icon">🎉</div>
+          <h3>¡NEXUS Ultra activado!</h3>
+          <p id="payment-success-msg">Tienes acceso al cerebro v12.0 APEX por 30 días.</p>
+        </div>
+        <div class="verify-section">
+          <h4>¿Ya realizaste el pago?</h4>
+          <p style="font-size:13px;color:var(--text3);margin-bottom:12px">Ingresa el ID de transacción de PayPal para verificar tu pago y activar el plan.</p>
+          <div class="verify-field">
+            <label>ID de Transacción PayPal</label>
+            <input type="text" id="transaction-id" placeholder="ej: 7AL68312YU652781A" style="text-transform:uppercase">
+          </div>
+          <div class="verify-field">
+            <label>Email PayPal del pagador</label>
+            <input type="email" id="payer-email" placeholder="tu@paypal.com">
+          </div>
+          <div id="verify-msg" style="display:none;font-size:12px;margin-bottom:10px;padding:8px 12px;border-radius:8px;"></div>
+          <button class="verify-btn" id="verify-btn" onclick="verifyPayment()">Verificar y Activar NEXUS Ultra</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CODEGEN PANEL -->
+  <div class="tab-panel" id="panel-codegen">
+    <div class="codegen-panel">
+      <div class="codegen-header">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--neon)"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+        <h3>CodeGen — Generador de Archivos</h3>
+      </div>
+      <div class="codegen-body">
+
+        <div class="codegen-field">
+          <label>Operación</label>
+          <div class="codegen-op-row" id="cg-op-row">
+            <button class="codegen-op-btn active" onclick="setCgOp('create',this)">✨ Crear</button>
+            <button class="codegen-op-btn" onclick="setCgOp('edit',this)">✏️ Editar</button>
+            <button class="codegen-op-btn" onclick="setCgOp('fix',this)">🔧 Corregir</button>
+            <button class="codegen-op-btn" onclick="setCgOp('analyze',this)">🔍 Analizar</button>
+            <button class="codegen-op-btn" onclick="setCgOp('extend',this)">➕ Extender</button>
+          </div>
+        </div>
+
+        <div class="codegen-field">
+          <label>Tipo de archivo</label>
+          <select id="cg-type">
+            <option value="js">JavaScript (.js)</option>
+            <option value="jsx">React (.jsx)</option>
+            <option value="ts">TypeScript (.ts)</option>
+            <option value="tsx">React TypeScript (.tsx)</option>
+            <option value="py">Python (.py)</option>
+            <option value="html">HTML (.html)</option>
+            <option value="css">CSS (.css)</option>
+            <option value="json">JSON (.json)</option>
+            <option value="cpp">C++ (.cpp)</option>
+            <option value="c">C (.c)</option>
+            <option value="cs">C# (.cs)</option>
+            <option value="java">Java (.java)</option>
+            <option value="go">Go (.go)</option>
+            <option value="rs">Rust (.rs)</option>
+            <option value="php">PHP (.php)</option>
+            <option value="rb">Ruby (.rb)</option>
+            <option value="sh">Bash (.sh)</option>
+            <option value="sql">SQL (.sql)</option>
+            <option value="yaml">YAML (.yaml)</option>
+            <option value="md">Markdown (.md)</option>
+            <option value="txt">Texto (.txt)</option>
+          </select>
+        </div>
+
+        <div class="codegen-field">
+          <label>Nombre del archivo</label>
+          <input type="text" id="cg-filename" placeholder="ej: mi_proyecto.js, index.html">
+        </div>
+
+        <div class="codegen-field">
+          <label>Instrucción / Descripción</label>
+          <textarea id="cg-prompt" placeholder="Describe qué debe hacer el archivo. Puedes pedir hasta 30,000+ líneas de código, webs completas, scripts complejos, etc."></textarea>
+        </div>
+
+        <!-- Cargar archivo existente (para editar/corregir/analizar) -->
+        <div class="codegen-field" id="cg-upload-section" style="display:none">
+          <label>Archivo actual (para editar / corregir)</label>
+          <div class="codegen-upload-area" id="cg-drop-area" onclick="document.getElementById('cg-file-input').click()" ondragover="cgDragOver(event)" ondrop="cgDrop(event)" ondragleave="cgDragLeave(event)">
+            <div class="codegen-upload-icon">📂</div>
+            <div class="codegen-upload-text">Arrastra tu archivo aquí o toca para seleccionar</div>
+            <div class="codegen-upload-sub">Soporta .js, .py, .html, .css, .ts, .cpp, .c, .cs, .java, .go, .rs, .php, .txt y más</div>
+          </div>
+          <input type="file" id="cg-file-input" style="display:none" onchange="cgLoadFile(event)">
+          <div id="cg-file-loaded" style="display:none" class="codegen-file-loaded">
+            <span style="font-size:22px">📄</span>
+            <span class="codegen-file-loaded-name" id="cg-file-loaded-name">archivo.js</span>
+            <span class="codegen-file-loaded-size" id="cg-file-loaded-size"></span>
+            <button class="codegen-file-remove" onclick="cgClearFile()">✕</button>
+          </div>
+        </div>
+
+        <button class="codegen-submit-btn" id="cg-submit-btn" onclick="cgSubmit()">
+          ⚡ Generar con NEXUS
+        </button>
+
+        <div id="cg-progress" style="display:none" class="codegen-progress">
+          <div class="codegen-spinner"></div>
+          <span id="cg-progress-text">NEXUS generando archivo...</span>
+        </div>
+
+        <div id="cg-result" style="display:none" class="codegen-result">
+          <div class="codegen-result-header">
+            <span class="codegen-result-title" id="cg-result-title">resultado.js</span>
+            <span class="codegen-result-meta" id="cg-result-meta"></span>
+            <div class="codegen-result-actions">
+              <button class="codegen-action-btn" onclick="cgCopyResult()">📋 Copiar</button>
+              <button class="codegen-action-btn dl" id="cg-dl-btn" onclick="cgDownload()" style="display:none">⬇️ Descargar</button>
+            </div>
+          </div>
+          <pre class="codegen-result-code" id="cg-result-code"></pre>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="bottom-nav-btn active" id="nav-chat" onclick="switchMainTab('chat')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+      Chat
+    </button>
+    <button class="bottom-nav-btn" id="nav-codegen" onclick="switchMainTab('codegen')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+      CodeGen
+    </button>
+    <button class="bottom-nav-btn" id="nav-stats" onclick="switchMainTab('stats')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h2v18H3V3zm4 7h2v11H7V10zm4-4h2v15h-2V6zm4 8h2v7h-2v-7zm4-6h2v13h-2V8z"/></svg>
+      Neural
+    </button>
+    <button class="bottom-nav-btn" id="nav-payment" onclick="switchMainTab('payment')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+      Ultra
+    </button>
+    <button class="bottom-nav-btn" id="nav-profile" onclick="switchMainTab('profile')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      Perfil
+    </button>
+  </nav>
+</div>
+
+<!-- ═══ HISTORY SIDEBAR ═══ -->
+<div class="hist-overlay" id="hist-overlay" onclick="closeHistory()"></div>
+<div class="hist-sidebar" id="hist-sidebar">
+  <div class="hist-head">
+    <div class="hist-title">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--accent3)"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+      Historial
+    </div>
+    <div style="display:flex;gap:6px;align-items:center">
+      <button class="hist-del-all" onclick="confirmClearAll()" title="Borrar todo">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+      </button>
+      <button class="btn-icon" onclick="closeHistory()" style="width:28px;height:28px">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="hist-search-wrap">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="position:absolute;left:26px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+    <input class="hist-search" id="hist-search" placeholder="Buscar en historial…" oninput="renderHistory(this.value)">
+  </div>
+  <div class="hist-list" id="hist-list"></div>
+</div>
+
+<!-- ═══ CONFIRM DIALOG ═══ -->
+<div class="conf-overlay" id="conf-overlay">
+  <div class="conf-box">
+    <div style="font-size:28px;margin-bottom:10px">🗑️</div>
+    <h3 id="conf-title">¿Borrar historial?</h3>
+    <p id="conf-desc">Esta acción no se puede deshacer.</p>
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="conf-cancel" onclick="closeConfirm()">Cancelar</button>
+      <button class="conf-ok" id="conf-ok">Borrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ OLLAMA MODAL ═══ -->
+<div class="ollama-modal-overlay" id="ollama-modal-overlay" onclick="handleOllamaOverlayClick(event)">
+  <div class="ollama-modal" id="ollama-modal">
+    <div class="ollama-modal-handle"></div>
+    <div class="ollama-modal-head">
+      <div class="ollama-modal-title">⚡ Activar Ollama local</div>
+      <button class="ollama-modal-close" onclick="closeOllamaSetup()">✕</button>
+    </div>
+    <div class="ollama-modal-body">
+      <p>Con Ollama en tu dispositivo, NEXUS tiene motor de lenguaje local de respaldo cuando Groq no está disponible.</p>
+      <div class="ollama-tabs">
+        <button class="ollama-tab active" onclick="switchOllamaTab('android',this)">📱 Android (Termux)</button>
+        <button class="ollama-tab" onclick="switchOllamaTab('pc',this)">🖥️ PC / Mac</button>
+      </div>
+      <div class="ollama-tab-content active" id="tab-android">
+        <div class="ollama-steps">
+          <div class="ollama-step"><div class="ollama-step-num">1</div><div class="ollama-step-info"><h4>Instalar Termux</h4><p>Descárgalo desde F-Droid o tu tienda de apps.</p></div></div>
+          <div class="ollama-step"><div class="ollama-step-num">2</div><div class="ollama-step-info"><h4>Instalar y arrancar Ollama</h4><p>Copia y pega en Termux:</p><div class="ollama-code">pkg install ollama<button class="ollama-copy-btn" onclick="copyCode('pkg install ollama')">copiar</button></div><div class="ollama-code" style="margin-top:6px">OLLAMA_ORIGINS="*" ollama serve<button class="ollama-copy-btn" onclick="copyCode('OLLAMA_ORIGINS=&quot;*&quot; ollama serve')">copiar</button></div></div></div>
+          <div class="ollama-step"><div class="ollama-step-num">3</div><div class="ollama-step-info"><h4>Descargar modelo</h4><div class="ollama-code">ollama pull llama3.2:1b<button class="ollama-copy-btn" onclick="copyCode('ollama pull llama3.2:1b')">copiar</button></div></div></div>
+          <div class="ollama-step"><div class="ollama-step-num">4</div><div class="ollama-step-info"><h4>Recarga esta página</h4><p>NEXUS detectará Ollama automáticamente.</p></div></div>
+        </div>
+        <div class="ollama-note">⚠️ El <strong>OLLAMA_ORIGINS="*"</strong> es clave para permitir comunicación con la web.</div>
+      </div>
+      <div class="ollama-tab-content" id="tab-pc">
+        <div class="ollama-steps">
+          <div class="ollama-step"><div class="ollama-step-num">1</div><div class="ollama-step-info"><h4>Descarga Ollama</h4><p>Entra a <strong>ollama.com</strong> e instala.</p></div></div>
+          <div class="ollama-step"><div class="ollama-step-num">2</div><div class="ollama-step-info"><h4>Descargar modelo e iniciar</h4><div class="ollama-code">ollama pull llama3.2:1b<button class="ollama-copy-btn" onclick="copyCode('ollama pull llama3.2:1b')">copiar</button></div><div class="ollama-code" style="margin-top:6px">OLLAMA_ORIGINS="*" ollama serve<button class="ollama-copy-btn" onclick="copyCode('OLLAMA_ORIGINS=&quot;*&quot; ollama serve')">copiar</button></div></div></div>
+          <div class="ollama-step"><div class="ollama-step-num">3</div><div class="ollama-step-info"><h4>Recarga la página</h4><p>NEXUS detecta Ollama automáticamente.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PROMO MODAL ═══ -->
+<div class="promo-overlay" id="promo-overlay" onclick="handlePromoOverlayClick(event)">
+  <div class="promo-sheet" id="promo-sheet">
+    <div class="promo-handle"></div>
+    <div class="promo-head">
+      <div class="promo-head-left">
+        <h2>⚡ NEXUS v12.0 APEX Ultra</h2>
+        <p>Motor emocional PAD-3D con 3 redes afectivas, 8 redes neuronales dinámicas, vocabulario infinito y aprendizaje que nunca se estanca.</p>
+      </div>
+      <div class="promo-close" onclick="dismissPromoBanner()">✕</div>
+    </div>
+    <div class="promo-icon-wrap">🧠✨</div>
+    <div class="promo-benefits">
+      <div class="promo-benefit"><div class="promo-benefit-icon">🧬</div><div class="promo-benefit-body"><h4>DynamicNeuralNet — 8 redes que crecen solas</h4><p>Cada red detecta cuándo sus neuronas se saturan y se expande automáticamente un +25%.</p></div></div>
+      <div class="promo-benefit"><div class="promo-benefit-icon">🎭</div><div class="promo-benefit-body"><h4>Motor emocional PAD-3D — 3 redes afectivas</h4><p>_AffectNet + _EmotionContextNet + _EmotionRegulationNet. Ensemble 40/25/20/15%.</p></div></div>
+      <div class="promo-benefit"><div class="promo-benefit-icon">♾️</div><div class="promo-benefit-body"><h4>InfiniteEmbeddings — vocabulario sin límite</h4><p>El plan free tiene un tope de 16,384 n-gramas. Ultra no tiene límite.</p></div></div>
+      <div class="promo-benefit"><div class="promo-benefit-icon">💬</div><div class="promo-benefit-body"><h4>Mensajes ilimitados</h4><p>Sin restricciones diarias. Conversa todo lo que necesites.</p></div></div>
+      <div class="promo-benefit"><div class="promo-benefit-icon">🌟</div><div class="promo-benefit-body"><h4>Soporte prioritario</h4><p>Acceso anticipado a nuevas funciones y mejoras.</p></div></div>
+    </div>
+    <div class="promo-footer">
+      <button class="promo-cta" onclick="goToPremiumFromBanner()">🧬 Activar NEXUS v12.0 APEX Ultra — $10/mes</button>
+      <div class="promo-dismiss" onclick="dismissPromoBanner()">No por ahora — quizás más adelante</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TUTORIAL TOOLTIP SYSTEM ═══ -->
+<div class="nx-overlay" id="nx-overlay" style="display:none"></div>
+<div class="nx-highlight-ring" id="nx-ring" style="display:none"></div>
+<div class="nx-tooltip" id="nx-tooltip" style="display:none">
+  <div class="nx-tooltip-header">
+    <div class="nx-tooltip-icon" id="nx-icon">🚀</div>
+    <div>
+      <div class="nx-tooltip-step" id="nx-step">PASO 1 DE 7</div>
+      <div class="nx-tooltip-title" id="nx-title">Bienvenido a NEXUS</div>
+    </div>
+  </div>
+  <div class="nx-tooltip-body" id="nx-body">Aquí empieza tu viaje.</div>
+  <div class="nx-tooltip-highlight" id="nx-highlight" style="display:none"></div>
+  <div class="nx-tooltip-footer">
+    <div class="nx-tooltip-dots" id="nx-dots"></div>
+    <div class="nx-tooltip-actions">
+      <button class="nx-skip" onclick="nxSkip()">Saltar todo</button>
+      <button class="nx-next" id="nx-next-btn" onclick="nxNext()">Siguiente →</button>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ── MENSAJES — mobile-first, sin offsets rotos ── */
+.msg {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px 8px;
+  border-bottom: 1px solid var(--border);
+  animation: msgIn .25s ease both;
+}
+.msg-user { background: var(--bg1); }
+.msg-ai   { background: var(--bg); }
+
+/* Header: avatar + nombre + timestamp en una fila */
+.msg-header {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 7px;
+}
+.msg-avatar {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.msg-user .msg-avatar {
+  background: var(--g-dim);
+  border: 1px solid var(--border-g);
+  font-size: 12px; font-weight: 800; color: var(--g);
+}
+.msg-ai .msg-avatar {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  color: var(--cy);
+}
+.msg-name {
+  font-size: 10px; font-weight: 800;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: .06em; text-transform: uppercase;
+}
+.msg-user .msg-name { color: var(--text3); }
+.msg-ai   .msg-name { color: var(--g); }
+.msg-ts {
+  margin-left: auto;
+  font-size: 10px; color: var(--text3);
+  font-family: 'Space Mono', monospace;
+  flex-shrink: 0;
+}
+
+/* Burbuja — ancho completo, SIN padding-left forzado */
+.msg-bubble {
+  width: 100%;
+  font-size: 14px; line-height: 1.65;
+  color: var(--text);
+  word-break: break-word; overflow-wrap: break-word;
+}
+.msg-user .msg-bubble { color: var(--text2); }
+.msg-bubble strong { color: var(--text); font-weight: 700; }
+.msg-bubble em { font-style: italic; }
+.msg-bubble code {
+  font-family: 'Space Mono', monospace; font-size: 12px;
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: 5px; padding: 1px 6px; color: var(--cy);
+}
+.msg-bubble pre {
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: 10px; padding: 12px; overflow-x: auto;
+  margin: 10px 0; font-size: 12px;
+  font-family: 'Space Mono', monospace;
+  color: var(--cy); line-height: 1.6; white-space: pre;
+}
+.msg-bubble a { color: var(--cy); text-decoration: underline; }
+
+/* Copiar */
+.msg-copy-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-top: 8px;
+  padding: 5px 12px;
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: 99px; font-size: 11px; font-weight: 600;
+  color: var(--text3); cursor: pointer; font-family: inherit;
+  transition: all .15s;
+}
+.msg-copy-btn svg { width: 12px; height: 12px; fill: currentColor; }
+.msg-copy-btn:hover { border-color: rgba(94,255,67,.3); color: var(--g); }
+.msg-copy-btn.copied { color: var(--g); border-color: rgba(94,255,67,.3); }
+
+/* Error */
+.msg-error {
+  padding: 12px 14px;
+  background: rgba(255,67,67,.06); border-bottom: 1px solid rgba(255,67,67,.12);
+  font-size: 13px; color: var(--hot);
+}
+
+/* Thinking — sin padding-left */
+.thinking-bubble {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 4px 0;
+}
+.thinking-bar { display: flex; gap: 5px; }
+.thinking-bar span {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--g);
+  animation: thinkBounce .8s ease-in-out infinite;
+}
+.thinking-bar span:nth-child(2) { animation-delay: .15s; background: var(--cy); }
+.thinking-bar span:nth-child(3) { animation-delay: .3s; }
+.elapsed { font-size: 11px; color: var(--text3); font-family: 'Space Mono', monospace; }
+
+/* Neural chips — en línea, sin offset */
+.neural-chips {
+  display: flex; flex-wrap: wrap; gap: 5px;
+  margin-top: 8px;
+}
+.chip {
+  display: flex; align-items: center; gap: 4px;
+  padding: 2px 8px;
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: 99px; font-size: 10px; color: var(--text2);
+  font-family: 'Space Mono', monospace;
+}
+.chip-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+
+/* Historial */
+.hist-group { font-size: 9px; font-weight: 700; color: var(--text3); letter-spacing: .12em; text-transform: uppercase; padding: 10px 4px 5px; font-family: 'Space Mono', monospace; }
+.hist-item-body { overflow: hidden; }
+.hist-item { position: relative; }
+.hist-item-del { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 22px; height: 22px; background: none; border: none; color: var(--text3); cursor: pointer; border-radius: 6px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: all .15s; }
+.hist-item:hover .hist-item-del { opacity: 1; }
+.hist-item-del:hover { background: rgba(255,67,67,.15); color: var(--hot); }
+
+/* Attach */
+.attach-btn { width: 38px; height: 38px; border-radius: 10px; background: var(--bg2); border: 1px solid var(--border2); color: var(--text3); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .15s; }
+.attach-btn:hover, .attach-btn.has-file { border-color: rgba(94,255,67,.35); color: var(--g); background: var(--g-dim); }
+
+/* File preview bar */
+.file-preview-bar { display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: var(--g-dim); border-top: 1px solid var(--border-g); border-bottom: 1px solid var(--border-g); animation: msgIn .2s ease both; }
+.file-preview-inner { flex: 1; display: flex; align-items: center; gap: 8px; overflow: hidden; flex-wrap: nowrap; }
+.file-preview-thumb { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+.file-preview-icon { width: 40px; height: 40px; border-radius: 8px; background: var(--bg2); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.file-preview-info { overflow: hidden; }
+.file-preview-name { font-size: 12px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.file-preview-meta { font-size: 10px; color: var(--text3); font-family: 'Space Mono', monospace; }
+.file-preview-clear { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 16px; padding: 4px; border-radius: 6px; transition: all .15s; }
+.file-preview-clear:hover { color: var(--hot); }
+.file-add-btn { background: var(--g-dim); border: 1px dashed var(--border-g); color: var(--g); cursor: pointer; font-size: 16px; padding: 3px 8px; border-radius: 8px; transition: all .15s; flex-shrink: 0; }
+.file-compare-badge { font-size: 9px; font-weight: 700; color: var(--g); background: var(--g-dim); border: 1px solid var(--border-g); border-radius: 4px; padding: 1px 5px; text-transform: uppercase; letter-spacing: .5px; margin-left: 6px; }
+.file-slot { display: flex; align-items: center; gap: 6px; background: var(--bg2); border: 1px solid var(--border2); border-radius: 8px; padding: 4px 8px; max-width: 200px; flex-shrink: 0; position: relative; }
+.file-slot-remove { position: absolute; top: -5px; right: -5px; width: 15px; height: 15px; border-radius: 50%; background: var(--hot); color: #fff; border: none; cursor: pointer; font-size: 9px; display: flex; align-items: center; justify-content: center; line-height: 1; }
+
+/* Adjunto en mensaje */
+.msg-file-attach { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.msg-file-chip { display: flex; align-items: center; gap: 8px; padding: 7px 12px; background: var(--bg2); border: 1px solid var(--border2); border-radius: 10px; font-size: 12px; max-width: 100%; }
+.msg-file-chip-icon { font-size: 18px; flex-shrink: 0; }
+.msg-file-chip-name { font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.msg-file-chip-size { font-size: 10px; color: var(--text3); font-family: 'Space Mono', monospace; }
+.msg-img-preview { margin-bottom: 8px; }
+.msg-img-preview img { max-width: 100%; max-height: 200px; border-radius: 12px; border: 1px solid var(--border2); object-fit: cover; }
+
+/* Imagen generada */
+.msg-bubble-image { padding: 12px 14px 10px !important; }
+.gen-img-container { position: relative; margin-bottom: 10px; }
+.gen-img-loading { display: flex; align-items: center; gap: 10px; padding: 20px; background: var(--bg2); border-radius: 10px; color: var(--text2); font-size: 13px; }
+.gen-img-spinner { width: 20px; height: 20px; border: 2px solid var(--border2); border-top-color: var(--cy); border-radius: 50%; animation: spin .8s linear infinite; flex-shrink: 0; }
+.gen-img { max-width: 100%; max-height: 480px; border-radius: 12px; border: 1px solid var(--border2); display: block; }
+.gen-img-caption { font-size: 12px; color: var(--text3); margin-bottom: 8px; font-style: italic; }
+.gen-img-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.gen-img-btn { background: var(--bg3); border: 1px solid var(--border2); color: var(--text2); padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; transition: all .15s; }
+.gen-img-btn:hover { border-color: var(--cy); color: var(--cy); }
+
+/* Archivo descargable */
+.file-dl-card { display: flex; align-items: center; gap: 12px; background: var(--bg2); border: 1px solid var(--border2); border-radius: 12px; padding: 14px 16px; }
+.file-dl-icon { font-size: 28px; flex-shrink: 0; }
+.file-dl-info { flex: 1; min-width: 0; }
+.file-dl-name { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.file-dl-meta { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.file-dl-btn { flex-shrink: 0; background: var(--g); color: #000; font-weight: 700; font-size: 13px; padding: 8px 16px; border-radius: 8px; text-decoration: none; white-space: nowrap; transition: opacity .15s; }
+.file-dl-btn:hover { opacity: .85; }
+
+/* CodeGen */
+#panel-codegen { padding: 0; }
+.codegen-panel { height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+.codegen-header { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.codegen-header h3 { font-size: 14px; font-weight: 700; margin: 0; }
+.codegen-body { flex: 1; overflow-y: auto; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+.codegen-field label { display: block; font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 5px; font-family: 'Space Mono', monospace; }
+.codegen-field input, .codegen-field textarea, .codegen-field select { width: 100%; background: var(--bg1); border: 1px solid var(--border2); border-radius: 10px; padding: 10px 12px; font-family: inherit; font-size: 13px; color: var(--text); outline: none; box-sizing: border-box; resize: none; transition: border-color .15s; }
+.codegen-field input:focus, .codegen-field textarea:focus, .codegen-field select:focus { border-color: rgba(94,255,67,.35); }
+.codegen-field textarea { min-height: 80px; }
+.codegen-op-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.codegen-op-btn { padding: 6px 12px; border-radius: 99px; border: 1px solid var(--border2); background: var(--surface); font-size: 11px; font-weight: 700; color: var(--text2); cursor: pointer; font-family: inherit; transition: all .15s; }
+.codegen-op-btn.active { border-color: rgba(94,255,67,.35); background: var(--g-dim); color: var(--g); }
+.codegen-submit-btn { width: 100%; padding: 12px; background: linear-gradient(135deg, #5EFF43, #00f2ff); border: none; border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 800; color: #000; cursor: pointer; transition: opacity .15s; }
+.codegen-submit-btn:disabled { opacity: .5; }
+.codegen-result { background: var(--bg1); border: 1px solid var(--border2); border-radius: 12px; overflow: hidden; }
+.codegen-result-header { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--border2); }
+.codegen-result-title { font-size: 12px; font-weight: 700; color: var(--text); flex: 1; }
+.codegen-result-meta { font-size: 10px; color: var(--text3); font-family: 'Space Mono', monospace; }
+.codegen-result-actions { display: flex; gap: 6px; }
+.codegen-action-btn { padding: 4px 10px; border-radius: 99px; border: 1px solid var(--border2); background: var(--surface); font-size: 10px; font-weight: 700; color: var(--text2); cursor: pointer; font-family: inherit; transition: all .15s; }
+.codegen-action-btn:hover { border-color: rgba(94,255,67,.3); color: var(--g); }
+.codegen-action-btn.dl { border-color: rgba(94,255,67,.3); color: var(--g); }
+.codegen-result-code { padding: 14px; font-family: 'Space Mono', monospace; font-size: 12px; color: var(--cy); line-height: 1.7; overflow-x: auto; max-height: 350px; overflow-y: auto; white-space: pre; }
+.codegen-progress { display: flex; align-items: center; gap: 10px; padding: 14px; font-size: 13px; color: var(--text2); }
+.codegen-spinner { width: 18px; height: 18px; border: 2px solid var(--border2); border-top-color: var(--cy); border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.codegen-upload-area { border: 2px dashed var(--border2); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; transition: all .2s; }
+.codegen-upload-area:hover { border-color: rgba(94,255,67,.35); background: var(--g-dim); }
+.codegen-upload-area.dragover { border-color: var(--g); background: var(--g-dim); }
+.codegen-upload-icon { font-size: 32px; margin-bottom: 8px; }
+.codegen-upload-text { font-size: 13px; color: var(--text2); }
+.codegen-upload-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+.codegen-file-loaded { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: rgba(94,255,67,.06); border: 1px solid rgba(94,255,67,.2); border-radius: 10px; }
+.codegen-file-loaded-name { font-size: 12px; font-weight: 700; color: var(--text); flex: 1; }
+.codegen-file-loaded-size { font-size: 10px; color: var(--text3); font-family: 'Space Mono', monospace; }
+.codegen-file-remove { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 16px; }
+</style>
+
+<script>
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  AUTH STATE
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let authToken = localStorage.getItem('nexus_token') || null;
+let currentUser = null;
+let currentPlan = 'free';
+let currentPlanStatus = {};
+let messagesUsed = 0;
+let messagesLimit = 10;
+let resetsAt = null;
+let currentBrainVersion = 'base';
+
+function getAuthHeaders() {
+  return authToken ? { 'Authorization': `Bearer ${authToken}`, 'Content-Type': 'application/json' } : { 'Content-Type': 'application/json' };
+}
+
+async function initApp() {
+  if (!authToken) { showAuth(); return; }
+  try {
+    const res = await fetch('/api/auth/me', { headers: getAuthHeaders() });
+    if (!res.ok) { authToken = null; localStorage.removeItem('nexus_token'); showAuth(); return; }
+    const data = await res.json();
+    currentUser     = data.user;
+    currentPlan     = data.plan?.plan || 'free';
+    currentPlanStatus = data.plan || {};
+    messagesUsed    = data.messagesUsed || 0;
+    messagesLimit   = data.messagesLimit || 10;
+    resetsAt        = data.resetsAt || null;
+    showApp();
+  } catch (e) { showAuth(); }
+}
+
+function showAuth() {
+  document.getElementById('auth-screen').classList.remove('hidden');
+  document.getElementById('main-app').style.display = 'none';
+}
+
+function showApp() {
+  document.getElementById('auth-screen').classList.add('hidden');
+  document.getElementById('main-app').style.display = 'flex';
+  updateProfileUI();
+  updateHeaderSub();
+  updateLimitBanner();
+  loadStats();
+  startPolling();
+  detectOllama();
+  setTimeout(() => fixHeight(), 100);
+  document.getElementById('input')?.focus();
+  setTimeout(checkRandomPromoBanner, 3500);
+  // Show tutorial only first time
+  setTimeout(() => { if (!localStorage.getItem('nx_tutorial_done')) nxStart(); }, 2800);
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  TUTORIAL SYSTEM
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const NX_STEPS = [
+  {
+    icon: '🚀',
+    title: 'Bienvenido a NEXUS',
+    body: 'Te damos un tour rápido de <strong>todo lo que puedes hacer</strong>. Toca "Siguiente" para comenzar o "Saltar todo" si ya conoces la app.',
+    highlight: '¡Solo toma 1 minuto!',
+    target: null,
+    position: 'center'
+  },
+  {
+    icon: '💬',
+    title: 'Escribe tu mensaje aquí',
+    body: 'Toca el <strong>campo de texto</strong> en la parte inferior para escribir tu pregunta o mensaje a NEXUS. Puedes escribir lo que quieras.',
+    highlight: '💡 Tip: Presiona Enter para enviar rápidamente',
+    target: '#input',
+    position: 'top'
+  },
+  {
+    icon: '⚡',
+    title: 'Botón Enviar',
+    body: 'Toca el <strong>botón morado</strong> para enviar tu mensaje. NEXUS responderá al instante con su inteligencia neural.',
+    highlight: '🎯 Funciona con Enter también desde el teclado',
+    target: '#send-btn',
+    position: 'top'
+  },
+  {
+    icon: '🔄',
+    title: 'Nuevo chat',
+    body: 'Toca el <strong>botón + de arriba a la derecha</strong> para empezar una conversación nueva desde cero.',
+    highlight: '✨ Tu conversación anterior se guarda en el historial',
+    target: '#new-btn',
+    position: 'bottom'
+  },
+  {
+    icon: '📚',
+    title: 'Historial de chats',
+    body: 'Toca el <strong>icono del reloj</strong> para ver todas tus conversaciones anteriores. Puedes buscar, retomar o eliminar chats.',
+    highlight: '🔍 Busca palabras clave para encontrar conversaciones',
+    target: '#history-btn',
+    position: 'bottom'
+  },
+  {
+    icon: '📊',
+    title: 'Tab Neural — Estadísticas',
+    body: 'En el tab <strong>"Neural"</strong> del menú inferior puedes ver las estadísticas del cerebro de NEXUS: vocabulario, episodios de memoria y actividad neural en tiempo real.',
+    highlight: '🧠 El cerebro de NEXUS aprende con cada conversación',
+    target: '#nav-stats',
+    position: 'top'
+  },
+  {
+    icon: '⚡',
+    title: 'Tab Ultra — Potencia máxima',
+    body: 'En <strong>"Ultra"</strong> puedes desbloquear NEXUS v12.0 APEX: 8 redes neuronales dinámicas, motor emocional PAD-3D y mensajes ilimitados por solo $10/mes.',
+    highlight: '🧬 7 veces más poderoso que el plan gratuito',
+    target: '#nav-payment',
+    position: 'top'
+  },
+  {
+    icon: '👤',
+    title: 'Tu perfil',
+    body: 'En <strong>"Perfil"</strong> puedes editar tu nombre, ver tu plan y límite de mensajes del día, y cerrar sesión.',
+    highlight: '🆓 Plan gratuito: 10 mensajes/día · Ultra: ilimitados',
+    target: '#nav-profile',
+    position: 'top'
+  },
+  {
+    icon: '🏆',
+    title: '¡Ya estás listo!',
+    body: 'Ya conoces todo NEXUS. <strong>¡Empieza a chatear!</strong> NEXUS recuerda tus conversaciones y aprende de ellas para darte respuestas cada vez más personalizadas.',
+    highlight: '🧬 NEXUS es único — tiene redes neuronales propias',
+    target: null,
+    position: 'center'
+  }
+];
+
+let nxCurrent = 0;
+
+function nxStart() {
+  nxCurrent = 0;
+  nxRender();
+}
+
+function nxRender() {
+  const step = NX_STEPS[nxCurrent];
+  const overlay = document.getElementById('nx-overlay');
+  const tooltip = document.getElementById('nx-tooltip');
+  const ring    = document.getElementById('nx-ring');
+
+  overlay.style.display = 'block';
+  tooltip.style.display = 'block';
+
+  // Update content
+  document.getElementById('nx-icon').textContent    = step.icon;
+  document.getElementById('nx-step').textContent    = `PASO ${nxCurrent+1} DE ${NX_STEPS.length}`;
+  document.getElementById('nx-title').textContent   = step.title;
+  document.getElementById('nx-body').innerHTML      = step.body;
+  const hlEl = document.getElementById('nx-highlight');
+  if (step.highlight) { hlEl.textContent = step.highlight; hlEl.style.display='block'; }
+  else { hlEl.style.display='none'; }
+
+  // Dots
+  const dots = document.getElementById('nx-dots');
+  dots.innerHTML = '';
+  NX_STEPS.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'nx-tooltip-dot' + (i===nxCurrent?' active':'');
+    dots.appendChild(d);
+  });
+
+  // Last step
+  const nextBtn = document.getElementById('nx-next-btn');
+  nextBtn.textContent = nxCurrent === NX_STEPS.length-1 ? '¡Empezar! 🚀' : 'Siguiente →';
+
+  // Highlight target element
+  if (step.target) {
+    const el = document.querySelector(step.target);
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      ring.style.display = 'block';
+      ring.style.left   = (rect.left - 6) + 'px';
+      ring.style.top    = (rect.top - 6) + 'px';
+      ring.style.width  = (rect.width + 12) + 'px';
+      ring.style.height = (rect.height + 12) + 'px';
+    } else {
+      ring.style.display = 'none';
+    }
+  } else {
+    ring.style.display = 'none';
+  }
+
+  // Position tooltip
+  positionTooltip(step);
+
+  // Re-animate
+  tooltip.style.animation = 'none';
+  tooltip.offsetHeight;
+  tooltip.style.animation = 'tooltipIn .35s cubic-bezier(.34,1.56,.64,1) both';
+}
+
+function positionTooltip(step) {
+  const tooltip = document.getElementById('nx-tooltip');
+  const vw = window.innerWidth, vh = window.innerHeight;
+  const tw = Math.min(270, vw - 32);
+
+  tooltip.style.maxWidth = tw + 'px';
+  tooltip.style.width    = tw + 'px';
+
+  // Default: center
+  if (step.position === 'center' || !step.target) {
+    tooltip.style.left = ((vw - tw) / 2) + 'px';
+    tooltip.style.top  = ((vh - 280) / 2) + 'px';
+    return;
+  }
+
+  const el = document.querySelector(step.target);
+  if (!el) { tooltip.style.left=((vw-tw)/2)+'px'; tooltip.style.top=((vh-280)/2)+'px'; return; }
+
+  const rect = el.getBoundingClientRect();
+  const margin = 16;
+  let left = rect.left + (rect.width/2) - (tw/2);
+  left = Math.max(margin, Math.min(left, vw - tw - margin));
+
+  if (step.position === 'bottom') {
+    tooltip.style.top  = (rect.bottom + 12) + 'px';
+    tooltip.style.left = left + 'px';
+  } else {
+    // top — show above
+    const ttHeight = 220;
+    let top = rect.top - ttHeight - 16;
+    if (top < 60) top = rect.bottom + 16;
+    tooltip.style.top  = top + 'px';
+    tooltip.style.left = left + 'px';
+  }
+}
+
+function nxNext() {
+  nxCurrent++;
+  if (nxCurrent >= NX_STEPS.length) { nxDone(); return; }
+  nxRender();
+}
+
+function nxSkip() { nxDone(); }
+
+function nxDone() {
+  document.getElementById('nx-overlay').style.display   = 'none';
+  document.getElementById('nx-tooltip').style.display   = 'none';
+  document.getElementById('nx-ring').style.display      = 'none';
+  localStorage.setItem('nx_tutorial_done', '1');
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  PROMO BANNER
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const PROMO_LAST_KEY  = 'nexus_promo_shown_at';
+const PROMO_DELAY_KEY = 'nexus_promo_next_delay';
+const PROMO_SEEN_KEY  = 'nexus_promo_seen_once';
+const PROMO_MIN_MS    = 1 * 60 * 60 * 1000;
+const PROMO_MAX_MS    = 5 * 24 * 60 * 60 * 1000;
+
+function _randomPromoDelay() { return Math.floor(Math.random()*(PROMO_MAX_MS-PROMO_MIN_MS+1))+PROMO_MIN_MS; }
+
+function checkRandomPromoBanner() {
+  if (currentPlan==='premium' || currentUser?.isVip) return;
+  const seenOnce  = localStorage.getItem(PROMO_SEEN_KEY);
+  const lastShown = parseInt(localStorage.getItem(PROMO_LAST_KEY)||'0',10);
+  const nextDelay = parseInt(localStorage.getItem(PROMO_DELAY_KEY)||'0',10);
+  if (!seenOnce) { showPromoBanner(); }
+  else if (nextDelay && Date.now()-lastShown>=nextDelay) { showPromoBanner(); }
+}
+function showPromoBanner() { document.getElementById('promo-overlay').classList.add('show'); }
+function dismissPromoBanner() {
+  document.getElementById('promo-overlay').classList.remove('show');
+  localStorage.setItem(PROMO_LAST_KEY, Date.now().toString());
+  localStorage.setItem(PROMO_SEEN_KEY, '1');
+  localStorage.setItem(PROMO_DELAY_KEY, _randomPromoDelay().toString());
+}
+function handlePromoOverlayClick(e) { if (e.target===document.getElementById('promo-overlay')) dismissPromoBanner(); }
+function goToPremiumFromBanner() { dismissPromoBanner(); switchMainTab('payment'); }
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  HEADER
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function updateHeaderSub() {
+  const sub = document.getElementById('header-sub');
+  if (!sub) return;
+  if (currentUser?.isVip) sub.textContent = '👑 VIP';
+  else if (currentPlan==='premium') sub.textContent = '✨ v12.0 APEX Ultra';
+  else sub.textContent = 'v11.0 · Free';
+  updateBrainVersionBadge();
+}
+
+function updateBrainVersionBadge() {
+  const badge = document.getElementById('brain-ver-badge');
+  const label = document.getElementById('brain-ver-label');
+  if (!badge||!label) return;
+  const isCreatorUser = currentUser?.isCreator||false;
+  const isPremium = currentPlan==='premium';
+  const isVip = currentUser?.isVip||false;
+  const useUltra = isCreatorUser||isVip||isPremium;
+  currentBrainVersion = useUltra?'ultra':'base';
+  badge.className = 'brain-ver-badge '+(isCreatorUser?'creator':useUltra?'ultra':'base');
+  label.textContent = isCreatorUser?'👑 Creator':useUltra?'v12.0 APEX Ultra':'v11.0 Free';
+  badge.title = useUltra?'Motor NEXUS v12.0 APEX Ultra activo':'Motor NEXUS v11.0 Free — actualiza a Ultra para el cerebro dinámico';
+}
+
+function updateProfileUI() {
+  if (!currentUser) return;
+  const initial = currentUser.username?.[0]?.toUpperCase()||'🧠';
+  document.getElementById('profile-avatar').textContent = currentUser.isVip?'👑':initial;
+  document.getElementById('profile-display-name').textContent = currentUser.displayName||currentUser.username;
+  document.getElementById('profile-email-display').textContent = currentUser.email;
+  document.getElementById('edit-display-name').value = currentUser.displayName||'';
+  document.getElementById('edit-username').value = currentUser.username||'';
+
+  const badge=document.getElementById('plan-badge'), icon=document.getElementById('plan-icon');
+  const pname=document.getElementById('plan-name'), pdesc=document.getElementById('plan-desc');
+  const pexpiry=document.getElementById('plan-expiry'), msgCounter=document.getElementById('msg-counter');
+  const planObj = currentPlanStatus||{};
+  const isPremium=(currentPlan==='premium'), isVip=currentUser.isVip||planObj.isVip;
+
+  if (isPremium) {
+    badge.className=isVip?'plan-badge vip':'plan-badge premium';
+    icon.textContent=isVip?'👑':'⚡';
+    pname.textContent=isVip?'VIP — Cuenta del Creador':'NEXUS Ultra — v12.0 APEX';
+    pdesc.textContent=isVip?'Acceso permanente sin cobro':'Mensajes ilimitados · Cerebro dinámico activo';
+    pexpiry.style.display='none';
+    if (!isVip&&planObj.expiresAt) {
+      const exp=new Date(planObj.expiresAt);
+      pexpiry.textContent=`Renueva el ${exp.toLocaleDateString('es',{day:'numeric',month:'long',year:'numeric'})}`;
+      pexpiry.style.display='block'; pexpiry.style.color='rgba(251,191,36,.7)';
+    }
+    msgCounter.style.display='none';
+  } else {
+    badge.className='plan-badge free'; icon.textContent='🆓';
+    pname.textContent='Plan Gratuito';
+    const remaining=Math.max(0,messagesLimit-messagesUsed);
+    pdesc.textContent=`${remaining} mensajes restantes hoy`;
+    pexpiry.style.display='none';
+    if (planObj.expired) { pexpiry.textContent='⚠ Plan expirado — renueva para continuar'; pexpiry.style.display='block'; pexpiry.style.color='var(--hot)'; }
+    msgCounter.style.display='block';
+    const pct=Math.min(100,(messagesUsed/messagesLimit)*100);
+    document.getElementById('counter-fill').style.width=pct+'%';
+    document.getElementById('counter-text').textContent=`${messagesUsed} / ${messagesLimit} mensajes`;
+    if (resetsAt) {
+      const r=new Date(resetsAt);
+      document.getElementById('counter-reset-time').textContent=`· Se renueva a las ${r.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})}`;
+    }
+  }
+  updateBrainInfoCard();
+}
+
+function updateBrainInfoCard() {
+  const el = document.getElementById('brain-info-body');
+  if (!el) return;
+  const isCreatorUser=currentUser?.isCreator||false;
+  const useUltra=(currentPlan==='premium')||currentUser?.isVip||isCreatorUser;
+  if (useUltra) {
+    el.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span class="brain-ver-badge ultra" style="font-size:10px;padding:3px 10px"><span class="brain-ver-dot"></span><span>${isCreatorUser?'👑 Creator Engine':'v12.0 APEX Ultra'}</span></span></div><div style="font-size:12px;color:var(--text2);line-height:1.8"><div>📄 <strong style="color:var(--text)">Script:</strong> brain_vip.py</div><div>🧬 <strong style="color:var(--text)">Redes neuronales:</strong> 8 DynamicNeuralNet (se auto-expanden)</div><div>🎭 <strong style="color:var(--text)">Motor emocional:</strong> PAD-3D — _AffectNet + _ContextNet + _RegulationNet</div><div>🔢 <strong style="color:var(--text)">Parámetros:</strong> hasta 3M+ (crecen solos)</div><div>♾️ <strong style="color:var(--text)">Vocabulario:</strong> InfiniteEmbeddings — sin límite</div><div>🎯 <strong style="color:var(--text)">Búsqueda episódica:</strong> cosine similarity (semántica real)</div></div>`;
+  } else {
+    el.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span class="brain-ver-badge base" style="font-size:10px;padding:3px 10px"><span class="brain-ver-dot"></span><span>v11.0 Free</span></span></div><div style="font-size:12px;color:var(--text2);line-height:1.8"><div>📄 <strong style="color:var(--text)">Script:</strong> brain.py</div><div>🧩 <strong style="color:var(--text)">Redes neuronales:</strong> 7 (arquitectura ×2)</div><div>🎭 <strong style="color:var(--text)">Motor emocional:</strong> PersonalityEngine PAD v2</div><div>🔢 <strong style="color:var(--text)">Parámetros:</strong> ~1.8M+ (tamaño fijo)</div><div>📖 <strong style="color:var(--text)">Vocabulario:</strong> EmbeddingMatrix — tope 16,384 n-gramas</div></div><button onclick="switchMainTab('payment')" style="margin-top:12px;width:100%;padding:10px;background:rgba(94,255,67,.08);border:1px solid rgba(94,255,67,.18);border-radius:10px;font-family:inherit;font-size:12px;font-weight:700;color:var(--neon);cursor:pointer">🧬 Actualizar a NEXUS v12.0 APEX Ultra — $10/mes</button>`;
+  }
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  LIMIT BANNER
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function updateLimitBanner() {
+  const banner = document.getElementById('limit-banner');
+  if (currentPlan==='free' && messagesUsed>=messagesLimit) {
+    banner.classList.add('show');
+    if (resetsAt) {
+      const r=new Date(resetsAt);
+      document.getElementById('limit-banner-text').textContent=`⚡ Límite de ${messagesLimit} mensajes alcanzado. Se renueva a las ${r.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})}. Actualiza a Ultra para ilimitado.`;
+    }
+  } else { banner.classList.remove('show'); }
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  AUTH ACTIONS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function switchAuthTab(tab) {
+  document.getElementById('tab-login').className='auth-tab'+(tab==='login'?' active':'');
+  document.getElementById('tab-register').className='auth-tab'+(tab==='register'?' active':'');
+  document.getElementById('form-login').style.display=tab==='login'?'block':'none';
+  document.getElementById('form-register').style.display=tab==='register'?'block':'none';
+  document.getElementById('auth-error').style.display='none';
+}
+function showAuthError(msg) { const el=document.getElementById('auth-error'); el.textContent=msg; el.style.display='block'; }
+
+async function doLogin() {
+  const identifier=document.getElementById('login-identifier').value.trim();
+  const password=document.getElementById('login-password').value;
+  if (!identifier||!password) { showAuthError('Completa todos los campos'); return; }
+  const btn=document.getElementById('login-btn');
+  btn.disabled=true; btn.textContent='Ingresando...';
+  try {
+    const res=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({identifier,password})});
+    const data=await res.json();
+    if (!res.ok) { showAuthError(data.error||'Error al ingresar'); btn.disabled=false; btn.textContent='Ingresar a NEXUS'; return; }
+    authToken=data.token; currentUser=data.user;
+    currentPlan=data.plan?.plan||data.plan||'free'; currentPlanStatus=data.plan||{};
+    messagesUsed=data.messagesUsed||0; messagesLimit=data.messagesLimit||10;
+    localStorage.setItem('nexus_token',authToken);
+    await initApp();
+  } catch(e) { showAuthError('Error de conexión'); btn.disabled=false; btn.textContent='Ingresar a NEXUS'; }
+}
+
+async function doRegister() {
+  const username=document.getElementById('reg-username').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const password=document.getElementById('reg-password').value;
+  if (!username||!email||!password) { showAuthError('Completa todos los campos'); return; }
+  const btn=document.getElementById('register-btn');
+  btn.disabled=true; btn.textContent='Registrando...';
+  try {
+    const res=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,email,password})});
+    const data=await res.json();
+    if (!res.ok) { showAuthError(data.error||'Error al registrarse'); btn.disabled=false; btn.textContent='Crear cuenta'; return; }
+    authToken=data.token; currentUser=data.user;
+    localStorage.setItem('nexus_token',authToken);
+    await initApp();
+  } catch(e) { showAuthError('Error de conexión'); btn.disabled=false; btn.textContent='Crear cuenta'; }
+}
+
+function doLogout() {
+  authToken=null; currentUser=null;
+  localStorage.removeItem('nexus_token');
+  conversationId=null; hActiveId=null; hMsgs=[];
+  showAuth();
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  PROFILE SAVE
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+async function saveProfile() {
+  const displayName=document.getElementById('edit-display-name').value.trim();
+  const username=document.getElementById('edit-username').value.trim();
+  const btn=document.getElementById('profile-save-btn'), msgEl=document.getElementById('profile-msg');
+  btn.disabled=true; btn.textContent='Guardando...'; msgEl.style.display='none';
+  try {
+    const res=await fetch('/api/auth/profile',{method:'PATCH',headers:getAuthHeaders(),body:JSON.stringify({displayName,username})});
+    const data=await res.json();
+    if (!res.ok) {
+      msgEl.style.cssText='display:block;background:rgba(244,63,94,0.08);color:var(--hot);border:1px solid rgba(244,63,94,0.2);font-size:12px;margin-bottom:10px;padding:8px 12px;border-radius:8px;';
+      msgEl.textContent=data.error||'Error al guardar';
+    } else {
+      authToken=data.token; currentUser=data.user;
+      localStorage.setItem('nexus_token',authToken);
+      msgEl.style.cssText='display:block;background:rgba(16,185,129,0.08);color:var(--green);border:1px solid rgba(16,185,129,0.2);font-size:12px;margin-bottom:10px;padding:8px 12px;border-radius:8px;';
+      msgEl.textContent='✓ Perfil actualizado';
+      updateProfileUI(); updateHeaderSub();
+    }
+  } catch(e) {
+    msgEl.style.cssText='display:block;background:rgba(244,63,94,0.08);color:var(--hot);border:1px solid rgba(244,63,94,0.2);font-size:12px;margin-bottom:10px;padding:8px 12px;border-radius:8px;';
+    msgEl.textContent='Error de conexión';
+  }
+  btn.disabled=false; btn.textContent='Guardar cambios';
+  setTimeout(()=>{ msgEl.style.display='none'; },3000);
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  PAYMENT
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let paypalTarget=null;
+async function loadPaymentInfo() {
+  try {
+    const res=await fetch('/api/payment/info',{headers:getAuthHeaders()});
+    if (!res.ok) return;
+    const data=await res.json();
+    paypalTarget=data.paypalTarget;
+    const premiumArea=document.getElementById('payment-already-premium');
+    const formArea=document.getElementById('payment-form-area');
+    if (currentPlan==='premium') { premiumArea.style.display='block'; formArea.style.display='none'; }
+    else { premiumArea.style.display='none'; formArea.style.display='block'; }
+  } catch(e) {}
+}
+
+function openPayPal() {
+  if (!paypalTarget) return;
+  const email=atob(paypalTarget);
+  const fallback=`https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${encodeURIComponent(email)}&item_name=NEXUS+AI+Premium+Mensual&amount=10.00&currency_code=USD`;
+  window.open(fallback,'_blank');
+}
+
+async function verifyPayment() {
+  const transactionId=document.getElementById('transaction-id').value.trim().toUpperCase();
+  const payerEmail=document.getElementById('payer-email').value.trim();
+  if (!transactionId) { showVerifyMsg('Ingresa el ID de transacción de PayPal','error'); return; }
+  const btn=document.getElementById('verify-btn');
+  btn.disabled=true; btn.textContent='Verificando...';
+  try {
+    const res=await fetch('/api/payment/verify',{method:'POST',headers:getAuthHeaders(),body:JSON.stringify({transactionId,payerEmail,amount:10})});
+    const data=await res.json();
+    if (!res.ok) { showVerifyMsg(data.error||'Error al verificar','error'); btn.disabled=false; btn.textContent='Verificar y Activar NEXUS Ultra'; return; }
+    currentPlan='premium'; currentPlanStatus={plan:'premium',active:true,isVip:data.isVip||false,expiresAt:data.expiresAt||null};
+    messagesUsed=0;
+    document.getElementById('payment-success').classList.add('show');
+    document.getElementById('payment-success-msg').textContent=data.message||'¡Plan activado! Acceso ilimitado por 30 días.';
+    showVerifyMsg('✓ '+(data.message||'¡Premium activado!'),'success');
+    updateProfileUI(); updateHeaderSub(); updateLimitBanner();
+    btn.textContent='✓ Activado';
+  } catch(e) { showVerifyMsg('Error de conexión','error'); btn.disabled=false; btn.textContent='Verificar y Activar NEXUS Ultra'; }
+}
+
+function showVerifyMsg(msg,type) {
+  const el=document.getElementById('verify-msg');
+  el.style.cssText=type==='success'?'display:block;background:rgba(16,185,129,0.08);color:var(--green);border:1px solid rgba(16,185,129,0.2);font-size:12px;margin-bottom:10px;padding:8px 12px;border-radius:8px;':'display:block;background:rgba(244,63,94,0.08);color:var(--hot);border:1px solid rgba(244,63,94,0.2);font-size:12px;margin-bottom:10px;padding:8px 12px;border-radius:8px;';
+  el.textContent=msg;
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  MAIN TABS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function switchMainTab(tab) {
+  ['chat','codegen','stats','payment','profile'].forEach(t=>{
+    const panel = document.getElementById(`panel-${t}`);
+    const nav   = document.getElementById(`nav-${t}`);
+    if (panel) panel.classList.remove('active');
+    if (nav)   nav.classList.remove('active');
+  });
+  const activePanel = document.getElementById(`panel-${tab}`);
+  const activeNav   = document.getElementById(`nav-${tab}`);
+  if (activePanel) activePanel.classList.add('active');
+  if (activeNav)   activeNav.classList.add('active');
+  if (tab==='stats')   loadStats();
+  if (tab==='profile') updateProfileUI();
+  if (tab==='payment') loadPaymentInfo();
+  if (tab==='chat')    setTimeout(()=>document.getElementById('input')?.focus(),100);
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  CHAT STATE
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let busy=false, conversationId=null, thinkingTimer=null, thinkingSeconds=0, statsLoaded=false;
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  HISTORY
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const H_INDEX='nxh_index', H_MSG='nxh_m_';
+let hActiveId=null, hMsgs=[];
+function hUid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function hGetIndex(){try{return JSON.parse(localStorage.getItem(H_INDEX)||'[]')}catch{return[]}}
+function hSetIndex(l){localStorage.setItem(H_INDEX,JSON.stringify(l))}
+function hGetMsgs(id){try{return JSON.parse(localStorage.getItem(H_MSG+id)||'[]')}catch{return[]}}
+function hSetMsgs(id,m){localStorage.setItem(H_MSG+id,JSON.stringify(m))}
+function hDelMsgs(id){localStorage.removeItem(H_MSG+id)}
+function hTitle(t){const s=t.trim().replace(/\s+/g,' ');return s.length>44?s.slice(0,44)+'…':s||'Nuevo chat'}
+function hRelTime(ts){const s=Math.floor((Date.now()-ts)/1000);if(s<60)return'ahora';const m=Math.floor(s/60);if(m<60)return`hace ${m} min`;const h=Math.floor(m/60);if(h<24)return`hace ${h}h`;const d=Math.floor(h/24);if(d===1)return'ayer';if(d<7)return`hace ${d} días`;return new Date(ts).toLocaleDateString('es',{day:'numeric',month:'short'})}
+function hEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function hPush(role,text) {
+  if (!hActiveId) {
+    hActiveId=hUid(); hMsgs=[];
+    const idx=hGetIndex();
+    idx.unshift({id:hActiveId,title:hTitle(role==='user'?text:'Chat'),ts:Date.now(),count:0});
+    hSetIndex(idx);
+  }
+  hMsgs.push({role,text,ts:Date.now()});
+  const idx=hGetIndex();
+  const i=idx.findIndex(c=>c.id===hActiveId);
+  if(i!==-1){
+    idx[i].count=hMsgs.length; idx[i].ts=Date.now();
+    if(role==='user'&&hMsgs.filter(m=>m.role==='user').length===1) idx[i].title=hTitle(text);
+    const[e]=idx.splice(i,1); idx.unshift(e); hSetIndex(idx);
+  }
+  hSetMsgs(hActiveId,hMsgs); renderHistory();
+}
+function hGetServerHistory(){return hMsgs.slice(-10).map(m=>({role:m.role==='user'?'user':'assistant',content:m.text}))}
+
+function openHistory(){document.getElementById('hist-sidebar').classList.add('open');document.getElementById('hist-overlay').classList.add('show');document.getElementById('history-btn').classList.add('active');document.getElementById('hist-search').value='';renderHistory()}
+function closeHistory(){document.getElementById('hist-sidebar').classList.remove('open');document.getElementById('hist-overlay').classList.remove('show');document.getElementById('history-btn').classList.remove('active')}
+document.getElementById('history-btn').addEventListener('click',()=>{document.getElementById('hist-sidebar').classList.contains('open')?closeHistory():openHistory()});
+
+function renderHistory(query='') {
+  const list=hGetIndex(), q=query.toLowerCase();
+  const filtered=q?list.filter(c=>c.title.toLowerCase().includes(q)):list;
+  const el=document.getElementById('hist-list');
+  el.innerHTML='';
+  if(filtered.length===0){el.innerHTML=`<div class="hist-empty"><div style="font-size:28px;margin-bottom:8px">${q?'🔍':'💬'}</div><div>${q?'Sin resultados':'Aún no hay chats'}</div></div>`;return}
+  const now=Date.now(), tod=new Date(); tod.setHours(0,0,0,0);
+  const wk=new Date(tod); wk.setDate(tod.getDate()-6);
+  const mo=new Date(tod); mo.setDate(tod.getDate()-30);
+  const groups=[{label:'Hoy',items:[]},{label:'Esta semana',items:[]},{label:'Este mes',items:[]},{label:'Anterior',items:[]}];
+  filtered.forEach(c=>{const d=new Date(c.ts);d.setHours(0,0,0,0);if(d>=tod)groups[0].items.push(c);else if(d>=wk)groups[1].items.push(c);else if(d>=mo)groups[2].items.push(c);else groups[3].items.push(c)});
+  groups.forEach(({label,items})=>{
+    if(!items.length) return;
+    const gl=document.createElement('div');gl.className='hist-group';gl.textContent=label;el.appendChild(gl);
+    items.forEach(c=>{
+      const item=document.createElement('div');
+      item.className='hist-item'+(c.id===hActiveId?' active':'');
+      item.innerHTML=`<div class="hist-item-body"><div class="hist-item-title">${hEsc(c.title)}</div><div class="hist-item-meta">${hRelTime(c.ts)} · ${c.count||0} msgs</div></div><button class="hist-item-del" title="Eliminar"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button>`;
+      item.querySelector('.hist-item-del').addEventListener('click',e=>{e.stopPropagation();confirmDeleteChat(c.id,c.title)});
+      item.addEventListener('click',()=>loadChat(c.id));
+      el.appendChild(item);
+    });
+  });
+}
+
+function loadChat(id) {
+  const msgs=hGetMsgs(id), idx=hGetIndex(), meta=idx.find(c=>c.id===id);
+  if(!meta||!msgs.length) return;
+  hActiveId=id; hMsgs=msgs; conversationId=null;
+  const msgsEl=document.getElementById('messages');
+  msgsEl.innerHTML='';
+  msgs.forEach(m=>{
+    const wrap=document.createElement('div');
+    if(m.role==='user'){
+      wrap.className='msg msg-user';
+      const now=new Date(m.ts);
+      wrap.innerHTML=`<div class="msg-header"><div class="msg-avatar" style="font-size:12px;font-weight:700;font-family:'Space Mono',monospace;color:var(--text2)">${currentUser?.username?.[0]?.toUpperCase()||'U'}</div><span class="msg-name">Tú</span><span class="msg-ts">${now.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})}</span></div><div class="msg-bubble">${renderMd(m.text)}</div>`;
+    } else {
+      const now=new Date(m.ts);
+      const bubble=document.createElement('div');bubble.className='msg-bubble';bubble.innerHTML=renderMd(m.text);
+      const copyBtn=makeCopyBtn(m.text);
+      wrap.className='msg msg-ai';
+      wrap.innerHTML=`<div class="msg-header"><div class="msg-avatar">🧠</div><span class="msg-name">NEXUS</span><span class="msg-ts">${now.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})}</span></div>`;
+      wrap.appendChild(bubble); wrap.appendChild(copyBtn);
+    }
+    msgsEl.appendChild(wrap);
+  });
+  msgsEl.scrollTop=msgsEl.scrollHeight;
+  closeHistory(); renderHistory();
+  document.getElementById('hint').textContent=`Chat retomado · ${msgs.length} mensajes`;
+}
+
+function confirmDeleteChat(id,title){showConfirm('¿Eliminar este chat?',`"${title.slice(0,38)}"`,()=>deleteChat(id))}
+function confirmClearAll(){showConfirm('¿Borrar todo el historial?','Se eliminarán todos los chats. No se puede deshacer.',clearAllHistory)}
+function showConfirm(title,desc,fn){
+  document.getElementById('conf-title').textContent=title;
+  document.getElementById('conf-desc').textContent=desc;
+  document.getElementById('conf-ok').onclick=()=>{fn();closeConfirm()};
+  document.getElementById('conf-overlay').classList.add('show');
+}
+function closeConfirm(){document.getElementById('conf-overlay').classList.remove('show')}
+function deleteChat(id){const idx=hGetIndex().filter(c=>c.id!==id);hSetIndex(idx);hDelMsgs(id);if(hActiveId===id){hActiveId=null;hMsgs=[];conversationId=null;document.getElementById('new-btn').click()}renderHistory(document.getElementById('hist-search').value)}
+function clearAllHistory(){hGetIndex().forEach(c=>hDelMsgs(c.id));hSetIndex([]);hActiveId=null;hMsgs=[];conversationId=null;renderHistory();document.getElementById('new-btn').click()}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  OLLAMA
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const OLLAMA_URL='http://localhost:11434', OLLAMA_MODEL='llama3.2:1b';
+let ollamaAvailable=false, ollamaBannerDismissed=false;
+
+async function detectOllama() {
+  try {
+    const ctrl=new AbortController();
+    const timer=setTimeout(()=>ctrl.abort(),2500);
+    const r=await fetch(OLLAMA_URL,{signal:ctrl.signal,mode:'cors'});
+    clearTimeout(timer); ollamaAvailable=r.ok||r.status===200;
+  } catch(e){ollamaAvailable=false}
+  updateOllamaUI(); return ollamaAvailable;
+}
+
+function updateOllamaUI() {
+  const dot=document.getElementById('ollama-local-dot');
+  const name=document.getElementById('ollama-local-name');
+  const status=document.getElementById('ollama-local-status');
+  if(ollamaAvailable){
+    dot.style.background='var(--green)'; dot.style.boxShadow='0 0 8px var(--green)';
+    name.textContent='Ollama local activo'; status.textContent=`Modelo: ${OLLAMA_MODEL}`;
+    if(!ollamaBannerDismissed) document.getElementById('ollama-banner').classList.add('show');
+    document.getElementById('ollama-offline-banner').classList.remove('show');
+  } else {
+    dot.style.background='var(--text3)'; dot.style.boxShadow='none';
+    name.textContent='Ollama no detectado'; status.textContent='Toca para ver cómo instalarlo';
+    document.getElementById('ollama-banner').classList.remove('show');
+  }
+}
+function closeOllamaBanner(){ollamaBannerDismissed=true;document.getElementById('ollama-banner').classList.remove('show')}
+function showOfflineBanner(){if(!ollamaAvailable&&!ollamaBannerDismissed) document.getElementById('ollama-offline-banner').classList.add('show')}
+async function callOllamaLocal(message,history=[]) {
+  if(!ollamaAvailable) return null;
+  try {
+    const messages=[{role:'system',content:'Eres NEXUS, un asistente de inteligencia artificial. Responde en español.'},{...history.slice(-6).map(h=>({role:h.role,content:h.content}))},{role:'user',content:message}];
+    const r=await fetch(`${OLLAMA_URL}/api/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:OLLAMA_MODEL,messages,stream:false})});
+    if(!r.ok) throw new Error('');
+    const data=await r.json();
+    return data?.message?.content||null;
+  } catch(e){ollamaAvailable=false;updateOllamaUI();return null}
+}
+function showOllamaSetup(){document.getElementById('ollama-modal-overlay').classList.add('show')}
+function closeOllamaSetup(){document.getElementById('ollama-modal-overlay').classList.remove('show')}
+function handleOllamaOverlayClick(e){if(e.target===document.getElementById('ollama-modal-overlay')) closeOllamaSetup()}
+function switchOllamaTab(tab,btn){document.querySelectorAll('.ollama-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.ollama-tab-content').forEach(t=>t.classList.remove('active'));btn.classList.add('active');document.getElementById(`tab-${tab}`).classList.add('active')}
+function copyCode(text){const d=text.replace(/&quot;/g,'"').replace(/&amp;/g,'&');navigator.clipboard?.writeText(d).catch(()=>{})}
+setInterval(detectOllama,30000);
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  POLLING
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let pollHandle=null;
+function startPolling(){if(pollHandle)clearInterval(pollHandle);pollHandle=setInterval(()=>{if(!busy)loadStats(false)},60000)}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  TEXTAREA AUTO-RESIZE
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const inputEl=document.getElementById('input');
+if(inputEl){inputEl.addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,140)+'px'})}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  RENDER MARKDOWN
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function renderMd(text) {
+  return text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/```[\s\S]*?```/g,m=>`<pre><code>${m.replace(/```\w*/g,'').trim()}</code></pre>`)
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/`(.+?)`/g,'<code>$1</code>')
+    .replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>')
+    .replace(/\n/g,'<br>');
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  COPY BUTTON
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function makeCopyBtn(text) {
+  const btn=document.createElement('button');
+  btn.className='msg-copy-btn';
+  btn.innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Copiar`;
+  btn.addEventListener('click',()=>{
+    navigator.clipboard?.writeText(text).then(()=>{
+      btn.className='msg-copy-btn copied';
+      btn.innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg> Copiado`;
+      setTimeout(()=>{btn.className='msg-copy-btn';btn.innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> Copiar`},2000);
+    }).catch(()=>{});
+  });
+  return btn;
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  ADD MESSAGE (full-width, no bubbles)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function addMessage(content, role='ai', extras={}) {
+  const welcome=document.getElementById('welcome-screen');
+  if(welcome) welcome.remove();
+  const msgs=document.getElementById('messages');
+  const wrap=document.createElement('div');
+  const now=new Date();
+  const timeStr=now.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+
+  if(role==='user'){
+    wrap.className='msg msg-user';
+    const initial=currentUser?.username?.[0]?.toUpperCase()||'U';
+    wrap.innerHTML=`<div class="msg-header"><div class="msg-avatar" style="font-size:12px;font-weight:700;font-family:'Space Mono',monospace;background:var(--bg3);color:var(--text2)">${initial}</div><span class="msg-name">Tú</span><span class="msg-ts">${timeStr}</span></div><div class="msg-bubble">${renderMd(content)}</div>`;
+  } else {
+    wrap.className='msg msg-ai';
+    let chipsHtml='';
+    if(extras.neuralActivity){
+      const a=extras.neuralActivity;
+      chipsHtml=`<div class="neural-chips">${a.rank_loss!==undefined?`<div class="chip"><div class="chip-dot" style="background:var(--accent3)"></div>loss ${a.rank_loss.toFixed?.(4)||a.rank_loss}</div>`:''} ${a.vocab_size!==undefined?`<div class="chip"><div class="chip-dot" style="background:var(--green)"></div>vocab ${a.vocab_size}</div>`:''} ${a.episodes!==undefined?`<div class="chip"><div class="chip-dot" style="background:var(--cyan)"></div>ep ${a.episodes}</div>`:''} ${a.trainings!==undefined?`<div class="chip"><div class="chip-dot" style="background:var(--neon)"></div>train ${a.trainings}</div>`:''}</div>`;
+    }
+    const headerDiv=document.createElement('div'); headerDiv.className='msg-header';
+    headerDiv.innerHTML=`<div class="msg-avatar">🧠</div><span class="msg-name">NEXUS</span><span class="msg-ts">${timeStr}</span>`;
+    const bubble=document.createElement('div'); bubble.className='msg-bubble';
+    bubble.innerHTML=renderMd(content)+(chipsHtml||'');
+    const copyBtn=makeCopyBtn(content);
+    wrap.appendChild(headerDiv); wrap.appendChild(bubble); wrap.appendChild(copyBtn);
+  }
+
+  msgs.appendChild(wrap);
+  msgs.scrollTop=msgs.scrollHeight;
+  return wrap;
+}
+
+function addError(msg) {
+  const msgs=document.getElementById('messages');
+  const el=document.createElement('div');
+  el.className='msg-error';
+  el.innerHTML=`⚠ ${msg}`;
+  msgs.appendChild(el); msgs.scrollTop=msgs.scrollHeight;
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  THINKING
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let thinkingEl=null;
+function showThinking() {
+  const msgs=document.getElementById('messages');
+  const wrap=document.createElement('div');
+  wrap.className='msg msg-ai'; wrap.id='thinking-wrap';
+  wrap.innerHTML=`<div class="msg-header"><div class="msg-avatar">🧠</div><span class="msg-name">NEXUS</span></div><div class="thinking-bubble"><div class="thinking-bar"><span></span><span></span><span></span></div><span class="elapsed" id="elapsed">0s</span></div>`;
+  msgs.appendChild(wrap); msgs.scrollTop=msgs.scrollHeight;
+  thinkingSeconds=0; thinkingEl=wrap;
+  document.getElementById('thinking-pill').classList.add('show');
+  thinkingTimer=setInterval(()=>{
+    thinkingSeconds++;
+    const el=document.getElementById('elapsed');
+    if(el) el.textContent=thinkingSeconds+'s';
+  },1000);
+}
+function hideThinking() {
+  clearInterval(thinkingTimer);
+  document.getElementById('thinking-pill').classList.remove('show');
+  const el=document.getElementById('thinking-wrap');
+  if(el) el.remove();
+}
+function setStatus(on,text) {
+  const dot=document.getElementById('status-dot'), txt=document.getElementById('status-text');
+  dot.className='status-dot'+(on?' on':' off');
+  txt.textContent=text;
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  SEND MESSAGE
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+async function sendMessage(preset) {
+  if(!authToken){showAuth();return}
+  if(currentPlan==='free'&&messagesUsed>=messagesLimit){switchMainTab('payment');return}
+  const input=document.getElementById('input'), sendBtn=document.getElementById('send-btn');
+  const message=(preset||input.value).trim();
+  if((!message && !currentAttachments.length)||busy) return;
+  const finalMsg = message || (currentAttachments.length === 2 ? `Compara estos dos archivos: ${currentAttachments[0].name} vs ${currentAttachments[1].name}` : currentAttachments.length ? `Analiza este archivo: ${currentAttachments[0].name}` : '');
+  input.value=''; input.style.height='auto';
+  busy=true; sendBtn.disabled=true;
+
+  // Show user message with file attachment
+  const fileSnapshot  = currentAttachments[0] || null;
+  const fileSnapshot2 = currentAttachments[1] || null;
+  addMessageWithFile(finalMsg,'user',{},fileSnapshot, fileSnapshot2);
+  const fileLabel = fileSnapshot2 ? ` [📎 ${fileSnapshot.name} vs ${fileSnapshot2.name}]` : fileSnapshot ? ` [📎 ${fileSnapshot.name}]` : '';
+  hPush('user', finalMsg + fileLabel);
+
+  // Clear attachments after sending
+  if (fileSnapshot) clearAttachment();
+
+  showThinking();
+  document.getElementById('hint').textContent='NEXUS está procesando…';
+  const ctrl=new AbortController();
+  const timer=setTimeout(()=>ctrl.abort(),300000); // 5 min timeout para archivos grandes
+
+  try {
+    let res, data;
+
+    if (fileSnapshot) {
+      // Use file chat endpoint (soporta 1 o 2 archivos para comparación)
+      const body = {
+        message: finalMsg, conversationId, history: hGetServerHistory(),
+        fileData: {
+          type:        fileSnapshot.type,
+          name:        fileSnapshot.name,
+          size:        fileSnapshot.size,
+          mimeType:    fileSnapshot.mimeType,
+          textSummary: fileSnapshot.textSummary,
+          text:        fileSnapshot.text || null,
+          base64:      fileSnapshot.type === 'image' ? fileSnapshot.base64 : null
+        }
+      };
+      if (fileSnapshot2) {
+        body.fileData2 = {
+          type:        fileSnapshot2.type,
+          name:        fileSnapshot2.name,
+          size:        fileSnapshot2.size,
+          mimeType:    fileSnapshot2.mimeType,
+          textSummary: fileSnapshot2.textSummary,
+          text:        fileSnapshot2.text || null,
+          base64:      fileSnapshot2.type === 'image' ? fileSnapshot2.base64 : null
+        };
+      }
+      res = await fetch('/api/chat-with-file', {
+        method:'POST', headers:getAuthHeaders(), signal:ctrl.signal,
+        body: JSON.stringify(body)
+      });
+    } else {
+      res = await fetch('/api/chat',{method:'POST',headers:getAuthHeaders(),signal:ctrl.signal,body:JSON.stringify({message:finalMsg,conversationId,history:hGetServerHistory()})});
+    }
+
+    clearTimeout(timer);
+    if(res.status===401){doLogout();return}
+    if(res.status===402){
+      hideThinking();
+      const d=await res.json();
+      messagesUsed=d.messagesUsed||messagesLimit;
+      if(d.resetsAt) resetsAt=d.resetsAt;
+      updateLimitBanner(); updateProfileUI();
+      addError(d.message||`Límite de ${messagesLimit} mensajes diarios alcanzado.`);
+      busy=false; sendBtn.disabled=false; input.focus(); return;
+    }
+    data=await res.json();
+    clearTimeout(timer); hideThinking();
+    if(!res.ok){addError(data.message||'Error del servidor');setStatus(false,'Error');return}
+    if(data.conversationId) conversationId=data.conversationId;
+    if(data.messagesUsed!==undefined) messagesUsed=data.messagesUsed;
+    if(data.plan) currentPlan=data.plan;
+    if(data.resetsAt) resetsAt=data.resetsAt;
+    if(data.brainVersion){currentBrainVersion=data.brainVersion;updateBrainVersionBadge()}
+    updateLimitBanner(); updateProfileUI();
+    let finalMessage=data.message||data.response;
+    if(!data.llmUsed&&ollamaAvailable&&!fileSnapshot){
+      try{const or=await callOllamaLocal(finalMsg);if(or&&or.trim().length>10)finalMessage=or}catch(e){}
+    }
+    // Limpiar el marcador __IMAGE_URL__ del texto visible
+    const cleanMessage = finalMessage.replace(/__IMAGE_URL__:[^\n]*/g, '').trim();
+    addMessageWithFile(cleanMessage,'ai',data,null);
+    // Si hay imagen generada, renderizarla en el chat
+    if(data.image_url){
+      addGeneratedImage(data.image_url, finalMessage);
+    }
+    // Si hay archivo generado para descargar
+    if(data.download_url){
+      addFileDownload(data.download_url, data.file_name, data.file_lines);
+    }
+    hPush('ai',cleanMessage);
+    if(data.neuralActivity||data.neural_activity) updateStats(data.neuralActivity||data.neural_activity);
+    setStatus(true,'Cerebro activo');
+    document.getElementById('hint').textContent='NEXUS listo · 📎 adjunta archivos · Enter para enviar';
+
+    // ── UpGames: si el mensaje pedía juegos, buscar recomendaciones reales ──
+    if(detectUpgamesIntent(finalMsg) && currentUser) {
+      const usuario = currentUser.username || currentUser.email;
+      fetch('/api/upgames/recomendar', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ usuario, mensaje: finalMsg })
+      }).then(r => r.ok ? r.json() : null).then(recoData => {
+        if(!recoData?.items?.length) return;
+        const cats = recoData.perfil?.categoriasFavoritas?.map(c=>c.nombre).filter(Boolean).join(', ');
+        addGameCards(recoData.items, cats ? `Basado en tus gustos: ${cats}` : 'Recomendaciones para ti');
+      }).catch(()=>{});
+    }
+  } catch(err) {
+    hideThinking();
+    if(err.name==='AbortError') addError('Tiempo de espera agotado. Intenta de nuevo.');
+    else addError(err.message);
+    setStatus(false,'Error — reintentando');
+    document.getElementById('hint').textContent='';
+  }
+  busy=false; sendBtn.disabled=false; input.focus();
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  STATS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+async function loadStats(forced=false) {
+  if(busy&&!forced){document.getElementById('busy-notice').classList.add('show');return}
+  document.getElementById('busy-notice').classList.remove('show');
+  try {
+    const res=await fetch('/api/stats');
+    if(!res.ok) return;
+    const data=await res.json();
+    const neural=data.neural||{};
+    updateStats(neural);
+    if(data.db){
+      if(data.db.users!==undefined) document.getElementById('db-users').textContent=data.db.users;
+      if(data.db.messages!==undefined) document.getElementById('db-messages').textContent=data.db.messages;
+    }
+    setStatus(true,'Cerebro activo'); statsLoaded=true;
+  } catch(e){setStatus(false,'Desconectado')}
+}
+
+function updateStats(d) {
+  if(!d) return;
+  if(d.rank_loss!==undefined){document.getElementById('rank-loss').textContent=d.rank_loss.toFixed?.(5)||d.rank_loss;document.getElementById('progress').style.width=Math.max(5,Math.min(95,(1-d.rank_loss)*100))+'%'}
+  if(d.intent_loss!==undefined) document.getElementById('intent-loss').textContent=d.intent_loss.toFixed?.(5)||d.intent_loss;
+  if(d.vocab_size!==undefined) document.getElementById('vocab').textContent=d.vocab_size;
+  if(d.episodes!==undefined) document.getElementById('episodes').textContent=d.episodes;
+  if(d.trainings!==undefined) document.getElementById('trainings').textContent=d.trainings;
+  if(d.queries!==undefined){document.getElementById('queries').textContent=d.queries;document.getElementById('hint').textContent=`${d.queries} consultas · ${d.trainings||0} entrenamientos`}
+  if(d.llm_available!==undefined) updateLLM(d.llm_available,d.llm_model);
+}
+
+function updateLLM(available,model) {
+  const card=document.getElementById('llm-card'), name=document.getElementById('llm-name'), status=document.getElementById('llm-status');
+  if(available){card.classList.add('live');name.textContent=model||'LLM activo';status.textContent='Motor de lenguaje conectado'}
+  else{card.classList.remove('live');name.textContent='LLM desconectado';status.textContent='Configura Groq u Ollama';showOfflineBanner()}
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  NUEVO CHAT
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+document.getElementById('new-btn').addEventListener('click',()=>{
+  conversationId=null; hActiveId=null; hMsgs=[];
+  const msgs=document.getElementById('messages');
+  msgs.innerHTML=`<div class="welcome" id="welcome-screen">
+    <div class="welcome-glyph"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26A7 7 0 0 0 19 9c0-3.87-3.13-7-7-7zm1 15h-2v-1h2v1zm.87-3.87c-.31.19-.87.5-.87 1.87h-2c0-2 1.05-2.59 1.57-2.9.56-.34 1.43-.87.43-1.6-.46-.32-.87-.37-1.22-.35-.66.04-1.28.58-1.56 1.35l-1.84-.76C8.87 8.74 10.35 7.1 12.07 7c.67-.04 1.64.06 2.56.71C16.23 8.75 16 10.38 14.04 11.5c-.2.11-.92.54-1.17.63z"/></svg></div>
+    <h2>¿En qué puedo ayudarte?</h2>
+    <p>Inteligencia artificial con redes neuronales propias y memoria episódica.</p>
+    <div class="suggestions">
+      <button class="sug" onclick="sendMessage('Hola! ¿Cómo estás hoy?')"><span class="sug-icon">👋</span><span>Salúdame</span><span class="sug-text">Empieza a chatear</span></button>
+      <button class="sug" onclick="sendMessage('¿Cómo funcionas internamente?')"><span class="sug-icon">🔬</span><span>Cómo funciono</span><span class="sug-text">Mi arquitectura neural</span></button>
+      <button class="sug" onclick="sendMessage('¿Quién te creó y cuál es tu historia?')"><span class="sug-icon">👤</span><span>Mi creador</span><span class="sug-text">Historia y origen</span></button>
+      <button class="sug" onclick="sendMessage('¿Qué puedes hacer por mí?')"><span class="sug-icon">⚡</span><span>Capacidades</span><span class="sug-text">Todo lo que puedo hacer</span></button>
+    </div>
+  </div>`;
+  document.getElementById('hint').textContent='NEXUS listo';
+  switchMainTab('chat');
+});
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  ALTURA DINÁMICA
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function fixHeight(){document.documentElement.style.setProperty('--app-h',window.innerHeight+'px')}
+fixHeight();
+window.addEventListener('resize',fixHeight);
+window.addEventListener('orientationchange',()=>setTimeout(fixHeight,200));
+document.getElementById('input')?.addEventListener('focus',()=>setTimeout(fixHeight,300));
+document.getElementById('input')?.addEventListener('blur',()=>setTimeout(fixHeight,300));
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  PWA
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let deferredPrompt=null;
+const PWA_DISMISSED_KEY='nexus_pwa_dismissed';
+window.addEventListener('beforeinstallprompt',(e)=>{
+  e.preventDefault(); deferredPrompt=e;
+  if(!localStorage.getItem(PWA_DISMISSED_KEY)) setTimeout(()=>{document.getElementById('pwa-banner').classList.add('show')},3000);
+});
+document.getElementById('pwa-install-btn').addEventListener('click',async()=>{
+  document.getElementById('pwa-banner').classList.remove('show');
+  if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null}
+});
+function dismissPWA(){document.getElementById('pwa-banner').classList.remove('show');localStorage.setItem(PWA_DISMISSED_KEY,'1')}
+window.addEventListener('appinstalled',()=>{document.getElementById('pwa-banner').classList.remove('show');localStorage.setItem(PWA_DISMISSED_KEY,'1')});
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  ENTER KEY en auth
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+['login-identifier','login-password'].forEach(id=>{
+  document.getElementById(id)?.addEventListener('keydown',e=>{if(e.key==='Enter') doLogin()});
+});
+['reg-username','reg-email','reg-password'].forEach(id=>{
+  document.getElementById(id)?.addEventListener('keydown',e=>{if(e.key==='Enter') doRegister()});
+});
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  ARCHIVO ADJUNTO — CHAT
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let currentAttachments = []; // Array de hasta 2 archivos — soporta comparación
+
+function getFileIcon(name, type) {
+  const ext = name.split('.').pop().toLowerCase();
+  const icons = {
+    py:'🐍', js:'🟨', ts:'🔷', jsx:'⚛️', tsx:'⚛️', html:'🌐', css:'🎨',
+    json:'📋', cpp:'⚙️', c:'⚙️', cs:'💎', java:'☕', go:'🔵', rs:'🦀',
+    php:'🐘', rb:'💎', sh:'📟', sql:'🗄️', yaml:'📝', yml:'📝', md:'📄',
+    pdf:'📕', docx:'📘', doc:'📘', xlsx:'📗', txt:'📄', zip:'📦',
+    jpg:'🖼️', jpeg:'🖼️', png:'🖼️', gif:'🖼️', webp:'🖼️', svg:'🖼️'
+  };
+  return icons[ext] || (type?.startsWith('image/') ? '🖼️' : '📎');
+}
+
+function fmtSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+  return (bytes/(1024*1024)).toFixed(1) + ' MB';
+}
+
+async function handleFileSelect(event) {
+  const files = Array.from(event.target.files);
+  if (!files.length) return;
+  for (const file of files.slice(0, 2 - currentAttachments.length)) {
+    await uploadAttachment(file);
+  }
+  event.target.value = ''; // reset input
+}
+
+async function uploadAttachment(file) {
+  if (currentAttachments.length >= 2) return; // máximo 2 archivos
+  const attachBtn = document.getElementById('attach-btn');
+  const bar       = document.getElementById('file-preview-bar');
+  const inner     = document.getElementById('file-preview-inner');
+  const addBtn    = document.getElementById('file-add-btn');
+
+  attachBtn.classList.add('has-file');
+  bar.style.display = 'flex';
+
+  // Mostrar spinner para este slot
+  const slotId = `slot-${currentAttachments.length}`;
+  const spinnerSlot = document.createElement('div');
+  spinnerSlot.id = slotId;
+  spinnerSlot.className = 'file-slot';
+  spinnerSlot.innerHTML = `<span>⏳</span><span style="font-size:11px;color:var(--text3)">Subiendo...</span>`;
+  inner.appendChild(spinnerSlot);
+
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res  = await fetch('/api/upload', { method: 'POST', headers: { 'Authorization': `Bearer ${authToken}` }, body: formData });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Error al subir');
+
+    currentAttachments.push(data);
+    const idx = currentAttachments.length - 1;
+
+    // Renderizar el slot definitivo
+    let thumb = data.type === 'image' && data.thumbBase64
+      ? `<img src="data:${data.mimeType};base64,${data.thumbBase64}" class="file-preview-thumb" style="width:28px;height:28px;border-radius:5px;object-fit:cover" alt="${data.name}">`
+      : `<span style="font-size:18px">${getFileIcon(data.name, data.mimeType)}</span>`;
+    spinnerSlot.innerHTML = `
+      ${thumb}
+      <div style="min-width:0">
+        <div class="file-preview-name" style="font-size:11px">${data.name}</div>
+        <div class="file-preview-meta">${fmtSize(data.size)}</div>
+      </div>
+      <button class="file-slot-remove" onclick="removeAttachment(${idx})" title="Quitar">✕</button>`;
+
+    // Mostrar botón "+" si hay slot disponible y llegamos a 1
+    if (currentAttachments.length === 1) {
+      addBtn.style.display = 'flex';
+      document.getElementById('input').placeholder = `Escribe tu pregunta o agrega otro archivo para comparar…`;
+    } else if (currentAttachments.length === 2) {
+      addBtn.style.display = 'none';
+      const [a, b] = currentAttachments;
+      const badge = `<span class="file-compare-badge">⚖️ COMPARAR</span>`;
+      document.getElementById('input').placeholder = `¿Cuál es mejor? ¿Qué diferencias hay? NEXUS los comparará…`;
+    }
+  } catch(e) {
+    inner.removeChild(spinnerSlot);
+    if (!currentAttachments.length) clearAttachment();
+    addError(`Error al subir archivo: ${e.message}`);
+  }
+}
+
+function removeAttachment(idx) {
+  currentAttachments.splice(idx, 1);
+  renderAttachmentSlots();
+}
+
+function renderAttachmentSlots() {
+  const inner  = document.getElementById('file-preview-inner');
+  const addBtn = document.getElementById('file-add-btn');
+  const bar    = document.getElementById('file-preview-bar');
+  inner.innerHTML = '';
+  if (!currentAttachments.length) { clearAttachment(); return; }
+  currentAttachments.forEach((data, idx) => {
+    let thumb = data.type === 'image' && data.thumbBase64
+      ? `<img src="data:${data.mimeType};base64,${data.thumbBase64}" class="file-preview-thumb" style="width:28px;height:28px;border-radius:5px;object-fit:cover" alt="${data.name}">`
+      : `<span style="font-size:18px">${getFileIcon(data.name, data.mimeType)}</span>`;
+    const slot = document.createElement('div');
+    slot.className = 'file-slot';
+    slot.innerHTML = `${thumb}<div style="min-width:0"><div class="file-preview-name" style="font-size:11px">${data.name}</div><div class="file-preview-meta">${fmtSize(data.size)}</div></div><button class="file-slot-remove" onclick="removeAttachment(${idx})" title="Quitar">✕</button>`;
+    inner.appendChild(slot);
+  });
+  addBtn.style.display = currentAttachments.length < 2 ? 'flex' : 'none';
+  document.getElementById('attach-btn').classList.add('has-file');
+  bar.style.display = 'flex';
+}
+
+function clearAttachment() {
+  currentAttachments = [];
+  document.getElementById('attach-btn').classList.remove('has-file');
+  document.getElementById('file-preview-bar').style.display = 'none';
+  document.getElementById('file-preview-inner').innerHTML = '';
+  document.getElementById('file-add-btn').style.display = 'none';
+  document.getElementById('input').placeholder = 'Escribe tu mensaje…';
+}
+
+// Drag & drop en el chat
+const inputZone = document.querySelector('.input-zone');
+if (inputZone) {
+  inputZone.addEventListener('dragover', (e) => { e.preventDefault(); inputZone.style.background='rgba(94,255,67,.04)'; });
+  inputZone.addEventListener('dragleave', () => { inputZone.style.background=''; });
+  inputZone.addEventListener('drop', async (e) => {
+    e.preventDefault(); inputZone.style.background='';
+    const file = e.dataTransfer.files[0];
+    for (const f of Array.from(e.dataTransfer.files).slice(0, 2 - currentAttachments.length)) { await uploadAttachment(f); }
+  });
+}
+
+// Override addMessage para mostrar archivo adjunto
+function addMessageWithFile(content, role='ai', extras={}, fileData=null, fileData2=null) {
+  const welcome = document.getElementById('welcome-screen');
+  if (welcome) welcome.remove();
+  const msgs = document.getElementById('messages');
+  const wrap  = document.createElement('div');
+  const now   = new Date();
+  const timeStr = now.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+
+  if (role === 'user') {
+    wrap.className = 'msg msg-user';
+    const initial = currentUser?.username?.[0]?.toUpperCase() || 'U';
+    let fileHtml = '';
+    if (fileData) {
+      const makeChip = (fd) => fd.type === 'image' && fd.thumbBase64
+        ? `<div class="msg-img-preview"><img src="data:${fd.mimeType};base64,${fd.thumbBase64}" alt="${fd.name}"></div>`
+        : `<div class="msg-file-chip"><span class="msg-file-chip-icon">${getFileIcon(fd.name, fd.mimeType)}</span><div><div class="msg-file-chip-name">${fd.name}</div><div class="msg-file-chip-size">${fmtSize(fd.size)}</div></div></div>`;
+      const chips = [makeChip(fileData), fileData2 ? makeChip(fileData2) : ''].join('');
+      const vsLabel = fileData2 ? `<span class="file-compare-badge">⚖️ COMPARAR</span>` : '';
+      fileHtml = `<div class="msg-file-attach" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">${chips}${vsLabel}</div>`;
+    }
+    wrap.innerHTML = `<div class="msg-header"><div class="msg-avatar" style="font-size:12px;font-weight:700;font-family:'Space Mono',monospace;background:var(--bg3);color:var(--text2)">${initial}</div><span class="msg-name">Tú</span><span class="msg-ts">${timeStr}</span></div>${fileHtml}<div class="msg-bubble">${renderMd(content)}</div>`;
+  } else {
+    wrap.className = 'msg msg-ai';
+    let chipsHtml = '';
+    if (extras.neuralActivity) {
+      const a = extras.neuralActivity;
+      chipsHtml = `<div class="neural-chips">${a.rank_loss!==undefined?`<div class="chip"><div class="chip-dot" style="background:var(--accent3)"></div>loss ${a.rank_loss.toFixed?.(4)||a.rank_loss}</div>`:''} ${a.vocab_size!==undefined?`<div class="chip"><div class="chip-dot" style="background:var(--green)"></div>vocab ${a.vocab_size}</div>`:''} ${a.episodes!==undefined?`<div class="chip"><div class="chip-dot" style="background:var(--cyan)"></div>ep ${a.episodes}</div>`:''} ${a.trainings!==undefined?`<div class="chip"><div class="chip-dot" style="background:var(--neon)"></div>train ${a.trainings}</div>`:''}</div>`;
+    }
+    const headerDiv = document.createElement('div'); headerDiv.className='msg-header';
+    headerDiv.innerHTML = `<div class="msg-avatar">🧠</div><span class="msg-name">NEXUS</span><span class="msg-ts">${timeStr}</span>`;
+    const bubble = document.createElement('div'); bubble.className='msg-bubble';
+    bubble.innerHTML = renderMd(content) + (chipsHtml||'');
+    const copyBtn = makeCopyBtn(content);
+    wrap.appendChild(headerDiv); wrap.appendChild(bubble); wrap.appendChild(copyBtn);
+  }
+  msgs.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+  return wrap;
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  IMAGEN GENERADA — renderizar en el chat
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function addGeneratedImage(imageUrl, fullMessage) {
+  const msgs = document.getElementById('messages');
+  const now  = new Date();
+  const timeStr = now.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+
+  const wrap = document.createElement('div');
+  wrap.className = 'msg msg-ai msg-image-gen';
+
+  // Extraer un título del prompt si existe
+  let promptText = '';
+  const promptMatch = fullMessage.match(/\*\*Prompt:\*\*\s*([^\n]+)/);
+  if (promptMatch) promptText = promptMatch[1].trim();
+
+  wrap.innerHTML = `
+    <div class="msg-header">
+      <div class="msg-avatar">🎨</div>
+      <span class="msg-name">NEXUS · Imagen generada</span>
+      <span class="msg-ts">${timeStr}</span>
+    </div>
+    <div class="msg-bubble msg-bubble-image">
+      <div class="gen-img-container">
+        <div class="gen-img-loading" id="gen-img-loading-${Date.now()}">
+          <div class="gen-img-spinner"></div>
+          <span>Generando imagen${promptText ? ': ' + promptText.slice(0,40) + (promptText.length>40?'...':'') : ''}…</span>
+        </div>
+        <img class="gen-img" src="${imageUrl}"
+          onload="this.style.display='block';this.previousElementSibling.style.display='none';"
+          onerror="this.previousElementSibling.innerHTML='<span>⚠️ No se pudo cargar la imagen. <a href=\\'${imageUrl}\\' target=\\'_blank\\'>Abrir enlace</a></span>'"
+          style="display:none;max-width:100%;border-radius:12px;cursor:pointer;"
+          onclick="window.open('${imageUrl}','_blank')"
+          title="Click para abrir en tamaño completo"
+        />
+      </div>
+      ${promptText ? `<div class="gen-img-caption">📝 ${promptText}</div>` : ''}
+      <div class="gen-img-actions">
+        <button class="gen-img-btn" onclick="window.open('${imageUrl}','_blank')">🔍 Ver completa</button>
+        <button class="gen-img-btn" onclick="downloadGenImage('${imageUrl}','nexus_imagen.jpg')">⬇️ Descargar</button>
+      </div>
+    </div>`;
+
+  msgs.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function downloadGenImage(url, filename) {
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.target = '_blank';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  ARCHIVO GENERADO — botón de descarga en el chat
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function addFileDownload(downloadUrl, fileName, fileLines) {
+  const msgs = document.getElementById('messages');
+  const now  = new Date();
+  const timeStr = now.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+
+  // Icono según extensión
+  const ext = (fileName || '').split('.').pop().toLowerCase();
+  const iconMap = {
+    js:'🟨', ts:'🔷', py:'🐍', html:'🌐', css:'🎨', json:'📋',
+    sql:'🗄️', sh:'⚙️', php:'🐘', java:'☕', go:'🐹', rs:'🦀',
+    cpp:'⚙️', c:'⚙️', cs:'💜', rb:'💎', swift:'🍎', kt:'🟣',
+    md:'📝', txt:'📄', yaml:'⚙️', yml:'⚙️', env:'🔑', xml:'📋',
+    zip:'📦'
+  };
+  const icon = iconMap[ext] || '📄';
+
+  const wrap = document.createElement('div');
+  wrap.className = 'msg msg-ai';
+  wrap.innerHTML = `
+    <div class="msg-header">
+      <div class="msg-avatar">⚡</div>
+      <span class="msg-name">NEXUS · Archivo listo</span>
+      <span class="msg-ts">${timeStr}</span>
+    </div>
+    <div class="msg-bubble">
+      <div class="file-dl-card">
+        <div class="file-dl-icon">${icon}</div>
+        <div class="file-dl-info">
+          <div class="file-dl-name">${fileName || 'archivo'}</div>
+          <div class="file-dl-meta">${fileLines ? fileLines.toLocaleString() + ' líneas' : 'Archivo completo'} · Listo para descargar</div>
+        </div>
+        <a class="file-dl-btn" href="${downloadUrl}" download="${fileName || 'archivo'}" target="_blank">
+          ⬇️ Descargar
+        </a>
+      </div>
+    </div>`;
+
+  msgs.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  CODEGEN PANEL
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let cgOp = 'create';
+let cgLoadedFile = null; // { name, size, content }
+let cgLastDownloadUrl = null;
+
+function setCgOp(op, btn) {
+  cgOp = op;
+  document.querySelectorAll('.codegen-op-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const uploadSection = document.getElementById('cg-upload-section');
+  if (['edit','fix','analyze','extend'].includes(op)) {
+    uploadSection.style.display = 'block';
+  } else {
+    uploadSection.style.display = 'none';
+  }
+}
+
+async function cgLoadFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    cgLoadedFile = { name: file.name, size: file.size, content: text };
+    document.getElementById('cg-drop-area').style.display  = 'none';
+    document.getElementById('cg-file-loaded').style.display = 'flex';
+    document.getElementById('cg-file-loaded-name').textContent = file.name;
+    document.getElementById('cg-file-loaded-size').textContent = fmtSize(file.size) + ' · ' + text.split('\n').length + ' líneas';
+    // Auto-fill filename
+    if (!document.getElementById('cg-filename').value) {
+      document.getElementById('cg-filename').value = file.name;
+    }
+    // Auto-select type
+    const ext = file.name.split('.').pop().toLowerCase();
+    const sel = document.getElementById('cg-type');
+    for (let opt of sel.options) { if (opt.value === ext) { sel.value = ext; break; } }
+  } catch(e) { addError('Error leyendo archivo: ' + e.message); }
+}
+
+function cgClearFile() {
+  cgLoadedFile = null;
+  document.getElementById('cg-drop-area').style.display   = 'block';
+  document.getElementById('cg-file-loaded').style.display = 'none';
+  document.getElementById('cg-file-input').value = '';
+}
+
+function cgDragOver(e) { e.preventDefault(); document.getElementById('cg-drop-area').classList.add('dragover'); }
+function cgDragLeave()  { document.getElementById('cg-drop-area').classList.remove('dragover'); }
+async function cgDrop(e) {
+  e.preventDefault(); cgDragLeave();
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    const fakeEvt = { target: { files: [file], value: '' } };
+    await cgLoadFile(fakeEvt);
+  }
+}
+
+async function cgSubmit() {
+  const prompt    = document.getElementById('cg-prompt').value.trim();
+  const fileType  = document.getElementById('cg-type').value;
+  const rawName   = document.getElementById('cg-filename').value.trim();
+  const fileName  = rawName || `nexus_output.${fileType}`;
+
+  if (!prompt) { document.getElementById('cg-prompt').focus(); return; }
+  if (['edit','fix','analyze','extend'].includes(cgOp) && !cgLoadedFile) {
+    addError('Sube un archivo para la operación ' + cgOp); return;
+  }
+
+  const submitBtn = document.getElementById('cg-submit-btn');
+  const progress  = document.getElementById('cg-progress');
+  const result    = document.getElementById('cg-result');
+  submitBtn.disabled = true;
+  progress.style.display = 'flex';
+  result.style.display   = 'none';
+  cgLastDownloadUrl = null;
+
+  const progressText = document.getElementById('cg-progress-text');
+  let dots = 0;
+  const progressInterval = setInterval(() => {
+    dots = (dots + 1) % 4;
+    progressText.textContent = 'NEXUS generando' + '.'.repeat(dots) + ' (puede tomar hasta 2 min para archivos grandes)';
+  }, 800);
+
+  try {
+    const body = {
+      prompt,
+      fileType,
+      fileName,
+      operation: cgOp,
+      currentContent: cgLoadedFile?.content || null
+    };
+    const res  = await fetch('/api/generate-file', {
+      method: 'POST',
+      headers: { ...getAuthHeaders() },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    clearInterval(progressInterval);
+    progress.style.display = 'none';
+    if (!res.ok) { addError(data.error || 'Error generando archivo'); submitBtn.disabled = false; return; }
+
+    const content = data.content || '';
+    const cleanContent = (() => {
+      const m = content.match(/```[\w]*\n?([\s\S]*?)```/);
+      return m ? m[1] : content;
+    })();
+
+    document.getElementById('cg-result-title').textContent = data.fileName || fileName;
+    document.getElementById('cg-result-meta').textContent  = `${data.lines || cleanContent.split('\n').length} líneas · ${(data.chars || cleanContent.length).toLocaleString()} chars`;
+    document.getElementById('cg-result-code').textContent  = cleanContent;
+
+    const dlBtn = document.getElementById('cg-dl-btn');
+    if (data.downloadUrl) {
+      cgLastDownloadUrl = data.downloadUrl;
+      dlBtn.style.display = 'inline-flex';
+    } else {
+      dlBtn.style.display = 'none';
+    }
+    result.style.display = 'block';
+
+    // If editing, update loaded file with new content
+    if (['edit','fix','extend'].includes(cgOp) && cgLoadedFile) {
+      cgLoadedFile.content = cleanContent;
+      document.getElementById('cg-file-loaded-size').textContent =
+        fmtSize(new Blob([cleanContent]).size) + ' · ' + cleanContent.split('\n').length + ' líneas';
+    }
+
+  } catch(e) {
+    clearInterval(progressInterval);
+    progress.style.display = 'none';
+    addError('Error: ' + e.message);
+  }
+  submitBtn.disabled = false;
+}
+
+function cgCopyResult() {
+  const code = document.getElementById('cg-result-code').textContent;
+  navigator.clipboard?.writeText(code).then(() => {
+    const btn = document.querySelector('.codegen-action-btn');
+    const orig = btn.textContent; btn.textContent = '✅ Copiado';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }).catch(() => {});
+}
+
+function cgDownload() {
+  if (!cgLastDownloadUrl) return;
+  const a = document.createElement('a');
+  a.href = cgLastDownloadUrl;
+  a.download = document.getElementById('cg-result-title').textContent;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  UPGAMES — CARDS EN EL CHAT
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+const UPGAMES_BASE = 'https://roucedevstudio.github.io/Frontendappsent';
+
+/**
+ * Renderiza tarjetas de juegos reales en el chat.
+ * Se llama automáticamente cuando detectUpgamesIntent() es true.
+ */
+function addGameCards(items, label) {
+  if(!items || !items.length) return;
+  const msgs = document.getElementById('messages');
+  const now = new Date();
+  const ts = now.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+  const fmtDl = n => n>=1000 ? (n/1000).toFixed(1)+'K' : String(n||0);
+
+  const cardsHtml = items.map((item,i) => {
+    const thumb = item.image
+      ? `<img class="nx-game-thumb" src="${item.image}" alt="${item.title||''}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+      : '';
+    const placeholder = `<div class="nx-game-thumb-placeholder" ${item.image?'style="display:none"':''}>🎮</div>`;
+    const dl = item.descargasEfectivas || 0;
+    return `<a class="nx-game-card" href="${UPGAMES_BASE}/puente.html?id=${item._id}" target="_blank"
+         style="animation-delay:${i*55}ms"
+         onclick="try{if(window.opener)window.opener.postMessage({type:'NX_OPEN_ITEM',itemId:'${item._id}'},'https://roucedevstudio.github.io');}catch(_){}">
+      ${thumb}${placeholder}
+      <div class="nx-game-info">
+        <div class="nx-game-title">${item.title||'Sin título'}</div>
+        <div class="nx-game-meta">
+          <span class="nx-game-cat">${item.category||'General'}</span>
+          ${dl>0?`<span class="nx-game-dl">↓ ${fmtDl(dl)}</span>`:''}
+        </div>
+      </div>
+      <svg class="nx-game-arrow" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>`;
+  }).join('');
+
+  const wrap = document.createElement('div');
+  wrap.className = 'msg msg-ai';
+  wrap.innerHTML = `
+    <div class="msg-header">
+      <div class="msg-avatar" style="font-size:15px">🎮</div>
+      <span class="msg-name" style="color:var(--g)">NEXUS · UpGames</span>
+      <span class="msg-ts">${ts}</span>
+    </div>
+    <div class="msg-bubble">
+      <div class="nx-cards-header">${label||'Recomendaciones para ti'}</div>
+      <div class="nx-game-cards">${cardsHtml}</div>
+    </div>`;
+  msgs.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+/**
+ * Detecta si el mensaje pide juegos o recomendaciones.
+ */
+function detectUpgamesIntent(msg) {
+  if(!msg) return false;
+  const m = msg.toLowerCase();
+  return ['recomienda','recomiéndame','sugier','qué juego','que juego',
+    'juegos de','busca juego','juego de terror','juego de zombi',
+    'juego de accion','juego de acción','juego rpg','juego indie',
+    'qué hay en upgames','que hay en upgames','busca en upgames',
+    'upgames','quiero jugar','para jugar','dame juegos',
+    'similar a','parecido a','juegos gratis','juegos android','juegos pc'
+  ].some(t => m.includes(t));
+}
+
+// ── Receptor postMessage de UpGames (cuando NEXUS está en iframe) ──
+window.addEventListener('message', function(event) {
+  const allowed = ['https://roucedevstudio.github.io','http://localhost:3000','http://localhost:5500','http://localhost:7700'];
+  if(!allowed.some(o => event.origin.startsWith(o))) return;
+  const msg = event.data;
+  if(!msg || typeof msg !== 'object') return;
+
+  if(msg.type === 'UPGRADES_CONTEXT' || msg.type === 'UPGAMES_CONTEXT') {
+    window._upgamesContext = {
+      usuario: msg.usuario||null,
+      feedActual: msg.feedActual||[],
+      categoriaActiva: msg.categoriaActiva||null,
+      receivedAt: Date.now()
+    };
+    const hint = document.getElementById('hint');
+    if(hint && msg.usuario) hint.textContent = `Conectado a UpGames · @${msg.usuario}`;
+    try{ event.source?.postMessage({type:'NX_READY'}, event.origin); }catch(_){}
+  }
+
+  // ⭐ UpGames le pide a NEXUS que diga el primer mensaje proactivo
+  if (msg.type === 'NX_REQUEST_PROACTIVE') {
+    _nexusProactiveSay();
+  }
+});
+
+// ── NEXUS dice el primer mensaje de la sesión ─────────────────────
+let _proactiveDone = false;
+async function _nexusProactiveSay() {
+  if (_proactiveDone) return;  // solo una vez por sesión
+  _proactiveDone = true;
+
+  // Quitar la pantalla de bienvenida con sugerencias
+  const welcome = document.getElementById('welcome-screen');
+  if (welcome) welcome.remove();
+
+  // Mostrar "pensando..." mientras el brain genera
+  showThinking();
+
+  try {
+    const res = await fetch('/api/proactive', { headers: getAuthHeaders() });
+    hideThinking();
+    if (!res.ok) { _proactiveDone = false; return; }
+    const data = await res.json();
+    const txt  = data.message || data.response || '';
+    if (txt && txt.trim() !== '...') {
+      addMessage(txt, 'ai', {});
+      // Notificar a UpGames que NEXUS habló (para el badge de la burbuja)
+      try {
+        window.parent?.postMessage(
+          { type: 'NX_PROACTIVE_SENT', message: txt },
+          '*'
+        );
+      } catch(_) {}
+    }
+  } catch (e) {
+    hideThinking();
+    _proactiveDone = false;
+  }
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  INIT
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+initApp();
+</script>
+</body>
+</html>

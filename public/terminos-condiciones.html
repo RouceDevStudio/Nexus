@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Términos y Condiciones | NEXUS AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:      #0C0C0E;
+      --bg2:     #141417;
+      --bg3:     #1C1C21;
+      --accent:  #D4A853;
+      --accent2: #E8C074;
+      --text:    #F0EEE8;
+      --text2:   #A8A49C;
+      --text3:   #5C5954;
+      --border:  rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.12);
+      --red:     #E5615A;
+      --green:   #5CB891;
+      --gold-glow: rgba(212,168,83,0.15);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NOISE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: .02;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80vw;
+      height: 50vh;
+      background: radial-gradient(ellipse, rgba(212,168,83,0.05) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* HEADER */
+    .legal-header {
+      padding-bottom: 28px;
+      margin-bottom: 40px;
+      border-bottom: 1px solid rgba(212,168,83,0.25);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(145deg, #2A2318, #1A1710);
+      border: 1px solid rgba(212,168,83,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px rgba(212,168,83,0.15);
+    }
+
+    .logo-mark svg { width:18px; height:18px; fill:var(--accent); }
+
+    .brand { font-size:17px; font-weight:700; letter-spacing:.05em; }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(92,184,145,0.1);
+      border: 1px solid rgba(92,184,145,0.3);
+      color: var(--green);
+      padding: 5px 14px;
+      border-radius: 99px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    h1 {
+      font-size: clamp(26px, 5vw, 38px);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      color: var(--accent);
+      text-shadow: 0 0 30px rgba(212,168,83,0.2);
+      margin-bottom: 8px;
+    }
+
+    .version-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text3);
+      letter-spacing: .04em;
+    }
+
+    .version-bar span { color: var(--text2); }
+
+    /* SUMMARY BOX */
+    .summary-box {
+      background: rgba(212,168,83,0.05);
+      border: 1px solid rgba(212,168,83,0.2);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 12px 12px 0;
+      padding: 16px 20px;
+      margin-bottom: 32px;
+      font-size: 13.5px;
+      color: var(--text2);
+      line-height: 1.65;
+    }
+
+    .summary-box strong { color: var(--accent2); }
+
+    /* TOC */
+    .toc {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
+      padding: 20px 22px;
+      margin-bottom: 36px;
+    }
+
+    .toc-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text3);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .toc-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+    @media(max-width:580px){ .toc-list { grid-template-columns: 1fr; } }
+
+    .toc-list a {
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 0;
+      transition: color .15s;
+    }
+
+    .toc-list a:hover { color: var(--accent2); }
+
+    .toc-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text3);
+      min-width: 22px;
+    }
+
+    /* SECTIONS */
+    .legal-section {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 26px 28px;
+      margin-bottom: 20px;
+      transition: border-color .2s;
+    }
+
+    .legal-section:hover { border-color: var(--border2); }
+
+    .legal-section h2 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--accent2);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .legal-section h2::before {
+      content: '';
+      width: 3px;
+      height: 16px;
+      background: var(--accent);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .legal-section h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 18px 0 8px;
+    }
+
+    .legal-section p {
+      font-size: 14px;
+      color: var(--text2);
+      margin-bottom: 10px;
+    }
+
+    .legal-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 10px;
+    }
+
+    .legal-list li {
+      font-size: 14px;
+      color: var(--text2);
+      padding-left: 18px;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .legal-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 10px;
+      top: 4px;
+    }
+
+    .legal-list li strong { color: var(--text); }
+
+    /* ALERT BOXES */
+    .alert {
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin: 14px 0;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+
+    .alert-danger {
+      background: rgba(229,97,90,0.07);
+      border-left: 4px solid var(--red);
+      color: #f0aaaa;
+    }
+
+    .alert-warning {
+      background: rgba(212,168,83,0.07);
+      border-left: 4px solid var(--accent);
+      color: #dfc98a;
+    }
+
+    .alert-success {
+      background: rgba(92,184,145,0.07);
+      border-left: 4px solid var(--green);
+      color: #8ed8b8;
+    }
+
+    .alert strong { color: inherit; filter: brightness(1.2); }
+
+    /* CRITICAL WARNING */
+    .critical-box {
+      background: rgba(229,97,90,0.06);
+      border: 1px solid rgba(229,97,90,0.3);
+      border-radius: 12px;
+      padding: 22px;
+      margin: 20px 0;
+      color: #f0aaaa;
+      font-size: 13.5px;
+    }
+
+    .critical-box h3 {
+      color: var(--red) !important;
+      margin-top: 0 !important;
+      margin-bottom: 10px !important;
+    }
+
+    /* DATA TABLE */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 14px 0;
+    }
+
+    .data-table th {
+      background: var(--bg3);
+      color: var(--text3);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border2);
+    }
+
+    .data-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2);
+      vertical-align: top;
+    }
+
+    .data-table td strong { color: var(--text); }
+
+    .data-table tr:last-child td { border-bottom: none; }
+
+    /* CONTACT BLOCK */
+    .contact-block {
+      background: var(--bg3);
+      border: 1px solid rgba(212,168,83,0.2);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 14px 0;
+      font-size: 13.5px;
+      color: var(--text2);
+    }
+
+    .contact-block strong { color: var(--text); display: block; margin-bottom: 6px; }
+    .contact-block a { color: var(--accent2); text-decoration: none; }
+    .contact-block a:hover { text-decoration: underline; }
+
+    /* ACCEPTANCE BOX */
+    .acceptance-box {
+      background: rgba(92,184,145,0.05);
+      border: 1px solid rgba(92,184,145,0.25);
+      border-radius: 14px;
+      padding: 24px;
+      margin-top: 10px;
+    }
+
+    .acceptance-box h3 { color: var(--green) !important; margin-top: 0 !important; }
+
+    .acceptance-list {
+      list-style: decimal;
+      margin-left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      font-size: 13.5px;
+      color: var(--text2);
+    }
+
+    .acceptance-list li { line-height: 1.6; }
+
+    /* CODE */
+    .mono {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--accent2);
+      background: rgba(0,0,0,0.3);
+      padding: 2px 7px;
+      border-radius: 5px;
+    }
+
+    /* BACK BUTTON */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 18px;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 28px;
+      transition: all .15s;
+    }
+
+    .back-btn:hover { border-color: rgba(212,168,83,0.3); color: var(--accent2); }
+
+    /* FOOTER */
+    .legal-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .legal-footer p { font-size: 12px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; }
+    .legal-footer a { color: var(--accent); text-decoration: none; }
+    .legal-footer a:hover { text-decoration: underline; }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-thumb { background: rgba(212,168,83,0.2); border-radius: 10px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <a class="back-btn" href="javascript:history.back()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    Volver a NEXUS
+  </a>
+
+  <!-- HEADER -->
+  <div class="legal-header">
+    <div class="header-top">
+      <div class="logo-group">
+        <div class="logo-mark">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26A7 7 0 0 0 19 9c0-3.87-3.13-7-7-7zm1 15h-2v-1h2v1zm.87-3.87c-.31.19-.87.5-.87 1.87h-2c0-2 1.05-2.59 1.57-2.9.56-.34 1.43-.87.43-1.6-.46-.32-.87-.37-1.22-.35-.66.04-1.28.58-1.56 1.35l-1.84-.76C8.87 8.74 10.35 7.1 12.07 7c.67-.04 1.64.06 2.56.71C16.23 8.75 16 10.38 14.04 11.5c-.2.11-.92.54-1.17.63z"/></svg>
+        </div>
+        <span class="brand">NEXUS AI</span>
+      </div>
+      <span class="status-badge"><span class="status-dot"></span>Vigente · v1.0</span>
+    </div>
+    <h1>⚖️ Términos y Condiciones</h1>
+    <div class="version-bar">
+      <span>Versión 1.0</span>
+      <span style="color:var(--text3)">·</span>
+      <span>Última actualización: Febrero 2026</span>
+      <span style="color:var(--text3)">·</span>
+      <span>Rige desde el 1 de Marzo, 2026</span>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary-box">
+    <strong>RESUMEN EJECUTIVO —</strong> Al usar NEXUS AI aceptas estos términos completos. NEXUS es un servicio de inteligencia artificial conversacional con redes neuronales propias que aprenden de las interacciones. Los planes tienen limitaciones claramente definidas. Los pagos se procesan vía PayPal y son no reembolsables. El uso indebido puede resultar en suspensión permanente de cuenta sin previo aviso. Este documento cumple con GDPR, Ley 1581/2012 (Colombia) y CCPA.
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">📋 Índice de Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#s1"><span class="toc-num">01</span>Descripción del Servicio</a></li>
+      <li><a href="#s2"><span class="toc-num">02</span>Elegibilidad y Registro</a></li>
+      <li><a href="#s3"><span class="toc-num">03</span>Planes y Pagos</a></li>
+      <li><a href="#s4"><span class="toc-num">04</span>Uso Aceptable</a></li>
+      <li><a href="#s5"><span class="toc-num">05</span>Propiedad Intelectual</a></li>
+      <li><a href="#s6"><span class="toc-num">06</span>Datos y Privacidad</a></li>
+      <li><a href="#s7"><span class="toc-num">07</span>Limitación de Responsabilidad</a></li>
+      <li><a href="#s8"><span class="toc-num">08</span>Sistema Anti-Fraude</a></li>
+      <li><a href="#s9"><span class="toc-num">09</span>Suspensión y Terminación</a></li>
+      <li><a href="#s10"><span class="toc-num">10</span>Modificaciones</a></li>
+      <li><a href="#s11"><span class="toc-num">11</span>Jurisdicción y Ley Aplicable</a></li>
+      <li><a href="#s12"><span class="toc-num">12</span>Aceptación Final</a></li>
+    </ul>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="legal-section" id="s1">
+    <h2>01. Descripción del Servicio</h2>
+    <p>NEXUS AI (en adelante "NEXUS" o "el Servicio") es una plataforma de inteligencia artificial conversacional operada por <strong>Jhonatan David Castro Galviz</strong>, con domicilio en Colombia. NEXUS ofrece:</p>
+    <ul class="legal-list">
+      <li><strong>Motor Neural Propio:</strong> Redes neuronales entrenadas en tiempo real que aprenden de cada conversación, con dos variantes: NEXUS v8 Free (plan gratuito) y NEXUS v9 APEX (plan premium).</li>
+      <li><strong>Memoria Episódica:</strong> El sistema registra y procesa conversaciones para mejorar la calidad de las respuestas. Los usuarios free tienen acceso a búsqueda básica (Jaccard); los premium a búsqueda semántica por cosine similarity.</li>
+      <li><strong>Chat Conversacional:</strong> Interfaz de mensajería en tiempo real con un asistente de IA que responde usando el motor neural entrenado más un LLM de respaldo (Groq/Ollama).</li>
+      <li><strong>Historial de Conversaciones:</strong> Almacenamiento de chats en base de datos segura, accesible únicamente por el usuario propietario.</li>
+    </ul>
+    <div class="alert alert-warning">
+      <strong>⚠️ NATURALEZA DEL SERVICIO:</strong> NEXUS es un servicio de IA experimental. Las respuestas son generadas automáticamente por modelos de aprendizaje automático y pueden contener errores, imprecisiones o información desactualizada. NEXUS NO provee asesoramiento médico, legal, financiero ni profesional de ningún tipo. El usuario es responsable de verificar cualquier información crítica.
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="legal-section" id="s2">
+    <h2>02. Elegibilidad y Registro</h2>
+    <h3>2.1 Requisitos para Usar NEXUS</h3>
+    <ul class="legal-list">
+      <li>Tener como mínimo <strong>18 años de edad</strong> o la mayoría de edad legal en tu jurisdicción (lo que sea mayor).</li>
+      <li>Proporcionar información de registro <strong>verdadera, exacta y actualizada</strong>: nombre de usuario único (3–20 caracteres), email válido y contraseña segura.</li>
+      <li>No haber sido previamente suspendido o baneado de NEXUS bajo ninguna cuenta.</li>
+      <li>Contar con conexión a internet y un dispositivo compatible para acceder al servicio.</li>
+    </ul>
+    <h3>2.2 Seguridad de la Cuenta</h3>
+    <ul class="legal-list">
+      <li><strong>Contraseña:</strong> Eres el único responsable de mantener la confidencialidad de tu contraseña. Las contraseñas se almacenan exclusivamente como hash bcrypt (factor de costo 10) — nunca en texto plano.</li>
+      <li><strong>Tokens JWT:</strong> El acceso autenticado usa tokens JWT con expiración automática. Al cerrar sesión, el token queda inválido.</li>
+      <li><strong>Intentos fallidos:</strong> Tras 5 intentos de login fallidos consecutivos, tu acceso queda bloqueado 15 minutos desde esa IP como protección anti-fuerza bruta.</li>
+      <li><strong>Una cuenta por persona:</strong> No puedes crear múltiples cuentas para evadir límites o sanciones.</li>
+    </ul>
+    <div class="alert alert-danger">
+      <strong>🚫 PROHIBIDO:</strong> Proporcionar información falsa al registrarse, suplantar la identidad de otra persona, o crear cuentas fraudulentas resulta en baneado permanente inmediato.
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="legal-section" id="s3">
+    <h2>03. Planes y Pagos</h2>
+
+    <h3>3.1 Plan Gratuito (NEXUS v8 Free)</h3>
+    <ul class="legal-list">
+      <li>Acceso al motor neural base con <strong>10 mensajes por día</strong> (se reinician a medianoche UTC).</li>
+      <li>Motor NEXUS v8: 8 redes neurales de tamaño fijo, ~1.8M parámetros, vocabulario con tope de 16,384 n-gramas.</li>
+      <li>Búsqueda episódica mediante similitud Jaccard, 2 pasadas de entrenamiento por consulta.</li>
+      <li>Historial de conversaciones almacenado en la nube.</li>
+      <li>Sin costo. Sujeto a cambios de condiciones con 15 días de aviso.</li>
+    </ul>
+
+    <h3>3.2 Plan Premium — NEXUS v9 APEX</h3>
+    <ul class="legal-list">
+      <li><strong>Precio:</strong> USD $10.00 por mes. Renovación manual mensual vía PayPal.</li>
+      <li><strong>Mensajes ilimitados</strong> sin restricciones diarias.</li>
+      <li>Motor NEXUS v9 APEX: DynamicNeuralNet (8 redes que crecen automáticamente hasta 3M parámetros), InfiniteEmbeddings (vocabulario ilimitado), búsqueda episódica por cosine similarity, LR Scheduler automático, 3 pasadas de entrenamiento por consulta.</li>
+      <li>Duración: <strong>30 días exactos</strong> desde la verificación del pago. Al vencer, la cuenta regresa automáticamente a plan gratuito sin compensación por días no usados.</li>
+    </ul>
+
+    <h3>3.3 Proceso de Pago y Verificación</h3>
+    <ul class="legal-list">
+      <li>Los pagos se realizan directamente a través de <strong>PayPal</strong> al destinatario indicado en la plataforma.</li>
+      <li>Tras el pago, el usuario ingresa su ID de transacción PayPal y email del pagador para verificación manual.</li>
+      <li>NEXUS verifica la autenticidad del pago antes de activar el plan. La verificación puede tardar hasta 24 horas hábiles.</li>
+      <li>Una misma transacción solo puede ser usada para activar el plan <strong>una única vez en una única cuenta</strong>.</li>
+    </ul>
+
+    <div class="critical-box">
+      <h3>💸 POLÍTICA DE NO REEMBOLSO</h3>
+      <p>Todos los pagos realizados a NEXUS son <strong>no reembolsables</strong>, incluyendo pero no limitándose a:</p>
+      <ul class="legal-list" style="margin-top:10px">
+        <li>Pagos realizados por error o duplicados (el usuario debe verificar antes de pagar).</li>
+        <li>Plan cancelado antes de los 30 días por decisión del usuario.</li>
+        <li>Suspensión de cuenta por violación de términos.</li>
+        <li>Cierre del servicio, salvo disposición contraria expresamente notificada.</li>
+      </ul>
+      <p style="margin-top:10px; font-size:13px;">Excepción única: si NEXUS cierra permanentemente con menos de 30 días restantes de un plan activo pagado, se gestionará la devolución proporcional.</p>
+    </div>
+
+    <h3>3.4 Cuentas VIP</h3>
+    <p>NEXUS puede otorgar cuentas VIP de forma discrecional. Las cuentas VIP tienen acceso permanente al plan premium sin costo. Este beneficio puede revocarse en cualquier momento por el operador sin obligación de compensación.</p>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="legal-section" id="s4">
+    <h2>04. Uso Aceptable</h2>
+    <h3>4.1 Usos Permitidos</h3>
+    <ul class="legal-list">
+      <li>Conversaciones, consultas, y solicitudes de información o asistencia de carácter general.</li>
+      <li>Uso creativo: escritura, brainstorming, análisis, aprendizaje y entretenimiento.</li>
+      <li>Uso personal o profesional dentro de los límites de tu plan.</li>
+    </ul>
+
+    <h3>4.2 Usos Prohibidos — TOLERANCIA CERO</h3>
+    <div class="alert alert-danger">
+      Las siguientes conductas resultan en <strong>baneado permanente e inmediato</strong> sin posibilidad de apelación:
+    </div>
+    <ul class="legal-list">
+      <li>Solicitar o intentar obtener información para cometer actividades ilegales (fabricación de armas, hackeo, fraude, extorsión, etc.).</li>
+      <li>Generar contenido sexual, violento o denigrante que involucre menores de edad.</li>
+      <li>Utilizar NEXUS para acosar, amenazar o difamar a personas reales.</li>
+      <li>Intentar manipular, jailbreak, o eludir las restricciones del sistema de IA.</li>
+      <li>Usar herramientas automatizadas (bots, scripts) para enviar mensajes masivos o sobrecargar el sistema.</li>
+      <li>Recopilar, extraer o scrapear datos del sistema sin autorización.</li>
+      <li>Intentar vulnerar, hackear o comprometer la seguridad de la plataforma o sus servidores.</li>
+      <li>Difundir desinformación deliberada, spam o contenido malicioso.</li>
+      <li>Vender, ceder o compartir el acceso a tu cuenta con terceros.</li>
+    </ul>
+    <div class="alert alert-warning">
+      <strong>⚠️</strong> NEXUS se reserva el derecho de evaluar conversaciones para detectar violaciones a estos términos. El historial puede ser revisado por el operador en caso de investigación por conducta prohibida o requerimiento legal.
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="legal-section" id="s5">
+    <h2>05. Propiedad Intelectual</h2>
+    <h3>5.1 Propiedad de NEXUS</h3>
+    <ul class="legal-list">
+      <li>El código fuente, diseño, arquitectura de redes neurales, modelos entrenados, marca "NEXUS AI" y todos los activos del servicio son propiedad exclusiva de Jhonatan David Castro Galviz.</li>
+      <li>Queda prohibida la copia, modificación, distribución, ingeniería inversa o uso comercial de cualquier componente del servicio sin autorización escrita.</li>
+    </ul>
+    <h3>5.2 Contenido Generado por el Usuario</h3>
+    <ul class="legal-list">
+      <li>Conservas los derechos sobre las consultas y mensajes que envías a NEXUS.</li>
+      <li>Al usar NEXUS, otorgas una <strong>licencia no exclusiva, gratuita y revocable</strong> para que el sistema procese tus mensajes con el propósito de generar respuestas y mejorar los modelos neurales.</li>
+      <li>NEXUS puede usar conversaciones anonimizadas y agregadas para mejorar el entrenamiento del sistema. No se vincularán conversaciones a tu identidad en ningún proceso de mejora de modelos.</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="legal-section" id="s6">
+    <h2>06. Datos y Privacidad</h2>
+    <p>El tratamiento de datos personales se rige por nuestra <a href="politica-privacidad.html" style="color:var(--accent2)">Política de Privacidad</a>, incorporada por referencia a estos términos. Resumen:</p>
+    <ul class="legal-list">
+      <li><strong>Datos recopilados:</strong> Email, nombre de usuario, contraseña (hasheada), IP de registro, historial de conversaciones, datos de pago (ID de transacción, email PayPal), logs de actividad.</li>
+      <li><strong>Finalidad:</strong> Autenticación, prestación del servicio, prevención de fraude y cumplimiento legal.</li>
+      <li><strong>Retención:</strong> Datos de cuenta activa mientras exista la cuenta + 1 año. Logs de fraude: 90 días. Historial de pagos: 7 años.</li>
+      <li><strong>Tus derechos:</strong> Acceso, rectificación, eliminación, portabilidad (GDPR/LGPD/CCPA). Contacta a <span class="mono">mr.m0onster@protonmail.com</span></li>
+    </ul>
+    <div class="alert alert-success">
+      <strong>🔒 GARANTÍA:</strong> Tus datos personales NUNCA se venden, alquilan ni intercambian con terceros para publicidad o marketing.
+    </div>
+  </div>
+
+  <!-- SECTION 7 -->
+  <div class="legal-section" id="s7">
+    <h2>07. Limitación de Responsabilidad</h2>
+    <ul class="legal-list">
+      <li><strong>Disponibilidad:</strong> NEXUS se ofrece "tal cual" y "según disponibilidad". No garantizamos tiempo de actividad ininterrumpido. Mantenimientos y caídas pueden ocurrir sin previo aviso.</li>
+      <li><strong>Exactitud de IA:</strong> Las respuestas de NEXUS pueden ser incorrectas, incompletas o desactualizadas. El usuario asume toda responsabilidad por decisiones tomadas basadas en respuestas de IA.</li>
+      <li><strong>Daños indirectos:</strong> NEXUS no es responsable por daños indirectos, incidentales, especiales o consecuentes derivados del uso o imposibilidad de uso del servicio.</li>
+      <li><strong>Límite máximo:</strong> La responsabilidad total de NEXUS ante cualquier reclamación no excederá el monto pagado por el usuario en los últimos 30 días.</li>
+      <li><strong>Fuerza mayor:</strong> NEXUS no es responsable por interrupciones causadas por fallas en proveedores externos (Groq, MongoDB, Render, servicios cloud), ataques cibernéticos, desastres naturales o actos gubernamentales.</li>
+    </ul>
+    <div class="alert alert-warning">
+      <strong>⚠️ EXENCIÓN MÉDICA/LEGAL:</strong> NEXUS no es un sustituto de profesionales de salud, derecho, finanzas ni ninguna otra disciplina regulada. Nunca uses respuestas de NEXUS como única base para decisiones críticas.
+    </div>
+  </div>
+
+  <!-- SECTION 8 -->
+  <div class="legal-section" id="s8">
+    <h2>08. Sistema Anti-Fraude</h2>
+    <p>NEXUS implementa un sistema activo de detección y prevención de fraude que incluye:</p>
+    <ul class="legal-list">
+      <li><strong>Rate Limiting:</strong> Máximo 100 solicitudes por minuto por IP. Exceder este límite genera bloqueo temporal automático.</li>
+      <li><strong>Protección de Login:</strong> Bloqueo de 15 minutos tras 5 intentos fallidos de autenticación consecutivos desde una misma IP+usuario.</li>
+      <li><strong>Verificación de Pagos:</strong> Sistema multicapa de detección: transacciones duplicadas entre cuentas, flood de intentos de pago por IP, spam de transacciones inválidas, emails en lista negra, y patrones de IDs fraudulentos.</li>
+      <li><strong>Límites por IP:</strong> Máximo 3 intentos de verificación de pago por hora, máximo 2 cuentas nuevas por IP en 24 horas.</li>
+      <li><strong>Registro de Fraude:</strong> Todos los intentos fraudulentos se registran con IP, User-Agent, timestamp y detalles para análisis e investigación.</li>
+    </ul>
+    <div class="alert alert-danger">
+      <strong>🚨 CONSECUENCIAS DEL FRAUDE:</strong> Intentar engañar al sistema de pagos (IDs de transacción falsos, múltiples cuentas, manipulación de datos) resulta en baneado permanente, pérdida de cualquier saldo o acceso premium, y posible reporte a autoridades en casos graves.
+    </div>
+  </div>
+
+  <!-- SECTION 9 -->
+  <div class="legal-section" id="s9">
+    <h2>09. Suspensión y Terminación</h2>
+    <h3>9.1 Causales de Suspensión o Baneado Permanente</h3>
+    <p>NEXUS puede suspender o terminar tu cuenta <strong>sin previo aviso</strong> si:</p>
+    <ul class="legal-list">
+      <li>Violas cualquiera de estas condiciones de uso, especialmente los usos prohibidos de la sección 4.</li>
+      <li>Se detecta fraude en pagos, creación masiva de cuentas o abuso del sistema anti-fraude.</li>
+      <li>Tu actividad sobrecarga o pone en riesgo la estabilidad del servicio.</li>
+      <li>Recibes requerimiento judicial o de autoridades competentes que ordene la suspensión.</li>
+      <li>La cuenta permanece inactiva por más de 24 meses consecutivos.</li>
+      <li>Intentas comprometer, hackear o vulnerar la seguridad de NEXUS o sus servidores.</li>
+    </ul>
+    <h3>9.2 Consecuencias</h3>
+    <ul class="legal-list">
+      <li>Pérdida inmediata del acceso a la cuenta y todo su contenido.</li>
+      <li>Si la suspensión se debe a fraude o violación de términos: <strong>pérdida total del plan premium activo sin reembolso</strong>.</li>
+      <li>Los registros de la cuenta pueden conservarse hasta 12 meses para investigaciones legales.</li>
+      <li>Los usuarios baneados no pueden crear nuevas cuentas. Los intentos de evasión resultan en bloqueo permanente de IP.</li>
+    </ul>
+    <h3>9.3 Cierre del Servicio por NEXUS</h3>
+    <p>NEXUS se reserva el derecho de suspender o cerrar permanentemente el servicio por cualquier motivo, incluyendo inviabilidad técnica o económica, cambios regulatorios o decisión del operador. En caso de cierre permanente:</p>
+    <ul class="legal-list">
+      <li>Se notificará con al menos <strong>30 días de anticipación</strong> via email y banner en la plataforma.</li>
+      <li>Los usuarios con planes premium activos recibirán compensación proporcional a los días no usados.</li>
+      <li>NEXUS no será responsable por pérdidas de ingresos potenciales o expectativas no cumplidas.</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 10 -->
+  <div class="legal-section" id="s10">
+    <h2>10. Modificaciones a los Términos</h2>
+    <ul class="legal-list">
+      <li><strong>Derecho Unilateral:</strong> NEXUS puede modificar estos términos en cualquier momento.</li>
+      <li><strong>Cambios sustanciales</strong> (privacidad, precios, responsabilidad): notificación con <strong>15 días de anticipación</strong> por email y banner en la app.</li>
+      <li><strong>Cambios menores</strong> (correcciones tipográficas, aclaraciones): sin notificación previa obligatoria.</li>
+      <li><strong>Aceptación por uso continuado:</strong> Seguir usando NEXUS después de la fecha efectiva de los nuevos términos constituye aceptación automática.</li>
+      <li>Si no estás de acuerdo con cualquier cambio, debes eliminar tu cuenta antes de la fecha efectiva.</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 11 -->
+  <div class="legal-section" id="s11">
+    <h2>11. Jurisdicción y Ley Aplicable</h2>
+    <h3>11.1 Ley Aplicable</h3>
+    <p>Este acuerdo se rige exclusivamente por las leyes de la <strong>República de Colombia</strong>, incluyendo pero no limitándose a:</p>
+    <ul class="legal-list">
+      <li>Ley 1273 de 2009 — Delitos informáticos y protección de la información digital.</li>
+      <li>Ley 1581 de 2012 — Protección de datos personales (Habeas Data).</li>
+      <li>Ley 23 de 1982 — Derechos de autor y propiedad intelectual.</li>
+      <li>Código de Comercio y Código Civil colombianos.</li>
+    </ul>
+    <h3>11.2 Jurisdicción Exclusiva</h3>
+    <p>Para cualquier disputa no resuelta por negociación directa, las partes se someten a la jurisdicción exclusiva de los tribunales de <strong>Bogotá D.C., Colombia</strong>, renunciando a cualquier otra jurisdicción.</p>
+    <h3>11.3 Notificaciones Legales</h3>
+    <div class="contact-block">
+      <strong>Operador de NEXUS AI</strong>
+      Jhonatan David Castro Galviz · Colombia<br><br>
+      Email legal: <a href="mailto:mr.m0onster@protonmail.com">mr.m0onster@protonmail.com</a><br>
+      Asunto recomendado: "Legal NEXUS - [Tu consulta]"<br><br>
+      Tiempo de respuesta: 5–15 días hábiles<br>
+      Notificaciones enviadas a otros emails no se consideran válidas para efectos legales.
+    </div>
+    <h3>11.4 Divisibilidad</h3>
+    <p>Si alguna cláusula de estos términos es declarada inválida o inaplicable, esa cláusula específica se considerará separada del acuerdo, manteniéndose el resto en plena vigencia y efecto.</p>
+  </div>
+
+  <!-- SECTION 12 -->
+  <div class="legal-section" id="s12">
+    <h2>12. Aceptación Final</h2>
+    <div class="acceptance-box">
+      <h3>✅ DECLARACIÓN DE ACEPTACIÓN</h3>
+      <p style="color:var(--text2); font-size:14px; margin-bottom:14px;">Al registrarte en NEXUS AI, iniciar sesión o usar cualquier función del servicio, DECLARAS SOLEMNEMENTE que:</p>
+      <ol class="acceptance-list">
+        <li>Has leído, comprendido y aceptado voluntariamente la totalidad de estos términos en su versión actual (v1.0).</li>
+        <li>Eres mayor de 18 años y tienes capacidad legal para celebrar contratos vinculantes.</li>
+        <li>Toda la información proporcionada al registrarte es verdadera y exacta.</li>
+        <li>Reconoces que NEXUS es un servicio de IA experimental y no sustituye asesoramiento profesional en ningún campo.</li>
+        <li>Aceptas la política de no reembolso para pagos de plan premium.</li>
+        <li>Aceptas que NEXUS puede monitorear el uso del servicio para detectar violaciones a estos términos.</li>
+        <li>Reconoces que el incumplimiento de los usos prohibidos puede resultar en baneado permanente sin previo aviso.</li>
+        <li>Aceptas que NEXUS puede modificar estos términos con 15 días de notificación para cambios sustanciales.</li>
+        <li>Aceptas que estos términos se rigen por la ley colombiana y cualquier disputa se resolverá en Colombia.</li>
+        <li>Has tenido oportunidad razonable de consultar con un abogado antes de aceptar.</li>
+        <li>No estás siendo coaccionado ni presionado. Esta aceptación es libre e informada.</li>
+      </ol>
+      <p style="margin-top:18px; font-size:13px; font-weight:700; color:var(--text);">ACEPTO ÍNTEGRAMENTE ESTOS TÉRMINOS Y CONDICIONES.</p>
+      <p style="font-size:12px; color:var(--text3); margin-top:8px; font-style:italic;">Si no estás de acuerdo con cualquiera de los puntos, debes abandonar la plataforma y eliminar tu cuenta.</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="legal-footer">
+    <p>NEXUS AI © 2026 · Jhonatan David Castro Galviz · Colombia</p>
+    <p style="margin-top:8px">
+      <a href="politica-privacidad.html">Política de Privacidad</a>
+      <span style="margin:0 10px;color:var(--text3)">·</span>
+      <a href="javascript:history.back()">Volver a NEXUS</a>
+    </p>
+    <p style="margin-top:12px; color:var(--text3)">Vigente desde el 1 de Marzo, 2026 · versión 1.0</p>
+  </div>
+
+</div>
+</body>
+</html>

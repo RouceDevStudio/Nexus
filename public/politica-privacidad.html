@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de Privacidad | NEXUS AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:      #0C0C0E;
+      --bg2:     #141417;
+      --bg3:     #1C1C21;
+      --accent:  #D4A853;
+      --accent2: #E8C074;
+      --text:    #F0EEE8;
+      --text2:   #A8A49C;
+      --text3:   #5C5954;
+      --border:  rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.12);
+      --red:     #E5615A;
+      --green:   #5CB891;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: .02;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80vw;
+      height: 50vh;
+      background: radial-gradient(ellipse, rgba(212,168,83,0.05) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .legal-header {
+      padding-bottom: 28px;
+      margin-bottom: 40px;
+      border-bottom: 1px solid rgba(212,168,83,0.25);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(145deg, #2A2318, #1A1710);
+      border: 1px solid rgba(212,168,83,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px rgba(212,168,83,0.15);
+    }
+
+    .logo-mark svg { width:18px; height:18px; fill:var(--accent); }
+    .brand { font-size:17px; font-weight:700; letter-spacing:.05em; }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(92,184,145,0.1);
+      border: 1px solid rgba(92,184,145,0.3);
+      color: var(--green);
+      padding: 5px 14px;
+      border-radius: 99px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    h1 {
+      font-size: clamp(26px, 5vw, 38px);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      color: var(--accent);
+      text-shadow: 0 0 30px rgba(212,168,83,0.2);
+      margin-bottom: 8px;
+    }
+
+    .version-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text3);
+      letter-spacing: .04em;
+    }
+
+    .version-bar span { color: var(--text2); }
+
+    .summary-box {
+      background: rgba(212,168,83,0.05);
+      border: 1px solid rgba(212,168,83,0.2);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 12px 12px 0;
+      padding: 16px 20px;
+      margin-bottom: 32px;
+      font-size: 13.5px;
+      color: var(--text2);
+      line-height: 1.65;
+    }
+
+    .summary-box strong { color: var(--accent2); }
+
+    .toc {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
+      padding: 20px 22px;
+      margin-bottom: 36px;
+    }
+
+    .toc-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text3);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .toc-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+    @media(max-width:580px){ .toc-list { grid-template-columns: 1fr; } }
+
+    .toc-list a {
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 0;
+      transition: color .15s;
+    }
+
+    .toc-list a:hover { color: var(--accent2); }
+
+    .toc-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text3);
+      min-width: 22px;
+    }
+
+    .legal-section {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 26px 28px;
+      margin-bottom: 20px;
+      transition: border-color .2s;
+    }
+
+    .legal-section:hover { border-color: var(--border2); }
+
+    .legal-section h2 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--accent2);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .legal-section h2::before {
+      content: '';
+      width: 3px;
+      height: 16px;
+      background: var(--accent);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .legal-section h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 18px 0 8px;
+    }
+
+    .legal-section p {
+      font-size: 14px;
+      color: var(--text2);
+      margin-bottom: 10px;
+    }
+
+    .legal-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 10px;
+    }
+
+    .legal-list li {
+      font-size: 14px;
+      color: var(--text2);
+      padding-left: 18px;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .legal-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 10px;
+      top: 4px;
+    }
+
+    .legal-list li strong { color: var(--text); }
+
+    .alert {
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin: 14px 0;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+
+    .alert-danger {
+      background: rgba(229,97,90,0.07);
+      border-left: 4px solid var(--red);
+      color: #f0aaaa;
+    }
+
+    .alert-warning {
+      background: rgba(212,168,83,0.07);
+      border-left: 4px solid var(--accent);
+      color: #dfc98a;
+    }
+
+    .alert-success {
+      background: rgba(92,184,145,0.07);
+      border-left: 4px solid var(--green);
+      color: #8ed8b8;
+    }
+
+    .alert strong { color: inherit; filter: brightness(1.2); }
+
+    /* RETENTION TABLE */
+    .retention-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 14px 0;
+    }
+
+    .retention-table th {
+      background: var(--bg3);
+      color: var(--text3);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border2);
+    }
+
+    .retention-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2);
+      vertical-align: top;
+    }
+
+    .retention-table td strong { color: var(--text); }
+    .retention-table tr:last-child td { border-bottom: none; }
+
+    /* RIGHTS GRID */
+    .rights-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    @media(max-width:560px){ .rights-grid { grid-template-columns: 1fr; } }
+
+    .right-card {
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .right-card .right-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent2);
+      font-family: 'IBM Plex Mono', monospace;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .right-card p {
+      font-size: 12px;
+      color: var(--text3);
+      margin: 0;
+    }
+
+    .contact-block {
+      background: var(--bg3);
+      border: 1px solid rgba(212,168,83,0.2);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 14px 0;
+      font-size: 13.5px;
+      color: var(--text2);
+    }
+
+    .contact-block strong { color: var(--text); display: block; margin-bottom: 6px; }
+    .contact-block a { color: var(--accent2); text-decoration: none; }
+    .contact-block a:hover { text-decoration: underline; }
+
+    .mono {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--accent2);
+      background: rgba(0,0,0,0.3);
+      padding: 2px 7px;
+      border-radius: 5px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 18px;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 28px;
+      transition: all .15s;
+    }
+
+    .back-btn:hover { border-color: rgba(212,168,83,0.3); color: var(--accent2); }
+
+    .legal-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .legal-footer p { font-size: 12px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; }
+    .legal-footer a { color: var(--accent); text-decoration: none; }
+    .legal-footer a:hover { text-decoration: underline; }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-thumb { background: rgba(212,168,83,0.2); border-radius: 10px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <a class="back-btn" href="javascript:history.back()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    Volver a NEXUS
+  </a>
+
+  <!-- HEADER -->
+  <div class="legal-header">
+    <div class="header-top">
+      <div class="logo-group">
+        <div class="logo-mark">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26A7 7 0 0 0 19 9c0-3.87-3.13-7-7-7zm1 15h-2v-1h2v1zm.87-3.87c-.31.19-.87.5-.87 1.87h-2c0-2 1.05-2.59 1.57-2.9.56-.34 1.43-.87.43-1.6-.46-.32-.87-.37-1.22-.35-.66.04-1.28.58-1.56 1.35l-1.84-.76C8.87 8.74 10.35 7.1 12.07 7c.67-.04 1.64.06 2.56.71C16.23 8.75 16 10.38 14.04 11.5c-.2.11-.92.54-1.17.63z"/></svg>
+        </div>
+        <span class="brand">NEXUS AI</span>
+      </div>
+      <span class="status-badge"><span class="status-dot"></span>GDPR · LGPD · CCPA</span>
+    </div>
+    <h1>🔒 Política de Privacidad</h1>
+    <div class="version-bar">
+      <span>Versión 1.0</span>
+      <span style="color:var(--text3)">·</span>
+      <span>Última actualización: Febrero 2026</span>
+      <span style="color:var(--text3)">·</span>
+      <span>Rige desde el 1 de Marzo, 2026</span>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary-box">
+    <strong>COMPROMISO DE PRIVACIDAD —</strong> NEXUS AI recopila únicamente los datos estrictamente necesarios para operar el servicio. Tus datos personales <strong>NUNCA se venden, alquilan ni comparten</strong> con terceros para publicidad. Esta política cumple con GDPR (Europa), Ley 1581/2012 (Colombia), LGPD (Brasil) y CCPA (California). Tienes derechos plenos sobre tus datos y puedes ejercerlos en cualquier momento.
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">📋 Índice de Contenido</div>
+    <ul class="toc-list">
+      <li><a href="#p1"><span class="toc-num">01</span>Responsable del Tratamiento</a></li>
+      <li><a href="#p2"><span class="toc-num">02</span>Datos que Recopilamos</a></li>
+      <li><a href="#p3"><span class="toc-num">03</span>Finalidad del Tratamiento</a></li>
+      <li><a href="#p4"><span class="toc-num">04</span>Compartir Datos con Terceros</a></li>
+      <li><a href="#p5"><span class="toc-num">05</span>Retención de Datos</a></li>
+      <li><a href="#p6"><span class="toc-num">06</span>Tus Derechos</a></li>
+      <li><a href="#p7"><span class="toc-num">07</span>Seguridad</a></li>
+      <li><a href="#p8"><span class="toc-num">08</span>Cookies y Almacenamiento</a></li>
+      <li><a href="#p9"><span class="toc-num">09</span>IA y Datos de Conversación</a></li>
+      <li><a href="#p10"><span class="toc-num">10</span>Transferencias Internacionales</a></li>
+      <li><a href="#p11"><span class="toc-num">11</span>Menores de Edad</a></li>
+      <li><a href="#p12"><span class="toc-num">12</span>Contacto DPO</a></li>
+    </ul>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="legal-section" id="p1">
+    <h2>01. Responsable del Tratamiento de Datos</h2>
+    <div class="contact-block">
+      <strong>Operador y Responsable</strong>
+      Jhonatan David Castro Galviz<br>
+      Persona Natural · Domicilio: República de Colombia<br><br>
+      <strong>Email de Privacidad</strong>
+      <a href="mailto:mr.m0onster@protonmail.com">mr.m0onster@protonmail.com</a><br>
+      Asunto: "Privacidad NEXUS - [Tu consulta]"<br><br>
+      <strong>Autoridad de Control (Colombia)</strong>
+      Superintendencia de Industria y Comercio (SIC) · <a href="https://www.sic.gov.co" target="_blank">www.sic.gov.co</a>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="legal-section" id="p2">
+    <h2>02. Datos que Recopilamos</h2>
+
+    <h3>2.1 Datos de Registro (Obligatorios)</h3>
+    <ul class="legal-list">
+      <li><strong>Nombre de usuario:</strong> Identificador único elegido por ti (3–20 caracteres). Se almacena en texto plano para identificación.</li>
+      <li><strong>Email:</strong> Para autenticación, recuperación de cuenta y notificaciones críticas del servicio.</li>
+      <li><strong>Contraseña:</strong> Almacenada exclusivamente como hash bcrypt (factor de costo 10). Nunca en texto plano. NEXUS no puede recuperar tu contraseña original.</li>
+    </ul>
+
+    <h3>2.2 Datos de Conversación</h3>
+    <ul class="legal-list">
+      <li><strong>Mensajes y respuestas:</strong> Cada conversación se almacena en nuestra base de datos vinculada a tu <span class="mono">userId</span> para permitir historial y continuidad.</li>
+      <li><strong>ID de Conversación:</strong> Identificador único por sesión de chat para organizar el historial.</li>
+      <li><strong>Timestamps:</strong> Fecha y hora de cada mensaje para ordenar el historial.</li>
+      <li><strong>Datos de entrenamiento neural:</strong> El sistema extrae vectores semánticos (embeddings) de las conversaciones para mejorar el motor neural. Estos vectores NO están vinculados directamente a tu identidad en el modelo.</li>
+    </ul>
+
+    <h3>2.3 Datos de Pago (Solo Usuarios Premium)</h3>
+    <ul class="legal-list">
+      <li><strong>ID de Transacción PayPal:</strong> El código alfanumérico de tu pago, usado para verificar autenticidad y prevenir reutilización.</li>
+      <li><strong>Email del pagador PayPal:</strong> Para verificar coincidencia y detectar fraude (múltiple uso en cuentas distintas).</li>
+      <li><strong>Fecha de activación y expiración del plan.</strong></li>
+      <li><strong>Historial de pagos verificados</strong> (retenido 7 años por obligación fiscal).</li>
+    </ul>
+
+    <h3>2.4 Datos Técnicos (Automáticos)</h3>
+    <ul class="legal-list">
+      <li><strong>Dirección IP:</strong> Capturada al registrarte (<span class="mono">registrationIp</span>) y en cada solicitud para prevención de fraude, rate limiting y bloqueo de bots.</li>
+      <li><strong>User-Agent:</strong> Navegador y sistema operativo, para compatibilidad y detección de automatización.</li>
+      <li><strong>Logs de actividad sospechosa:</strong> Intentos de login fallidos, intentos de pago fraudulentos, comportamiento anómalo — almacenados en colección <span class="mono">fraud_log</span>.</li>
+      <li><strong>Logs de búsquedas y clicks:</strong> Consultas enviadas al sistema y clicks en respuestas, usados para mejorar la relevancia del motor neural (colección <span class="mono">searches</span> y <span class="mono">clicks</span>).</li>
+    </ul>
+
+    <div class="alert alert-warning">
+      <strong>⚠️ NEXUS NO recopila:</strong> Número de tarjeta de crédito o datos bancarios directos (los pagos son vía PayPal), datos de ubicación GPS, contactos, archivos del dispositivo, ni información biométrica de ningún tipo.
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="legal-section" id="p3">
+    <h2>03. Finalidad del Tratamiento de Datos</h2>
+    <p>Utilizamos tus datos personales EXCLUSIVAMENTE para:</p>
+    <ul class="legal-list">
+      <li><strong>Autenticación y Seguridad de Cuenta:</strong> Verificar tu identidad al iniciar sesión, gestionar tokens JWT y proteger el acceso a tu cuenta.</li>
+      <li><strong>Prestación del Servicio:</strong> Procesar tus mensajes, generar respuestas con el motor neural, mantener el historial de conversaciones y personalizar la experiencia según tu plan.</li>
+      <li><strong>Mejora del Motor Neural:</strong> Entrenar las redes neurales con datos anonimizados de conversaciones para mejorar la calidad de las respuestas. Sin vincular datos a identidades individuales.</li>
+      <li><strong>Gestión de Pagos:</strong> Verificar transacciones de PayPal, activar planes premium, prevenir fraude en pagos y mantener registros contables obligatorios.</li>
+      <li><strong>Prevención de Fraude y Abuso:</strong> Detectar y bloquear comportamiento malicioso, bots, intentos de hackeo y violaciones a los términos de uso.</li>
+      <li><strong>Comunicaciones Críticas:</strong> Enviar notificaciones sobre cambios en términos, alertas de seguridad, vencimiento del plan o incidencias del servicio.</li>
+      <li><strong>Cumplimiento Legal:</strong> Responder a solicitudes de autoridades judiciales o regulatorias con base legal válida.</li>
+    </ul>
+    <div class="alert alert-success">
+      <strong>✅ BASE LEGAL:</strong> El tratamiento se basa en (a) ejecución del contrato de servicio, (b) interés legítimo en seguridad y prevención de fraude, y (c) cumplimiento de obligaciones legales. Para el entrenamiento del motor neural, la base es el interés legítimo con datos anonimizados.
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="legal-section" id="p4">
+    <h2>04. Compartir Datos con Terceros</h2>
+    <h3>4.1 Proveedores de Infraestructura (Acceso Técnico Necesario)</h3>
+    <ul class="legal-list">
+      <li><strong>MongoDB Atlas (AWS):</strong> Base de datos principal donde se almacenan usuarios, conversaciones, pagos y logs. Servidores en AWS, cifrados en reposo. Cláusulas contractuales estándar (SCC) para GDPR.</li>
+      <li><strong>Render.com:</strong> Hosting del servidor Node.js de NEXUS. Tiene acceso a logs de aplicación (IP, User-Agent, errores). Certificado con Privacy Shield.</li>
+      <li><strong>Groq / Ollama:</strong> Proveedores LLM usados para enriquecer las respuestas del motor neural. Las consultas pueden ser procesadas por sus servidores. Consulta sus políticas individuales para datos enviados a sus APIs.</li>
+    </ul>
+    <h3>4.2 PayPal</h3>
+    <p>Para usuarios premium, el proceso de pago se realiza en plataformas de PayPal. NEXUS solo recibe el ID de transacción y el email del pagador para verificación. NEXUS no procesa ni almacena datos de tarjeta de crédito ni cuentas bancarias.</p>
+    <div class="alert alert-success">
+      <strong>🔒 GARANTÍA ABSOLUTA — NEXUS NUNCA comparte tus datos para:</strong><br>
+      ❌ Publicidad dirigida o perfilado comercial<br>
+      ❌ Venta a brokers de datos o terceros no afiliados<br>
+      ❌ Marketing de terceros ajenos al servicio<br>
+      ❌ Análisis de comportamiento con fines externos a NEXUS<br>
+      ❌ Investigación de mercado sin consentimiento explícito
+    </div>
+    <h3>4.3 Divulgación Legal Obligatoria</h3>
+    <p>NEXUS puede divulgar datos si es legalmente requerido por orden judicial, requerimiento de autoridad competente, o para proteger los derechos e integridad de otros usuarios o del propio servicio. En estos casos, divulgaremos únicamente la información mínima necesaria y notificaremos al usuario cuando sea legalmente posible.</p>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="legal-section" id="p5">
+    <h2>05. Retención de Datos</h2>
+    <table class="retention-table">
+      <thead>
+        <tr>
+          <th>Tipo de Dato</th>
+          <th>Período de Retención</th>
+          <th>Motivo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Datos de cuenta activa</strong><br>(usuario, email, preferencias)</td>
+          <td>Mientras la cuenta esté activa + 1 año post-eliminación</td>
+          <td>Prestación del servicio y seguridad</td>
+        </tr>
+        <tr>
+          <td><strong>Historial de conversaciones</strong></td>
+          <td>Mientras la cuenta esté activa. Se eliminan al borrar la cuenta.</td>
+          <td>Funcionalidad de historial</td>
+        </tr>
+        <tr>
+          <td><strong>Datos de pago</strong><br>(ID transacción, email PayPal)</td>
+          <td>7 años desde la transacción</td>
+          <td>Obligación fiscal y contable</td>
+        </tr>
+        <tr>
+          <td><strong>Logs de fraude</strong><br>(IP, intentos fallidos, patrones)</td>
+          <td>90 días</td>
+          <td>Análisis de patrones de seguridad</td>
+        </tr>
+        <tr>
+          <td><strong>Transacciones usadas</strong><br>(para prevenir reutilización)</td>
+          <td>Indefinido (referencia de seguridad)</td>
+          <td>Prevención de fraude en pagos</td>
+        </tr>
+        <tr>
+          <td><strong>Logs de actividad</strong><br>(búsquedas, clicks)</td>
+          <td>90 días en forma identificable</td>
+          <td>Mejora del servicio (anonimizados después)</td>
+        </tr>
+        <tr>
+          <td><strong>Embeddings neurales</strong><br>(vectores semánticos)</td>
+          <td>Indefinido (no vinculados a identidad)</td>
+          <td>Mejora del motor neural de IA</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="legal-section" id="p6">
+    <h2>06. Tus Derechos (GDPR · Ley 1581 · LGPD · CCPA)</h2>
+    <p>Como usuario tienes los siguientes derechos sobre tus datos personales:</p>
+    <div class="rights-grid">
+      <div class="right-card">
+        <div class="right-title">✓ Acceso</div>
+        <p>Solicitar una copia de todos tus datos personales almacenados, en formato JSON legible por máquina.</p>
+      </div>
+      <div class="right-card">
+        <div class="right-title">✓ Rectificación</div>
+        <p>Corregir datos incorrectos o desactualizados. Puedes editar nombre de usuario y nombre visible directamente desde tu perfil.</p>
+      </div>
+      <div class="right-card">
+        <div class="right-title">✓ Eliminación</div>
+        <p>"Derecho al Olvido": borrar tu cuenta y todos los datos asociados, excepto los retenidos por obligación legal (pagos 7 años, transacciones anti-fraude).</p>
+      </div>
+      <div class="right-card">
+        <div class="right-title">✓ Portabilidad</div>
+        <p>Exportar tus conversaciones y datos de cuenta en formato estructurado (JSON). Solicítalo por email.</p>
+      </div>
+      <div class="right-card">
+        <div class="right-title">✓ Oposición</div>
+        <p>Oponerte al procesamiento de datos para fines de mejora del modelo neural. Tus conversaciones no se usarán en entrenamiento si lo solicitas expresamente.</p>
+      </div>
+      <div class="right-card">
+        <div class="right-title">✓ Limitación</div>
+        <p>Solicitar que restrinjamos el procesamiento en casos justificados mientras se resuelve una disputa sobre los datos.</p>
+      </div>
+      <div class="right-card">
+        <div class="right-title">✓ No Venta (CCPA)</div>
+        <p>Optar por no vender datos personales. NEXUS no vende datos — ya está garantizado por defecto para todos los usuarios.</p>
+      </div>
+      <div class="right-card">
+        <div class="right-title">✓ Queja</div>
+        <p>Presentar una queja ante la Superintendencia de Industria y Comercio (SIC) de Colombia si consideras que tus derechos han sido vulnerados.</p>
+      </div>
+    </div>
+    <div class="contact-block" style="margin-top:16px">
+      <strong>📧 Para Ejercer Tus Derechos</strong>
+      Email: <a href="mailto:mr.m0onster@protonmail.com">mr.m0onster@protonmail.com</a><br>
+      Asunto: "Solicitud de Privacidad - [Tu Usuario]"<br><br>
+      <strong>Tiempo de Respuesta:</strong> Máximo 30 días hábiles<br>
+      <strong>Costo:</strong> GRATUITO (primera solicitud por año)
+    </div>
+  </div>
+
+  <!-- SECTION 7 -->
+  <div class="legal-section" id="p7">
+    <h2>07. Seguridad de Datos</h2>
+    <p>NEXUS implementa medidas técnicas y organizativas para proteger tus datos:</p>
+    <ul class="legal-list">
+      <li>🔐 <strong>Cifrado en tránsito:</strong> HTTPS/TLS 1.3 en todas las comunicaciones entre cliente y servidor.</li>
+      <li>🔒 <strong>Cifrado en reposo:</strong> AES-256 en la base de datos MongoDB Atlas (AWS).</li>
+      <li>🔑 <strong>Hashing de contraseñas:</strong> bcrypt con factor de costo 10. Las contraseñas son irrecuperables por diseño.</li>
+      <li>🛡️ <strong>Autenticación JWT:</strong> Tokens con firma criptográfica y expiración automática.</li>
+      <li>⚡ <strong>Rate Limiting:</strong> Máximo 100 solicitudes por minuto por IP. Bloqueo automático ante abuso.</li>
+      <li>🚫 <strong>Anti Fuerza Bruta:</strong> Bloqueo de 15 minutos tras 5 intentos fallidos de login consecutivos.</li>
+      <li>🔍 <strong>Sistema Anti-Fraude Multicapa:</strong> Detección de transacciones duplicadas, floods de IP, patrones de IDs falsos y emails en lista negra.</li>
+      <li>📋 <strong>Logs de Auditoría:</strong> Registro de accesos administrativos y actividades sospechosas con timestamp e IP.</li>
+    </ul>
+    <div class="alert alert-warning">
+      <strong>⚠️ Notificación de Brechas de Seguridad:</strong> En caso de brecha que comprometa datos personales sensibles (contraseñas, emails, historial), notificaremos a los usuarios afectados por email en un máximo de 72 horas. Reportaremos a la autoridad de control competente según lo exija la ley.
+    </div>
+  </div>
+
+  <!-- SECTION 8 -->
+  <div class="legal-section" id="p8">
+    <h2>08. Cookies y Almacenamiento Local</h2>
+    <h3>8.1 Almacenamiento Local (localStorage) — Esencial</h3>
+    <p>NEXUS usa exclusivamente <span class="mono">localStorage</span> del navegador para funcionalidades esenciales. No se instalan cookies de seguimiento propias.</p>
+    <ul class="legal-list">
+      <li><span class="mono">nexus_token</span> — Token JWT de sesión. Necesario para autenticación. Eliminado al cerrar sesión.</li>
+      <li><span class="mono">nexus_promo_shown_at</span> — Timestamp de última vez que se mostró el banner promocional. Sin datos personales.</li>
+      <li><span class="mono">nexus_pwa_dismissed</span> — Si el usuario descartó el banner de instalación PWA. Sin datos personales.</li>
+    </ul>
+    <div class="alert alert-success">
+      <strong>✅ Sin tracking oculto:</strong> NEXUS no instala cookies de Google Analytics, Facebook Pixel ni ninguna otra herramienta de análisis de comportamiento de terceros. Tu navegación dentro de NEXUS no es rastreada por entidades externas.
+    </div>
+  </div>
+
+  <!-- SECTION 9 -->
+  <div class="legal-section" id="p9">
+    <h2>09. IA y Datos de Conversación — Transparencia Total</h2>
+    <p>NEXUS es diferente a los chatbots tradicionales: tiene un motor neural propio que <strong>aprende de las interacciones</strong>. Es importante que entiendas cómo se procesan tus datos en este contexto:</p>
+    <ul class="legal-list">
+      <li><strong>Entrenamiento en tiempo real:</strong> Cada mensaje que envías puede usarse para actualizar los pesos de las redes neurales de NEXUS. Este proceso mejora la calidad de las respuestas para todos los usuarios.</li>
+      <li><strong>Embeddings (vectores semánticos):</strong> El sistema convierte tus mensajes en representaciones matemáticas (vectores de alta dimensión) para búsqueda semántica y memoria episódica. Estos vectores no contienen texto literal pero capturan el significado semántico.</li>
+      <li><strong>Memoria episódica:</strong> NEXUS almacena fragmentos de conversaciones (episodios) para recuperar contexto relevante en futuras consultas. Estos episodios están vinculados a tu cuenta para que el sistema "recuerde" conversaciones pasadas tuyas.</li>
+      <li><strong>Sin vinculación cross-user:</strong> Los datos de tu cuenta nunca se mezclan ni comparten con los episodios o modelos de otros usuarios. Cada usuario tiene su propio contexto aislado.</li>
+      <li><strong>Derecho de exclusión:</strong> Puedes solicitar que tus conversaciones no se usen para entrenamiento del modelo base. Escríbenos a <a href="mailto:mr.m0onster@protonmail.com" style="color:var(--accent2)">mr.m0onster@protonmail.com</a> con asunto "Opt-out entrenamiento".</li>
+    </ul>
+    <div class="alert alert-warning">
+      <strong>⚠️ RECOMENDACIÓN:</strong> No compartas información altamente sensible (datos financieros detallados, documentos legales confidenciales, contraseñas de otros servicios) en tus conversaciones con NEXUS. Aunque los datos están protegidos, ningún sistema digital es 100% invulnerable.
+    </div>
+  </div>
+
+  <!-- SECTION 10 -->
+  <div class="legal-section" id="p10">
+    <h2>10. Transferencias Internacionales de Datos</h2>
+    <p>Tus datos pueden ser procesados en servidores ubicados fuera de Colombia, bajo las siguientes garantías:</p>
+    <ul class="legal-list">
+      <li><strong>MongoDB Atlas (AWS — Virginia, EE.UU.):</strong> Cumple GDPR mediante Cláusulas Contractuales Estándar (SCC). Datos cifrados en reposo y en tránsito.</li>
+      <li><strong>Render.com (Oregon, EE.UU.):</strong> Servidor del backend. Cumple requisitos de privacidad de datos conforme a SCCs.</li>
+      <li><strong>Groq (EE.UU.):</strong> Las consultas enviadas al LLM de Groq pueden ser procesadas en sus servidores. Consulta la política de privacidad de Groq para detalles.</li>
+      <li><strong>PayPal (Global):</strong> Gestiona los pagos bajo sus propias políticas de privacidad y cumplimiento regulatorio.</li>
+    </ul>
+    <p>Todas las transferencias internacionales se realizan bajo mecanismos de salvaguarda aprobados por las autoridades de protección de datos.</p>
+  </div>
+
+  <!-- SECTION 11 -->
+  <div class="legal-section" id="p11">
+    <h2>11. Privacidad de Menores de Edad</h2>
+    <div class="alert alert-danger">
+      <strong>🚫 NEXUS NO está dirigido a menores de 18 años.</strong> Si tienes menos de 18 años, no debes usar este servicio ni proporcionar ningún dato personal.
+    </div>
+    <p>Si descubrimos que hemos recopilado datos de un menor de 18 años sin el consentimiento verificado de sus padres o tutores legales, eliminaremos esa información de forma inmediata y permanente.</p>
+    <p>Padres o tutores que detecten una cuenta de menor pueden contactarnos en: <a href="mailto:mr.m0onster@protonmail.com" style="color:var(--accent2)">mr.m0onster@protonmail.com</a> con asunto "Cuenta de Menor - Eliminación Urgente". Respondemos en máximo 48 horas hábiles.</p>
+  </div>
+
+  <!-- SECTION 12 -->
+  <div class="legal-section" id="p12">
+    <h2>12. Contacto — Oficial de Protección de Datos (DPO)</h2>
+    <div class="contact-block">
+      <strong>Oficial de Protección de Datos</strong>
+      Jhonatan David Castro Galviz<br>
+      NEXUS AI · Colombia<br><br>
+      <strong>Email:</strong> <a href="mailto:mr.m0onster@protonmail.com">mr.m0onster@protonmail.com</a><br>
+      <strong>Asunto recomendado:</strong> "Privacidad NEXUS - [Tu consulta]"<br><br>
+      <strong>Tiempo de respuesta:</strong> 5–30 días hábiles dependiendo de la complejidad<br>
+      <strong>Costo:</strong> Gratuito (primera solicitud por año por usuario)<br><br>
+      <strong>Autoridad de Control (Colombia):</strong><br>
+      Superintendencia de Industria y Comercio (SIC)<br>
+      <a href="https://www.sic.gov.co" target="_blank">www.sic.gov.co</a> · +57 601 592 0400
+    </div>
+    <h3>12.1 Cambios a Esta Política</h3>
+    <ul class="legal-list">
+      <li>Cambios sustanciales: notificación por email con 15 días de anticipación.</li>
+      <li>Cambios menores: actualización de la fecha "Última actualización" con aviso en la plataforma.</li>
+      <li>Uso continuado = aceptación de la nueva política.</li>
+    </ul>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="legal-footer">
+    <p>NEXUS AI © 2026 · Jhonatan David Castro Galviz · Colombia</p>
+    <p style="margin-top:8px">
+      <a href="terminos-condiciones.html">Términos y Condiciones</a>
+      <span style="margin:0 10px;color:var(--text3)">·</span>
+      <a href="javascript:history.back()">Volver a NEXUS</a>
+    </p>
+    <p style="margin-top:12px; color:var(--text3)">Cumple con GDPR · Ley 1581/2012 · LGPD · CCPA · Versión 1.0</p>
+  </div>
+
+</div>
+</body>
+</html>
