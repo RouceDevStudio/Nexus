@@ -8,8 +8,5 @@ cmds = [
   "python3 -m pip install -r requirements.txt"
 ]
 
-[variables]
-PATH = "/root/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin"
-
 [start]
-cmd = "node index.js"
+cmd = "bash start.sh"
