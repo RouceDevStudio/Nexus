@@ -4,31 +4,13 @@ const cors        = require('cors');
 const axios       = require('axios');
 const cheerio     = require('cheerio');
 const path        = require('path');
-const { spawn, execSync } = require('child_process');
+const { spawn }   = require('child_process');
 const fs          = require('fs').promises;
 const fsSync      = require('fs');
 const MongoClient = require('mongodb').MongoClient;
 const bcrypt      = require('bcryptjs');
 const jwt         = require('jsonwebtoken');
 const crypto      = require('crypto');
-
-// ── Resolución robusta del binario Python ───────────────────────────
-function resolvePython() {
-    // Primero intentar la variable de entorno inyectada por nixpacks.toml
-    if (process.env.PYTHON_BIN && process.env.PYTHON_BIN.trim()) {
-        console.log("✅ Python desde env: " + process.env.PYTHON_BIN.trim());
-        return process.env.PYTHON_BIN.trim();
-    }
-    const candidates = ['python3', 'python3.11', 'python3.10', 'python3.9', 'python'];
-    for (const bin of candidates) {
-        try { const p = execSync('which ' + bin, { encoding: 'utf8' }).trim(); console.log('✅ Python resuelto: ' + p); return p; }
-        catch (_) {}
-    }
-    console.error('❌ No se encontró ningún intérprete Python. Verifica nixpacks.toml');
-    process.exit(1);
-}
-const PYTHON_BIN = resolvePython();
-// ────────────────────────────────────────────────────────────────────
 
 // ── Multipart / File Upload ──────────────────────────────────────────
 let multer, sharp, mammoth, pdfParse;
@@ -361,7 +343,7 @@ class BrainProcess {
         const brainPath = path.join(__dirname, 'neural', this.scriptName);
         const env = { ...process.env, PYTHONUNBUFFERED: '1' };
         console.log(`🧠 Iniciando cerebro NEXUS [${this.label}] → ${this.scriptName}`);
-        this.proc = spawn(PYTHON_BIN, ['-u', brainPath], { env });
+        this.proc = spawn('python3', ['-u', brainPath], { env });
 
         let buffer = '';
         this.proc.stdout.on('data', (chunk) => {
