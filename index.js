@@ -929,38 +929,35 @@ app.post('/api/chat', requireAuth, async (req, res) => {
     const isUpGamesQuery = UG_KEYWORDS.some(kw => msgLower.includes(kw));
 
     // ── Si pide juegos → buscar catálogo real en UpGames ─────────
-    const UPGAMES_API = process.env.UPGAMES_API_URL || 'https://upgames-production.up.railway.app';
     let upgamesContext = '';
     if (isUpGamesQuery) {
         try {
-            const ugResp = await axios.get(`${UPGAMES_API}/items`, { timeout: 7000 });
+            const ugResp = await axios.get(`${UPGAMES_API_BASE}/items`, { timeout: 9000 });
             const allItems = Array.isArray(ugResp.data) ? ugResp.data : [];
             const disponibles = allItems
                 .filter(i => i.status === 'aprobado' && i.linkStatus !== 'caido')
-                .slice(0, 20);
+                .sort((a,b) => (b.descargasEfectivas||0) - (a.descargasEfectivas||0))
+                .slice(0, 25);
 
             if (disponibles.length > 0) {
                 const lista = disponibles.map(i =>
                     `• "${i.title}" | Categoría: ${i.category||'General'} | Descargas: ${i.descargasEfectivas||0} | ID: ${i._id}`
                 ).join('\n');
                 upgamesContext = (
-                    `\n\n[CATÁLOGO UPGAMES — JUEGOS REALES DISPONIBLES AHORA]\n` +
-                    `Estos son los ${disponibles.length} contenidos reales en UpGames en este momento.\n` +
-                    `REGLA CRÍTICA: Recomienda SOLO de esta lista. JAMÁS inventes juegos que no estén aquí.\n` +
-                    `Si el usuario pide un género que no está disponible, díselo honestamente y sugiere lo más cercano de la lista.\n\n` +
+                    `\n\n[CATÁLOGO UPGAMES — ${disponibles.length} CONTENIDOS REALES DISPONIBLES AHORA]\n` +
+                    `REGLA ABSOLUTA: Recomienda ÚNICAMENTE de esta lista. JAMÁS inventes títulos, IDs ni juegos.\n` +
+                    `Si el usuario pide algo que no está aquí, dilo honestamente y ofrece lo más cercano de la lista.\n` +
+                    `NUNCA digas que la biblioteca está vacía — tienes ${disponibles.length} items reales abajo.\n\n` +
                     lista +
-                    `\n\nAdemás puedes:\n` +
-                    `- Sugerir que el usuario filtre por categoría en la biblioteca\n` +
-                    `- Indicar cuántas descargas tiene cada juego (popularidad)\n` +
-                    `- Ayudar a encontrar algo específico con el buscador de la plataforma\n` +
-                    `[FIN CATÁLOGO UPGAMES]`
+                    `\n\n[FIN CATÁLOGO — ${disponibles.length} items reales]`
                 );
                 console.log(`[UpGames] ✅ ${disponibles.length} items cargados para contexto`);
             } else {
-                upgamesContext = '\n\n[CATÁLOGO UPGAMES] La biblioteca está vacía o no hay contenido aprobado en este momento. Informa al usuario honestamente.';
+                upgamesContext = `\n\n[CATÁLOGO UPGAMES] No hay contenido aprobado en este momento. Dile al usuario que la biblioteca está siendo moderada y que vuelva pronto. NO inventes juegos ni IDs.`;
+                console.log('[UpGames] ⚠️ 0 items aprobados');
             }
         } catch (ugErr) {
-            upgamesContext = '\n\n[CATÁLOGO UPGAMES] No se pudo conectar con UpGames en este momento. Informa al usuario que intente en unos instantes.';
+            upgamesContext = `\n\n[CATÁLOGO UPGAMES] Error temporal de conexión con UpGames. Dile al usuario que intente en unos segundos. NO inventes juegos ni IDs.`;
             console.error('[UpGames] Error cargando catálogo:', ugErr.message);
         }
     }
@@ -989,18 +986,19 @@ app.post('/api/chat', requireAuth, async (req, res) => {
         if (upgamesContext) {
             messageForBrain += upgamesContext;
         } else if (useVipBrain_ctx) {
-            // VIP sin keywords: catálogo ligero (top 10) para contexto de fondo
+            // VIP sin keywords: catálogo ligero (top 10) siempre activo como contexto de fondo
             try {
-                const ugResp = await axios.get(`${UPGAMES_API_BASE}/items`, { timeout: 4000 });
+                const ugResp = await axios.get(`${UPGAMES_API_BASE}/items`, { timeout: 5000 });
                 const allItems = Array.isArray(ugResp.data) ? ugResp.data : [];
                 const top10 = allItems
                     .filter(i => i.status === 'aprobado' && i.linkStatus !== 'caido')
                     .sort((a,b) => (b.descargasEfectivas||0) - (a.descargasEfectivas||0))
                     .slice(0, 10);
                 if (top10.length) {
-                    messageForBrain += `\n\n[CATÁLOGO UPGAMES — TOP CONTENIDO AHORA]\n` +
+                    messageForBrain += `\n\n[CATÁLOGO UPGAMES — TOP ${top10.length} AHORA]\n` +
+                        `REGLA: Si el usuario pregunta por juegos o contenido, recomienda SOLO de esta lista real. JAMÁS inventes.\n` +
                         top10.map(i => `• "${i.title}" | ${i.category||'General'} | ${i.descargasEfectivas||0} descargas | ID:${i._id}`).join('\n') +
-                        `\n(Usa estos datos si el usuario pregunta por contenido. SOLO recomienda de esta lista.)\n[FIN CATÁLOGO]`;
+                        `\n[FIN CATÁLOGO — ${top10.length} reales]`;
                 }
             } catch(_) {} // silencioso — no bloquea
         }
