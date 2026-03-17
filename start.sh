@@ -1,6 +1,5 @@
 #!/bin/bash
 # Exponer python3 de Nix al PATH en runtime - Ruta ajustada para detectar Python 3.11 específicamente
-export PATH="/nix/store/*python3-3.11*/bin:/root/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
 
 # Verificación detallada de Python
 echo "=== VERIFICACIÓN DE PYTHON ==="
