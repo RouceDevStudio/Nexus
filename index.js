@@ -97,6 +97,132 @@ const VIP_ACCOUNTS = [
 const rateLimitStore = new Map();
 const loginAttempts  = new Map();
 
+
+// ══════════════════════════════════════════════════════════════════
+//  NEXUS VIP — CONTEXTO ENRIQUECIDO
+//  Busca stats reales del usuario en UpGames y construye narrativa
+// ══════════════════════════════════════════════════════════════════
+
+const UPGAMES_API_BASE = process.env.UPGAMES_API_URL || 'https://upgames-production.up.railway.app';
+
+/**
+ * Obtiene stats públicos del usuario desde UpGames (verificación, publicaciones, seguidores)
+ * Fire-and-forget con timeout corto para no bloquear la respuesta
+ */
+async function fetchUpGamesUserStats(username) {
+    if (!username) return null;
+    try {
+        const [usersResp, itemsResp] = await Promise.all([
+            axios.get(`${UPGAMES_API_BASE}/auth/users/public`, { timeout: 4000 }).catch(() => null),
+            axios.get(`${UPGAMES_API_BASE}/items/user/${encodeURIComponent(username)}`, { timeout: 4000 }).catch(() => null),
+        ]);
+
+        const users   = Array.isArray(usersResp?.data) ? usersResp.data : [];
+        const userData = users.find(u => u.usuario === username);
+        const items   = Array.isArray(itemsResp?.data) ? itemsResp.data : [];
+
+        const aprobados   = items.filter(i => i.status === 'aprobado');
+        const totalDescargas = aprobados.reduce((sum, i) => sum + (i.descargasEfectivas || 0), 0);
+
+        return {
+            verificacionNivel: userData?.verificadoNivel || 0,
+            seguidores:        userData?.listaSeguidores?.length || 0,
+            siguiendo:         userData?.listaSiguiendo?.length  || 0,
+            publicacionesAprobadas: aprobados.length,
+            publicacionesTotales:   items.length,
+            totalDescargas,
+            topItems: aprobados
+                .sort((a,b) => (b.descargasEfectivas||0) - (a.descargasEfectivas||0))
+                .slice(0, 3)
+                .map(i => ({ title: i.title, categoria: i.category, descargas: i.descargasEfectivas||0 })),
+        };
+    } catch (e) {
+        return null;
+    }
+}
+
+/**
+ * Construye narrativa de comportamiento desde eventos de MongoDB
+ * Resume en texto natural qué le gusta al usuario, qué buscó, qué descargó
+ */
+async function buildBehavioralNarrative(username) {
+    if (!db || !username) return '';
+    try {
+        const desde = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000); // últimos 30 días
+        const eventos = await db.collection('upgames_eventos')
+            .find({ usuario: username, ts: { $gte: desde } })
+            .sort({ ts: -1 }).limit(200).toArray();
+
+        if (!eventos.length) return '';
+
+        const PESOS = { download: 10, favorite: 8, view: 3, search: 2, category: 5, unfavorite: -3 };
+        const catMap = {}; const tagMap = {}; const searches = []; const downloads = [];
+
+        for (const ev of eventos) {
+            const peso = PESOS[ev.tipo] || 1;
+            const d = ev.datos || {};
+            if (d.category) catMap[d.category] = (catMap[d.category] || 0) + peso;
+            if (Array.isArray(d.tags)) d.tags.forEach(t => { if(t) tagMap[t] = (tagMap[t]||0)+1; });
+            if (ev.tipo === 'search' && d.query) searches.push(d.query);
+            if (ev.tipo === 'download' && d.title) downloads.push(d.title);
+        }
+
+        const topCats    = Object.entries(catMap).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([n])=>n);
+        const topTags    = Object.entries(tagMap).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([t])=>t);
+        const topSearch  = [...new Set(searches)].slice(0, 5);
+        const topDL      = [...new Set(downloads)].slice(0, 5);
+
+        const parts = [];
+        if (topCats.length)   parts.push(`categorías que más le interesan: ${topCats.join(', ')}`);
+        if (topTags.length)   parts.push(`temas recurrentes: ${topTags.join(', ')}`);
+        if (topSearch.length) parts.push(`búsquedas recientes: "${topSearch.join('", "')}"`);
+        if (topDL.length)     parts.push(`contenido descargado recientemente: ${topDL.join(', ')}`);
+
+        return parts.length ? parts.join(' | ') : '';
+    } catch (e) {
+        return '';
+    }
+}
+
+/**
+ * Construye bloque de contexto VIP que se inyecta al mensaje
+ * Incluye: perfil UpGames + comportamiento + capacidades de Nexus en la plataforma
+ */
+function buildVipContextBlock(ugStats, behaviorNarrative, useVipBrain) {
+    const lines = ['\n\n[CONTEXTO NEXUS VIP — DATOS EN VIVO]'];
+
+    if (ugStats) {
+        const nivelLabel = ['Sin verificar','Bronce ✦','Oro ✦✦','Elite ✦✦✦'][ugStats.verificacionNivel] || 'Sin verificar';
+        lines.push(`Perfil UpGames del usuario:`);
+        lines.push(`  • Verificación: ${nivelLabel}`);
+        lines.push(`  • Publicaciones aprobadas: ${ugStats.publicacionesAprobadas} (total subidas: ${ugStats.publicacionesTotales})`);
+        lines.push(`  • Descargas totales generadas: ${ugStats.totalDescargas.toLocaleString()}`);
+        lines.push(`  • Seguidores: ${ugStats.seguidores} | Siguiendo: ${ugStats.siguiendo}`);
+        if (ugStats.topItems.length) {
+            lines.push(`  • Sus publicaciones más exitosas: ${ugStats.topItems.map(i=>`"${i.title}" (${i.descargas} descargas)`).join(', ')}`);
+        }
+    }
+
+    if (behaviorNarrative) {
+        lines.push(`Comportamiento reciente en UpGames: ${behaviorNarrative}`);
+    }
+
+    if (useVipBrain) {
+        lines.push(`\nCAPACIDADES NEXUS DENTRO DE UPGAMES — ÚSALAS ACTIVAMENTE:`);
+        lines.push(`  • Puedes abrir cualquier ítem del catálogo directamente: cuando menciones un juego, incluye su ID y dile al usuario que puede hacer clic para abrirlo`);
+        lines.push(`  • Puedes sugerir filtrar por categoría en la biblioteca (Juego, Mod, Optimización, Ajustes, Apps, Software)`);
+        lines.push(`  • Puedes orientar al usuario sobre cómo publicar, ganar dinero, mejorar su nivel de verificación`);
+        lines.push(`  • Puedes ver en tiempo real el catálogo completo y recomendar desde datos reales, no inventados`);
+        lines.push(`  • Si el usuario tiene publicaciones, puedes hablar de ellas con datos concretos (descargas, estado)`);
+        lines.push(`  • Si el usuario tiene nivel 0, puedes motivarlo a publicar su primer contenido y explicarle el proceso`);
+        lines.push(`  • Si tiene nivel 1+, puedes hablar de sus ganancias potenciales con datos reales de sus descargas`);
+        lines.push(`REGLA: No esperes que te pregunten — si ves en el perfil algo relevante, coméntalo proactivamente.`);
+    }
+
+    lines.push('[FIN CONTEXTO VIP]');
+    return lines.join('\n');
+}
+
 app.use(cors());
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));
@@ -760,15 +886,29 @@ app.post('/api/chat', requireAuth, async (req, res) => {
     const isCreator = isCreatorAccount(userEmail);
     const isVip     = user?.isVip || isVipAccount(userEmail);
 
-    // ── Contexto de usuario para el brain ─────────────────────────
+    // ── Contexto de usuario para el brain (enriquecido VIP) ──────
+    const _username = user?.username || req.user.username || '';
+    const useVipBrain_ctx = isCreator || isVip || planStatus.plan === 'premium';
+
+    // Para VIP/creador: enriquecer con stats reales de UpGames (paralelo, no bloquea)
+    const [_ugStats, _behaviorNarrative] = useVipBrain_ctx
+        ? await Promise.all([
+            fetchUpGamesUserStats(_username),
+            buildBehavioralNarrative(_username),
+          ])
+        : [null, ''];
+
     const userContext = {
         userId,
         email:       userEmail,
-        username:    user?.username || req.user.username || '',
-        displayName: user?.displayName || user?.username || req.user.username || '',
+        username:    _username,
+        displayName: user?.displayName || _username,
         plan:        planStatus.plan,
         isVip,
-        isCreator
+        isCreator,
+        // Datos enriquecidos disponibles para el brain
+        upgamesStats:     _ugStats,
+        behaviorSummary:  _behaviorNarrative,
     };
 
     console.log(`💬 [${convId.slice(-6)}] [${planStatus.plan}]${isCreator?' 👑 CREATOR':''} "${message.slice(0,70)}"`);
@@ -826,7 +966,7 @@ app.post('/api/chat', requireAuth, async (req, res) => {
     }
 
     // ── Selección de cerebro según plan ──────────────────────────
-    const useVipBrain = isCreator || isVip || planStatus.plan === 'premium';
+    const useVipBrain = useVipBrain_ctx; // ya calculado arriba junto con el contexto enriquecido
     const activeBrain = useVipBrain ? brainVip : brainBase;
     const brainVersion = useVipBrain ? 'ultra' : 'base';
     console.log(`🔀 Cerebro activo: ${brainVersion.toUpperCase()} [${useVipBrain ? 'brain_vip.py' : 'brain.py'}]`);
@@ -841,10 +981,34 @@ app.post('/api/chat', requireAuth, async (req, res) => {
         }
         const conversationHistory = Array.isArray(history) ? history.slice(-8) : [];
 
-        // Enriquecer mensaje con contexto UpGames si aplica
-        const messageForBrain = upgamesContext
-            ? message + upgamesContext
-            : message;
+        // Enriquecer mensaje con contexto UpGames
+        // VIP: siempre recibe catálogo ligero + bloque de capacidades + perfil
+        // Free: solo cuando hay keywords de UpGames
+        let messageForBrain = message;
+
+        if (upgamesContext) {
+            messageForBrain += upgamesContext;
+        } else if (useVipBrain_ctx) {
+            // VIP sin keywords: catálogo ligero (top 10) para contexto de fondo
+            try {
+                const ugResp = await axios.get(`${UPGAMES_API_BASE}/items`, { timeout: 4000 });
+                const allItems = Array.isArray(ugResp.data) ? ugResp.data : [];
+                const top10 = allItems
+                    .filter(i => i.status === 'aprobado' && i.linkStatus !== 'caido')
+                    .sort((a,b) => (b.descargasEfectivas||0) - (a.descargasEfectivas||0))
+                    .slice(0, 10);
+                if (top10.length) {
+                    messageForBrain += `\n\n[CATÁLOGO UPGAMES — TOP CONTENIDO AHORA]\n` +
+                        top10.map(i => `• "${i.title}" | ${i.category||'General'} | ${i.descargasEfectivas||0} descargas | ID:${i._id}`).join('\n') +
+                        `\n(Usa estos datos si el usuario pregunta por contenido. SOLO recomienda de esta lista.)\n[FIN CATÁLOGO]`;
+                }
+            } catch(_) {} // silencioso — no bloquea
+        }
+
+        // VIP/creador: agregar bloque de capacidades + perfil UpGames
+        if (useVipBrain_ctx) {
+            messageForBrain += buildVipContextBlock(_ugStats, _behaviorNarrative, useVipBrain_ctx);
+        }
 
         const thought = await activeBrain.process(messageForBrain, conversationHistory, searchResults, userContext);
         const responseText = thought.response||thought.message||'Lo siento, no pude generar una respuesta.';
@@ -986,15 +1150,33 @@ app.get('/api/proactive', requireAuth, async (req, res) => {
             return res.json({ message: '...', proactive: true, mode: 'neutral' });
         }
 
+        const _proUsername = user?.username || '';
+        const _useVip = isCreator || isVip || (user?.plan === 'premium');
+
+        // Enriquecer con perfil real para mensaje proactivo personalizado
+        const [_proStats, _proNarrative] = _useVip
+            ? await Promise.all([
+                fetchUpGamesUserStats(_proUsername),
+                buildBehavioralNarrative(_proUsername),
+              ])
+            : [null, ''];
+
         const userCtx = {
             userId:      req.user.id,
-            username:    user?.username    || '',
-            displayName: user?.displayName || user?.username || '',
+            username:    _proUsername,
+            displayName: user?.displayName || _proUsername,
             email:       userEmail,
             isCreator,
             isVip,
             plan:        user?.plan || 'free',
+            upgamesStats:    _proStats,
+            behaviorSummary: _proNarrative,
         };
+
+        // Para VIP: inyectar contexto enriquecido como hint al brain
+        if (_useVip && (_proStats || _proNarrative)) {
+            userCtx._proactiveHint = buildVipContextBlock(_proStats, _proNarrative, _useVip);
+        }
 
         const result = await activeBrain.proactive(userCtx);
         res.json({
