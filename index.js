@@ -343,7 +343,7 @@ class BrainProcess {
         const brainPath = path.join(__dirname, 'neural', this.scriptName);
         const env = { ...process.env, PYTHONUNBUFFERED: '1' };
         console.log(`🧠 Iniciando cerebro NEXUS [${this.label}] → ${this.scriptName}`);
-        this.proc = spawn('python', ['-u', brainPath], { env });
+        this.proc = spawn('python3', ['-u', brainPath], { env });
 
         let buffer = '';
         this.proc.stdout.on('data', (chunk) => {
