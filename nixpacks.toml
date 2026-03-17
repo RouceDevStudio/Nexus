@@ -5,9 +5,8 @@ pkgs = ["nodejs_22", "python311", "python311Packages.pip"]
 cmds = [
   "rm -f package-lock.json",
   "npm install --legacy-peer-deps",
-  "python3 -m pip install -r requirements.txt",
-  "ln -sf $(which python3) /usr/local/bin/python || true"
+  "python3 -m pip install -r requirements.txt"
 ]
 
 [start]
-cmd = "node index.js"
+cmd = "PYTHON_BIN=$(which python3 || which python3.11 || echo '') node index.js"

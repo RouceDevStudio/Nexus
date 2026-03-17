@@ -14,6 +14,11 @@ const crypto      = require('crypto');
 
 // ── Resolución robusta del binario Python ───────────────────────────
 function resolvePython() {
+    // Primero intentar la variable de entorno inyectada por nixpacks.toml
+    if (process.env.PYTHON_BIN && process.env.PYTHON_BIN.trim()) {
+        console.log("✅ Python desde env: " + process.env.PYTHON_BIN.trim());
+        return process.env.PYTHON_BIN.trim();
+    }
     const candidates = ['python3', 'python3.11', 'python3.10', 'python3.9', 'python'];
     for (const bin of candidates) {
         try { const p = execSync('which ' + bin, { encoding: 'utf8' }).trim(); console.log('✅ Python resuelto: ' + p); return p; }
