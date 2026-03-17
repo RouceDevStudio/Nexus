@@ -6,7 +6,7 @@ cmds = [
   "rm -f package-lock.json",
   "npm install --legacy-peer-deps",
   "python3 -m pip install -r requirements.txt",
-  "chmod +x start.sh"
+  "which python3 > .python_path && echo 'Python path guardado:' && cat .python_path"
 ]
 
 [start]
