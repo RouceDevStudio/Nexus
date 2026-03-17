@@ -1198,7 +1198,8 @@ class ResponseGenerator:
                 user_identity_block += f"\n- Seguidores: {ug_stats.get('seguidores', 0)} | Siguiendo: {ug_stats.get('siguiendo', 0)}"
                 top = ug_stats.get('topItems', [])
                 if top:
-                    user_identity_block += f"\n- Su contenido más exitoso: {', '.join(f'"{i["title"]}" ({i["descargas"]} descargas)' for i in top)}"
+                    _top_str = ', '.join(item["title"] + " (" + str(item["descargas"]) + " descargas)" for item in top)
+                    user_identity_block += f"\n- Su contenido más exitoso: {_top_str}"
             if behavior:
                 user_identity_block += f"\n- Comportamiento reciente en UpGames: {behavior}"
 
