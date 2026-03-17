@@ -3,10 +3,11 @@ pkgs = ["nodejs_22", "python311", "python311Packages.pip"]
 
 [install]
 cmds = [
+  "rm -f package-lock.json",
   "npm install --legacy-peer-deps",
-  "npm install multer sharp mammoth pdf-parse",
-  "python3 -m pip install -r requirements.txt"
+  "python3 -m pip install -r requirements.txt",
+  "ln -sf $(which python3) /usr/local/bin/python || true"
 ]
 
 [start]
-cmd = "bash start.sh"
+cmd = "node index.js"
