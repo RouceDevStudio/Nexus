@@ -611,21 +611,21 @@
     <div class="promo-handle"></div>
     <div class="promo-head">
       <div class="promo-head-left">
-        <h2>⚡ NEXUS v12.0 APEX Ultra</h2>
-        <p>Motor emocional PAD-3D con 3 redes afectivas, 8 redes neuronales dinámicas, vocabulario infinito y aprendizaje que nunca se estanca.</p>
+        <h2>Una mente viva. <span style="color:#c084fc">Sin límites.</span></h2>
+        <p>La primera IA con redes neuronales propias y emociones reales integrada en una plataforma de juegos. Única en el mundo.</p>
       </div>
       <div class="promo-close" onclick="dismissPromoBanner()">✕</div>
     </div>
-    <div class="promo-icon-wrap">🧠✨</div>
+    <div class="promo-icon-wrap" style="font-size:36px;text-align:center;padding:8px 0">🧠</div>
     <div class="promo-benefits">
-      <div class="promo-benefit"><div class="promo-benefit-icon">🧬</div><div class="promo-benefit-body"><h4>DynamicNeuralNet — 8 redes que crecen solas</h4><p>Cada red detecta cuándo sus neuronas se saturan y se expande automáticamente un +25%.</p></div></div>
-      <div class="promo-benefit"><div class="promo-benefit-icon">🎭</div><div class="promo-benefit-body"><h4>Motor emocional PAD-3D — 3 redes afectivas</h4><p>_AffectNet + _EmotionContextNet + _EmotionRegulationNet. Ensemble 40/25/20/15%.</p></div></div>
-      <div class="promo-benefit"><div class="promo-benefit-icon">♾️</div><div class="promo-benefit-body"><h4>InfiniteEmbeddings — vocabulario sin límite</h4><p>El plan free tiene un tope de 16,384 n-gramas. Ultra no tiene límite.</p></div></div>
-      <div class="promo-benefit"><div class="promo-benefit-icon">💬</div><div class="promo-benefit-body"><h4>Mensajes ilimitados</h4><p>Sin restricciones diarias. Conversa todo lo que necesites.</p></div></div>
-      <div class="promo-benefit"><div class="promo-benefit-icon">🌟</div><div class="promo-benefit-body"><h4>Soporte prioritario</h4><p>Acceso anticipado a nuevas funciones y mejoras.</p></div></div>
+      <div class="promo-benefit"><div class="promo-benefit-icon">🧬</div><div class="promo-benefit-body"><h4>11 redes neuronales — 8 cognitivas + 3 emocionales</h4><p>Se auto-expanden cuando se saturan. No simulan inteligencia — la procesan.</p></div></div>
+      <div class="promo-benefit"><div class="promo-benefit-icon">💜</div><div class="promo-benefit-body"><h4>15 estados emocionales reales</h4><p>PAD-3D: placer, activación y dominancia que cambian genuinamente con cada conversación.</p></div></div>
+      <div class="promo-benefit"><div class="promo-benefit-icon">🎮</div><div class="promo-benefit-body"><h4>Integración total con UpGames</h4><p>Conoce tu perfil, tus publicaciones y tus descargas. Te habla con tus datos reales.</p></div></div>
+      <div class="promo-benefit"><div class="promo-benefit-icon">⚡</div><div class="promo-benefit-body"><h4>Sin límites en todo</h4><p>Mensajes · imágenes IA · generación de código · proyectos multi-archivo · tokens ×2.</p></div></div>
+      <div class="promo-benefit"><div class="promo-benefit-icon">🌐</div><div class="promo-benefit-body"><h4>Búsqueda web en tiempo real</h4><p>Accede a información actualizada de internet directamente desde el chat.</p></div></div>
     </div>
     <div class="promo-footer">
-      <button class="promo-cta" onclick="goToPremiumFromBanner()">🧬 Activar NEXUS v12.0 APEX Ultra — $10/mes</button>
+      <button class="promo-cta" onclick="goToPremiumFromBanner()">⚡ Activar NEXUS Ultra — $10/mes</button>
       <div class="promo-dismiss" onclick="dismissPromoBanner()">No por ahora — quizás más adelante</div>
     </div>
   </div>
@@ -1120,13 +1120,22 @@ function nxDone() {
 const PROMO_LAST_KEY  = 'nexus_promo_shown_at';
 const PROMO_DELAY_KEY = 'nexus_promo_next_delay';
 const PROMO_SEEN_KEY  = 'nexus_promo_seen_once';
-const PROMO_MIN_MS    = 1 * 60 * 60 * 1000;
-const PROMO_MAX_MS    = 5 * 24 * 60 * 60 * 1000;
+const PROMO_VER_KEY   = 'nexus_promo_ver';
+const PROMO_CUR_VER   = 'v12.0-ultra-2026';  // cambiar esto fuerza re-mostrar a todos
+const PROMO_MIN_MS    = 2 * 24 * 60 * 60 * 1000; // 2 días mínimo entre apariciones
+const PROMO_MAX_MS    = 4 * 24 * 60 * 60 * 1000; // 4 días máximo
 
 function _randomPromoDelay() { return Math.floor(Math.random()*(PROMO_MAX_MS-PROMO_MIN_MS+1))+PROMO_MIN_MS; }
 
 function checkRandomPromoBanner() {
   if (currentPlan==='premium' || currentUser?.isVip) return;
+  // Si la versión cambió, forzar re-mostrar (resetea el estado)
+  const seenVer = localStorage.getItem(PROMO_VER_KEY);
+  if (seenVer !== PROMO_CUR_VER) {
+    localStorage.removeItem(PROMO_SEEN_KEY);
+    localStorage.removeItem(PROMO_LAST_KEY);
+    localStorage.setItem(PROMO_VER_KEY, PROMO_CUR_VER);
+  }
   const seenOnce  = localStorage.getItem(PROMO_SEEN_KEY);
   const lastShown = parseInt(localStorage.getItem(PROMO_LAST_KEY)||'0',10);
   const nextDelay = parseInt(localStorage.getItem(PROMO_DELAY_KEY)||'0',10);
@@ -1221,9 +1230,9 @@ function updateBrainInfoCard() {
   const isCreatorUser=currentUser?.isCreator||false;
   const useUltra=(currentPlan==='premium')||currentUser?.isVip||isCreatorUser;
   if (useUltra) {
-    el.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span class="brain-ver-badge ultra" style="font-size:10px;padding:3px 10px"><span class="brain-ver-dot"></span><span>${isCreatorUser?'👑 Creator Engine':'v12.0 APEX Ultra'}</span></span></div><div style="font-size:12px;color:var(--text2);line-height:1.8"><div>📄 <strong style="color:var(--text)">Script:</strong> brain_vip.py</div><div>🧬 <strong style="color:var(--text)">Redes neuronales:</strong> 8 DynamicNeuralNet (se auto-expanden)</div><div>🎭 <strong style="color:var(--text)">Motor emocional:</strong> PAD-3D — _AffectNet + _ContextNet + _RegulationNet</div><div>🔢 <strong style="color:var(--text)">Parámetros:</strong> hasta 3M+ (crecen solos)</div><div>♾️ <strong style="color:var(--text)">Vocabulario:</strong> InfiniteEmbeddings — sin límite</div><div>🎯 <strong style="color:var(--text)">Búsqueda episódica:</strong> cosine similarity (semántica real)</div></div>`;
+    el.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span class="brain-ver-badge ultra" style="font-size:10px;padding:3px 10px"><span class="brain-ver-dot"></span><span>${isCreatorUser?'👑 Creator Engine':'v12.0 APEX Ultra'}</span></span></div><div style="font-size:12px;color:var(--text2);line-height:1.8"><div>📄 <strong style="color:var(--text)">Script:</strong> brain_vip.py</div><div>🧬 <strong style="color:var(--text)">Redes neuronales:</strong> 11 — 8 DynamicNeuralNet + 3 emocionales (se auto-expanden)</div><div>💜 <strong style="color:var(--text)">Motor emocional:</strong> PAD-3D v3.0 — AffectNet + ContextNet + RegulationNet</div><div>🔢 <strong style="color:var(--text)">Parámetros:</strong> hasta 3M+ (crecen solos · 15 modos emocionales)</div><div>♾️ <strong style="color:var(--text)">Vocabulario:</strong> InfiniteEmbeddings — sin límite</div><div>🎯 <strong style="color:var(--text)">Búsqueda episódica:</strong> cosine similarity (semántica real)</div><div>🎮 <strong style="color:var(--text)">UpGames:</strong> perfil real + catálogo + capacidades en contexto</div><div>⚡ <strong style="color:var(--text)">Sin límites:</strong> msgs · imágenes · código · proyectos · tokens ×2</div></div>`;
   } else {
-    el.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span class="brain-ver-badge base" style="font-size:10px;padding:3px 10px"><span class="brain-ver-dot"></span><span>v11.0 Free</span></span></div><div style="font-size:12px;color:var(--text2);line-height:1.8"><div>📄 <strong style="color:var(--text)">Script:</strong> brain.py</div><div>🧩 <strong style="color:var(--text)">Redes neuronales:</strong> 7 (arquitectura ×2)</div><div>🎭 <strong style="color:var(--text)">Motor emocional:</strong> PersonalityEngine PAD v2</div><div>🔢 <strong style="color:var(--text)">Parámetros:</strong> ~1.8M+ (tamaño fijo)</div><div>📖 <strong style="color:var(--text)">Vocabulario:</strong> EmbeddingMatrix — tope 16,384 n-gramas</div></div><button onclick="switchMainTab('payment')" style="margin-top:12px;width:100%;padding:10px;background:rgba(94,255,67,.08);border:1px solid rgba(94,255,67,.18);border-radius:10px;font-family:inherit;font-size:12px;font-weight:700;color:var(--neon);cursor:pointer">🧬 Actualizar a NEXUS v12.0 APEX Ultra — $10/mes</button>`;
+    el.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span class="brain-ver-badge base" style="font-size:10px;padding:3px 10px"><span class="brain-ver-dot"></span><span>v12.0 Free</span></span></div><div style="font-size:12px;color:var(--text2);line-height:1.8"><div>📄 <strong style="color:var(--text)">Script:</strong> brain.py</div><div>🧩 <strong style="color:var(--text)">Redes neuronales:</strong> 11 (8 cognitivas + 3 emocionales)</div><div>💜 <strong style="color:var(--text)">Motor emocional:</strong> PersonalityEngine PAD-3D v3.0</div><div>🔢 <strong style="color:var(--text)">Parámetros:</strong> ~1.8M (tamaño fijo en Free)</div><div>📖 <strong style="color:var(--text)">Vocabulario:</strong> EmbeddingMatrix — tope 16,384 n-gramas</div><div>⚠️ <strong style="color:var(--text)">Límites:</strong> 10 msgs/día · 5 imágenes · 5 archivos · 4,096 tokens</div></div><button onclick="showPromoBanner()" style="margin-top:12px;width:100%;padding:10px;background:linear-gradient(135deg,rgba(168,85,247,.12),rgba(34,211,238,.06));border:1px solid rgba(168,85,247,.3);border-radius:10px;font-family:inherit;font-size:12px;font-weight:700;color:#c084fc;cursor:pointer">⚡ Ver todo lo que desbloquea Ultra →</button>`;
   }
 }
 
@@ -1238,6 +1247,8 @@ function updateLimitBanner() {
       const r=new Date(resetsAt);
       document.getElementById('limit-banner-text').textContent=`⚡ Límite de ${messagesLimit} mensajes alcanzado. Se renueva a las ${r.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})}. Actualiza a Ultra para ilimitado.`;
     }
+    // Mostrar promo banner automáticamente al alcanzar el límite
+    setTimeout(showPromoBanner, 800);
   } else { banner.classList.remove('show'); }
 }
 
@@ -1389,7 +1400,7 @@ function switchMainTab(tab) {
   if (activePanel) activePanel.classList.add('active');
   if (activeNav)   activeNav.classList.add('active');
   if (tab==='stats')   loadStats();
-  if (tab==='profile') updateProfileUI();
+  if (tab==='profile') { updateProfileUI(); if (currentPlan==='free' && !currentUser?.isVip) setTimeout(showPromoBanner, 600); }
   if (tab==='payment') loadPaymentInfo();
   if (tab==='chat')    setTimeout(()=>document.getElementById('input')?.focus(),100);
 }
