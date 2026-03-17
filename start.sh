@@ -1,22 +1,24 @@
-#!/bin/bash
-# Exponer python3 de Nix al PATH en runtime - Ruta ajustada para detectar Python 3.11 específicamente
+#!/bin/sh
+# ── NEXUS Startup Script ─────────────────────────────────────────────
+# Resuelve el binario de Python en el entorno real de Railway/Nix
+# y lo exporta ANTES de que Node arranque.
 
-# Verificación detallada de Python
-echo "=== VERIFICACIÓN DE PYTHON ==="
-PYTHON_LOCATION=$(which python3 2>/dev/null || echo 'NO ENCONTRADO')
-echo "Python3 path: $PYTHON_LOCATION"
-if [ "$PYTHON_LOCATION" != "NO ENCONTRADO" ]; then
-  echo "Python3 version: $(python3 --version 2>&1)"
-  echo "Pip path: $(which pip 2>/dev/null || echo 'NO ENCONTRADO')"
-else
-  echo "ERROR: Python3 no fue localizado en el PATH"
-  exit 1
+echo "🔍 Buscando intérprete Python..."
+
+# Intentar cada candidato en orden
+for BIN in python3 python3.11 python3.10 python3.9 python; do
+    RESOLVED=$(command -v "$BIN" 2>/dev/null)
+    if [ -n "$RESOLVED" ]; then
+        echo "✅ Python encontrado: $RESOLVED"
+        export PYTHON_BIN="$RESOLVED"
+        break
+    fi
+done
+
+if [ -z "$PYTHON_BIN" ]; then
+    echo "❌ CRÍTICO: No se encontró Python. Abortando."
+    exit 1
 fi
 
-# Instalar paquetes Node.js faltantes para evitar errores de dependencias
-echo "=== INSTALACIÓN DE DEPENDENCIAS NODE.JS ==="
-npm install multer sharp mammoth pdf-parse --legacy-peer-deps
-
-# Iniciar la aplicación
-echo "=== INICIANDO APLICACIÓN ==="
-node index.js
+echo "🚀 Iniciando NEXUS con Python: $PYTHON_BIN"
+exec node index.js
