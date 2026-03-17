@@ -3,7 +3,8 @@ pkgs = ["nodejs_22", "python311", "python311Packages.pip"]
 
 [install]
 cmds = [
-  "npm ci --force",
+  "rm -f package-lock.json",
+  "npm install --legacy-peer-deps",
   "python3 -m pip install -r requirements.txt"
 ]
 
