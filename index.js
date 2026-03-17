@@ -789,7 +789,7 @@ app.post('/api/chat', requireAuth, async (req, res) => {
     const isUpGamesQuery = UG_KEYWORDS.some(kw => msgLower.includes(kw));
 
     // ── Si pide juegos → buscar catálogo real en UpGames ─────────
-    const UPGAMES_API = process.env.UPGAMES_API_URL || 'https://backendapp-037y.onrender.com';
+    const UPGAMES_API = process.env.UPGAMES_API_URL || 'https://upgames-production.up.railway.app';
     let upgamesContext = '';
     if (isUpGamesQuery) {
         try {
@@ -1016,7 +1016,7 @@ app.get('/api/proactive', requireAuth, async (req, res) => {
 app.post('/api/upgames/recomendar', requireAuth, async (req, res) => {
     const { usuario, mensaje } = req.body;
     if (!usuario) return res.status(400).json({ error: 'usuario requerido' });
-    const UPGAMES_API = process.env.UPGAMES_API_URL || 'https://backendapp-037y.onrender.com';
+    const UPGAMES_API = process.env.UPGAMES_API_URL || 'https://upgames-production.up.railway.app';
     try {
         // 1. Calcular perfil del usuario
         let perfil = { categorias: [], tags: [], recientes: [] };
