@@ -619,6 +619,183 @@ select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmln
 .payment-feature-text p  { font-size: 11px; color: var(--text3); line-height: 1.5; }
 
 .payment-price { text-align: center; padding: 16px; }
+
+/* ══════════════════════════════════════════════
+   VIP / ULTRA PANEL — NEXUS
+══════════════════════════════════════════════ */
+
+/* Hero banner */
+.vip-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 28px 20px 24px;
+  text-align: center;
+  background: linear-gradient(160deg, rgba(168,85,247,.12) 0%, rgba(34,211,238,.06) 60%, transparent 100%);
+  border-bottom: 1px solid rgba(168,85,247,.15);
+}
+.vip-hero-glow {
+  position: absolute;
+  top: -40px; left: 50%;
+  transform: translateX(-50%);
+  width: 260px; height: 120px;
+  background: radial-gradient(ellipse, rgba(168,85,247,.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+.vip-hero-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  background: linear-gradient(90deg, rgba(168,85,247,.2), rgba(34,211,238,.15));
+  border: 1px solid rgba(168,85,247,.35);
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: #c084fc;
+  margin-bottom: 14px;
+  font-family: 'Space Mono', monospace;
+}
+.vip-hero-title {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 10px;
+  font-family: 'Syne', sans-serif;
+}
+.vip-accent { color: #c084fc; }
+.vip-hero-sub {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.6;
+  max-width: 300px;
+  margin: 0 auto 20px;
+}
+.vip-hero-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+.vip-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 16px;
+}
+.vip-stat-num {
+  font-size: 22px;
+  font-weight: 800;
+  color: #c084fc;
+  font-family: 'Syne', sans-serif;
+  line-height: 1;
+}
+.vip-stat-lbl {
+  font-size: 10px;
+  color: var(--text3);
+  margin-top: 3px;
+  font-family: 'Space Mono', monospace;
+}
+.vip-stat-div {
+  width: 1px;
+  height: 32px;
+  background: var(--border2);
+}
+
+/* Comparativa */
+.vip-compare {
+  margin: 16px;
+  border: 1px solid rgba(168,85,247,.15);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.vip-compare-title {
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: var(--text3);
+  background: rgba(168,85,247,.05);
+  border-bottom: 1px solid rgba(168,85,247,.1);
+  font-family: 'Space Mono', monospace;
+  text-transform: uppercase;
+}
+.vip-compare-grid { display: flex; flex-direction: column; }
+.vip-compare-row {
+  display: grid;
+  grid-template-columns: 1fr 80px 90px;
+  align-items: center;
+  padding: 9px 14px;
+  font-size: 12px;
+  border-bottom: 1px solid var(--border);
+  gap: 8px;
+}
+.vip-compare-row:last-child { border-bottom: none; }
+.vip-compare-header {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+  background: rgba(0,0,0,.2);
+  font-family: 'Space Mono', monospace;
+}
+.vip-row-label { color: var(--text2); }
+.vip-col-free  { text-align: center; color: var(--text3); font-size: 11px; }
+.vip-col-ultra {
+  text-align: center;
+  color: #c084fc;
+  font-weight: 700;
+  font-size: 11px;
+}
+.vip-compare-header .vip-col-ultra { color: #c084fc; }
+
+/* Features title */
+.vip-features-title {
+  padding: 16px 16px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: var(--text3);
+  text-transform: uppercase;
+  font-family: 'Space Mono', monospace;
+}
+
+/* Price block */
+.vip-price-block {
+  text-align: center;
+  padding: 20px 16px 8px;
+}
+.vip-price-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+}
+.vip-price-num {
+  font-size: 44px;
+  font-weight: 800;
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  line-height: 1;
+}
+.vip-price-period {
+  font-size: 18px;
+  color: var(--text2);
+  font-weight: 500;
+}
+.vip-price-sub {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 6px;
+}
+
+/* PayPal btn enhanced */
+.vip-paypal-btn {
+  background: linear-gradient(135deg, rgba(168,85,247,.15), rgba(34,211,238,.08)) !important;
+  border: 1px solid rgba(168,85,247,.3) !important;
+}
+.vip-paypal-btn:hover {
+  background: linear-gradient(135deg, rgba(168,85,247,.25), rgba(34,211,238,.15)) !important;
+  border-color: rgba(168,85,247,.5) !important;
+}
 .price-amount  { font-size: 40px; font-weight: 800; color: var(--text); font-family: 'Space Mono', monospace; }
 .price-period  { font-size: 12px; color: var(--text3); margin-top: 4px; }
 
