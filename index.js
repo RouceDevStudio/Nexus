@@ -935,7 +935,7 @@ app.post('/api/chat', requireAuth, async (req, res) => {
             const ugResp = await axios.get(`${UPGAMES_API_BASE}/items`, { timeout: 9000 });
             const allItems = Array.isArray(ugResp.data) ? ugResp.data : [];
             const disponibles = allItems
-                .filter(i => i.status === 'aprobado' && i.linkStatus !== 'caido')
+                .filter(i => i.linkStatus !== 'caido')
                 .sort((a,b) => (b.descargasEfectivas||0) - (a.descargasEfectivas||0))
                 .slice(0, 25);
 
@@ -991,7 +991,7 @@ app.post('/api/chat', requireAuth, async (req, res) => {
                 const ugResp = await axios.get(`${UPGAMES_API_BASE}/items`, { timeout: 5000 });
                 const allItems = Array.isArray(ugResp.data) ? ugResp.data : [];
                 const top10 = allItems
-                    .filter(i => i.status === 'aprobado' && i.linkStatus !== 'caido')
+                    .filter(i => i.linkStatus !== 'caido')
                     .sort((a,b) => (b.descargasEfectivas||0) - (a.descargasEfectivas||0))
                     .slice(0, 10);
                 if (top10.length) {
@@ -1240,7 +1240,7 @@ app.post('/api/upgames/recomendar', requireAuth, async (req, res) => {
                 // Filtrar aprobados y no-caídos, ordenar por categoría preferida del perfil
                 const catPref = new Set(perfil.categorias.map(c => c.nombre));
                 items = all
-                    .filter(i => i.status === 'aprobado' && i.linkStatus !== 'caido')
+                    .filter(i => i.linkStatus !== 'caido')
                     .sort((a, b) => {
                         const aMatch = catPref.has(a.category) ? 1 : 0;
                         const bMatch = catPref.has(b.category) ? 1 : 0;
