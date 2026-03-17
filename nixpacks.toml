@@ -3,7 +3,7 @@ pkgs = ["nodejs_22", "python311", "python311Packages.pip"]
 
 [install]
 cmds = [
-  "npm install",
+  "npm ci --force",
   "python3 -m pip install -r requirements.txt"
 ]
 
