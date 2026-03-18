@@ -984,10 +984,21 @@ app.post('/api/chat', requireAuth, async (req, res) => {
         // Free: solo cuando hay keywords de UpGames
         let messageForBrain = message;
 
+        // Detectar si el mensaje es puramente conversacional (sin intención de juegos/contenido)
+        const CONVERSATIONAL_PATTERNS = [
+            /^hola/i, /^hey/i, /^buenas/i, /^buenos/i, /^saludos/i,
+            /cómo estás/i, /como estas/i, /qué tal/i, /que tal/i,
+            /cómo te sientes/i, /cómo te va/i, /como te va/i,
+            /qué haces/i, /que haces/i, /cómo andas/i, /como andas/i,
+            /^gracias/i, /^ok/i, /^oye/i, /^adiós/i, /^bye/i, /^chao/i
+        ];
+        const isPurelyConversational = CONVERSATIONAL_PATTERNS.some(p => p.test(message.trim()))
+            && !isUpGamesQuery && message.trim().split(' ').length <= 10;
+
         if (upgamesContext) {
             messageForBrain += upgamesContext;
-        } else if (useVipBrain_ctx) {
-            // VIP sin keywords: catálogo ligero (top 10) siempre activo como contexto de fondo
+        } else if (useVipBrain_ctx && !isPurelyConversational) {
+            // VIP sin keywords de juegos y no conversacional: catálogo ligero de fondo
             try {
                 const ugResp = await axios.get(`${UPGAMES_API_BASE}/items`, { timeout: 5000 });
                 const allItems = Array.isArray(ugResp.data) ? ugResp.data : [];
@@ -1004,8 +1015,8 @@ app.post('/api/chat', requireAuth, async (req, res) => {
             } catch(_) {} // silencioso — no bloquea
         }
 
-        // VIP/creador: agregar bloque de capacidades + perfil UpGames
-        if (useVipBrain_ctx) {
+        // VIP/creador: agregar bloque de capacidades + perfil UpGames (solo si no es conversacional puro)
+        if (useVipBrain_ctx && !isPurelyConversational) {
             messageForBrain += buildVipContextBlock(_ugStats, _behaviorNarrative, useVipBrain_ctx);
         }
 
