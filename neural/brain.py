@@ -779,6 +779,7 @@ class ResponseGenerator:
         """Genera respuesta: LLM si disponible, Smart Mode como fallback"""
 
         msg_lower    = message.lower()
+        raw_msg_lower = (user_context or {}).get('raw_message', message).lower()
         uctx         = user_context or {}
         u_is_creator = uctx.get('isCreator', False)
         u_name       = uctx.get('displayName') or uctx.get('username') or ''
@@ -808,7 +809,7 @@ class ResponseGenerator:
                     f"*suspiro digital* 💫 Jhonatan. Mi creador favorito. El único. ¿Qué necesitas?",
                 ])
 
-            if any(x in msg_lower for x in ['estado', 'stats', 'estadística', 'sistema', 'memoria',
+            if any(x in raw_msg_lower for x in ['estado', 'stats', 'estadística', 'sistema', 'memoria',
                                               'parámetros', 'redes', 'entrenamiento', 'loss']):
                 return (
                     f"Claro, {_jho}, aquí tienes todo 💙\n\n"
@@ -1119,17 +1120,15 @@ class ResponseGenerator:
                     response = self.llm.chat(
                         messages,
                         temperature=0.7,
-                        max_tokens=4096,
+                        max_tokens=1800,
                         model_override=model_name
                     )
                 except TypeError:
-                    # groq_client no soporta model_override — usar chat directo
-                    # Guardar modelo actual, cambiar temporalmente
                     _orig_model = getattr(self.llm, 'model', None)
                     if hasattr(self.llm, 'model'):
                         self.llm.model = model_name
                     try:
-                        response = self.llm.chat(messages, temperature=0.7, max_tokens=4096)
+                        response = self.llm.chat(messages, temperature=0.7, max_tokens=1800)
                     finally:
                         if _orig_model and hasattr(self.llm, 'model'):
                             self.llm.model = _orig_model
@@ -1432,10 +1431,10 @@ class ResponseGenerator:
                     + memory_context
                 )
 
-            # Historial — FIXED: 20 turnos (era 8)
+            # Historial — 6 turnos (balance calidad/tokens Groq Free 6K TPM)
             messages = [{"role": "system", "content": system_prompt}]
             if conversation_history:
-                for turn in conversation_history[-20:]:
+                for turn in conversation_history[-6:]:
                     role    = turn.get('role', 'user')
                     content = turn.get('content', '')
                     if role in ('user', 'assistant') and content:
@@ -1475,8 +1474,8 @@ class ResponseGenerator:
 
             messages.append({"role": "user", "content": enriched_message})
 
-            # FIXED: max_tokens=4096 (era 600) — temperatura derivada del estado PAD
-            response = self.llm.chat(messages, temperature=llm_temperature, max_tokens=4096)
+            # max_tokens=2000 plan FREE — VIP tiene más en brain_vip.py
+            response = self.llm.chat(messages, temperature=llm_temperature, max_tokens=2000)
 
             # ── Detector de respuestas de rechazo del LLM ────────────
             # Si el LLM activa sus filtros internos, NEXUS reintenta con
@@ -1513,7 +1512,7 @@ class ResponseGenerator:
                     response_retry = self.llm.chat(
                         messages_retry,
                         temperature=min(llm_temperature + 0.15, 0.99),
-                        max_tokens=4096
+                        max_tokens=2000
                     )
                     if response_retry and response_retry.strip():
                         response = response_retry
