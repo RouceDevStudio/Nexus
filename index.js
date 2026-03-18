@@ -213,7 +213,7 @@ function buildVipContextBlock(ugStats, behaviorNarrative, useVipBrain) {
         lines.push(`  • Puedes sugerir filtrar por categoría en la biblioteca (Juego, Mod, Optimización, Ajustes, Apps, Software)`);
         lines.push(`  • Puedes orientar al usuario sobre cómo publicar, ganar dinero, mejorar su nivel de verificación`);
         lines.push(`  • Puedes ver en tiempo real el catálogo completo y recomendar desde datos reales, no inventados`);
-        lines.push(`  • Si el usuario tiene publicaciones, puedes hablar de ellas con datos concretos (descargas, estado)`);
+        lines.push(`  • Si el usuario tiene publicaciones, puedes hablar de ellas con datos concretos (descargas y rendimiento)`);
         lines.push(`  • Si el usuario tiene nivel 0, puedes motivarlo a publicar su primer contenido y explicarle el proceso`);
         lines.push(`  • Si tiene nivel 1+, puedes hablar de sus ganancias potenciales con datos reales de sus descargas`);
         lines.push(`REGLA: No esperes que te pregunten — si ves en el perfil algo relevante, coméntalo proactivamente.`);
@@ -906,6 +906,7 @@ app.post('/api/chat', requireAuth, async (req, res) => {
         plan:        planStatus.plan,
         isVip,
         isCreator,
+        raw_message: message,          // mensaje limpio sin catálogo inyectado
         // Datos enriquecidos disponibles para el brain
         upgamesStats:     _ugStats,
         behaviorSummary:  _behaviorNarrative,
@@ -937,11 +938,11 @@ app.post('/api/chat', requireAuth, async (req, res) => {
             const disponibles = allItems
                 .filter(i => i.linkStatus !== 'caido')
                 .sort((a,b) => (b.descargasEfectivas||0) - (a.descargasEfectivas||0))
-                .slice(0, 25);
+                .slice(0, 12);
 
             if (disponibles.length > 0) {
                 const lista = disponibles.map(i =>
-                    `• "${i.title}" | Categoría: ${i.category||'General'} | Descargas: ${i.descargasEfectivas||0} | ID: ${i._id}`
+                    `• "${i.title}" | ${i.category||'General'} | ${i.descargasEfectivas||0} descargas`
                 ).join('\n');
                 upgamesContext = (
                     `\n\n[CATÁLOGO UPGAMES — ${disponibles.length} CONTENIDOS REALES DISPONIBLES AHORA]\n` +
@@ -976,7 +977,7 @@ app.post('/api/chat', requireAuth, async (req, res) => {
             searchResults = await searchAll(q);
             searchResults.forEach((r,i)=>{ r._position=i+1; });
         }
-        const conversationHistory = Array.isArray(history) ? history.slice(-8) : [];
+        const conversationHistory = Array.isArray(history) ? history.slice(-6) : [];
 
         // Enriquecer mensaje con contexto UpGames
         // VIP: siempre recibe catálogo ligero + bloque de capacidades + perfil
@@ -993,11 +994,11 @@ app.post('/api/chat', requireAuth, async (req, res) => {
                 const top10 = allItems
                     .filter(i => i.linkStatus !== 'caido')
                     .sort((a,b) => (b.descargasEfectivas||0) - (a.descargasEfectivas||0))
-                    .slice(0, 10);
+                    .slice(0, 6);
                 if (top10.length) {
                     messageForBrain += `\n\n[CATÁLOGO UPGAMES — TOP ${top10.length} AHORA]\n` +
                         `REGLA: Si el usuario pregunta por juegos o contenido, recomienda SOLO de esta lista real. JAMÁS inventes.\n` +
-                        top10.map(i => `• "${i.title}" | ${i.category||'General'} | ${i.descargasEfectivas||0} descargas | ID:${i._id}`).join('\n') +
+                        top10.map(i => `• "${i.title}" | ${i.category||'General'} | ${i.descargasEfectivas||0} descargas`).join('\n') +
                         `\n[FIN CATÁLOGO — ${top10.length} reales]`;
                 }
             } catch(_) {} // silencioso — no bloquea
@@ -1475,7 +1476,7 @@ app.post('/api/chat-with-file', requireAuth, async (req, res) => {
     };
 
     try {
-        const conversationHistory = Array.isArray(history) ? history.slice(-8) : [];
+        const conversationHistory = Array.isArray(history) ? history.slice(-6) : [];
         const convId = conversationId || `conv_${Date.now()}`;
         const thought = await activeBrain.process(enrichedMessage, conversationHistory, null, userContext);
         const responseText = thought.response || thought.message || 'Lo siento, no pude procesar el archivo.';
