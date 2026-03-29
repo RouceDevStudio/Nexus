@@ -2372,299 +2372,435 @@ async function _nexusProactiveSay() {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 initApp();
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-//  NEXUS MASCOT — Xuān · Cyber Sun Wukong
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-(function initMascot() {
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   NEXUS MASCOT v2 — Xuān
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+(function() {
+  'use strict';
 
-  const STATES = {
-    morning:   { cls:'state-morning',   msg:'¡Buenos días! ☀️ ¿Empezamos?',            hours:[6,12]  },
-    afternoon: { cls:'state-afternoon', msg:'¿Qué estás construyendo? 🔧',              hours:[12,18] },
-    evening:   { cls:'state-evening',   msg:'Buenas noches 🌆 Aquí contigo.',           hours:[18,24] },
-    night:     { cls:'state-night',     msg:'Modo noche 🌙 Duerme... o no.',            hours:[0,6]   },
-    battery:   { cls:'state-battery',   msg:'⚡ Batería baja. Yo también estoy cansado.', hours:null  }
-  };
-
-  const TAPS = [
-    '¡Oye! 😄', '¿Me llamaste?', 'NEXUS activo 🔋', '¡Sigo aquí!',
-    'Neural online ⚡', '¿En qué te ayudo?', '🐒 ¡Ey!'
+  const PROACTIVE = [
+    { acc: '⚡ NEXUS', msg: '¿En qué trabajamos hoy?' },
+    { acc: '🎮 UpGames',  msg: 'Tengo recomendaciones para ti.' },
+    { acc: '🧠 Neural',   msg: 'Mis redes están listas.' },
+    { acc: '☀️ Aquí',     msg: '¿Necesitas ayuda con algo?' },
+    { acc: '🔮 NEXUS',    msg: 'Pregúntame lo que sea.' },
+    { acc: '🌙 Noche',    msg: 'Sigo en línea. Cuando quieras.' },
+    { acc: '⚡ Alerta',   msg: '¡Carga el teléfono!' },
   ];
 
-  let _tapIdx = 0;
-  let _bubbleTimer = null;
+  const TAPS = [
+    { acc: '😄', msg: '¡Hola! Soy Xuān.' },
+    { acc: '⚡', msg: 'NEXUS operativo.' },
+    { acc: '🐒', msg: '¿Me llamaste?' },
+    { acc: '🔋', msg: 'Energía al máximo.' },
+    { acc: '🎮', msg: 'UpGames conectado.' },
+    { acc: '🌀', msg: 'Redes neuronales listas.' },
+  ];
+
+  const STATES = {
+    morning:   { cls:'nxm-state-morning',   hours:[6,12],  proIdx:0 },
+    afternoon: { cls:'nxm-state-afternoon',  hours:[12,18], proIdx:1 },
+    evening:   { cls:'nxm-state-evening',    hours:[18,24], proIdx:5 },
+    night:     { cls:'nxm-state-night',      hours:[0,6],   proIdx:5 },
+    battery:   { cls:'nxm-state-battery',    hours:null,    proIdx:6 },
+  };
+
+  let tapIdx = 0, bubbleTimer = null, speakTimer = null;
 
   function getState() {
-    // Battery primero
-    if (window._mascotBatteryLow) return STATES.battery;
+    if (window._nxmBattLow) return STATES.battery;
     const h = new Date().getHours();
     if (h >= 6  && h < 12) return STATES.morning;
     if (h >= 12 && h < 18) return STATES.afternoon;
-    if (h >= 18 && h < 24) return STATES.evening;
+    if (h >= 18)           return STATES.evening;
     return STATES.night;
   }
 
-  function applyState(widget, state) {
-    // Quitar todas las clases de estado
-    Object.values(STATES).forEach(s => widget.classList.remove(s.cls));
-    widget.classList.add(state.cls);
-    const msgEl = widget.querySelector('#nx-mascot-msg');
-    if (msgEl) msgEl.textContent = state.msg;
+  function applyState(w) {
+    Object.values(STATES).forEach(s => w.classList.remove(s.cls));
+    w.classList.add(getState().cls);
   }
 
-  function showBubble(widget, msg, ms) {
-    const msgEl = widget.querySelector('#nx-mascot-msg');
-    if (msgEl && msg) msgEl.textContent = msg;
-    widget.classList.add('nx-bubble-show');
-    clearTimeout(_bubbleTimer);
-    _bubbleTimer = setTimeout(() => widget.classList.remove('nx-bubble-show'), ms || 3500);
+  function showBubble(w, acc, msg, ms) {
+    const aEl = w.querySelector('.nxm-b-acc');
+    const mEl = w.querySelector('.nxm-b-msg');
+    if (aEl) aEl.textContent = acc;
+    if (mEl) mEl.textContent = msg;
+    w.classList.add('nxm-show-bubble');
+    clearTimeout(bubbleTimer);
+    bubbleTimer = setTimeout(() => w.classList.remove('nxm-show-bubble'), ms || 3800);
   }
 
-  function onTap(widget) {
-    const body = widget.querySelector('.nx-mascot-body');
+  function startSpeak(w) {
+    w.classList.add('nxm-speaking');
+    clearTimeout(speakTimer);
+    speakTimer = setTimeout(() => w.classList.remove('nxm-speaking'), 3200);
+  }
+
+  function onTap(w) {
+    const body = w.querySelector('.nxm-body');
     if (body) {
-      body.classList.remove('nx-tapped');
-      void body.offsetWidth; // reflow
-      body.classList.add('nx-tapped');
-      setTimeout(() => body.classList.remove('nx-tapped'), 450);
+      body.classList.remove('nxm-tapped');
+      void body.offsetWidth;
+      body.classList.add('nxm-tapped');
+      setTimeout(() => body.classList.remove('nxm-tapped'), 460);
     }
-    showBubble(widget, TAPS[_tapIdx % TAPS.length], 2800);
-    _tapIdx++;
+    const t = TAPS[tapIdx % TAPS.length]; tapIdx++;
+    showBubble(w, t.acc, t.msg, 2800);
+    startSpeak(w);
+  }
+
+  function proactiveTick(w) {
+    const st = getState();
+    const p  = PROACTIVE[st.proIdx];
+    showBubble(w, p.acc, p.msg, 4500);
+    startSpeak(w);
   }
 
   // Battery API
   if (navigator.getBattery) {
-    navigator.getBattery().then(batt => {
-      function checkBatt() {
-        window._mascotBatteryLow = batt.level < 0.2 && !batt.charging;
-      }
-      checkBatt();
-      batt.addEventListener('levelchange', checkBatt);
-      batt.addEventListener('chargingchange', checkBatt);
-    }).catch(() => {});
+    navigator.getBattery().then(b => {
+      const chk = () => { window._nxmBattLow = b.level < 0.20 && !b.charging; };
+      chk();
+      b.addEventListener('levelchange', chk);
+      b.addEventListener('chargingchange', chk);
+    }).catch(()=>{});
   }
 
-  // Mostrar mascot cuando el usuario está logueado
-  function tryShow() {
+  function boot() {
     const app = document.getElementById('main-app');
-    if (!app || app.style.display === 'none') {
-      setTimeout(tryShow, 500);
-      return;
-    }
-    const widget = document.getElementById('nx-mascot-widget');
-    if (!widget) return;
-    widget.style.display = 'flex';
-    applyState(widget, getState());
-    // Mostrar burbuja inicial tras 1.5s
-    setTimeout(() => showBubble(widget, getState().msg, 4000), 1500);
+    if (!app || app.style.display === 'none') { setTimeout(boot, 600); return; }
+    const w = document.getElementById('nx-mascot-v2');
+    if (!w) return;
+    w.style.display = 'flex';
+    applyState(w);
+    // Saludo inicial
+    setTimeout(() => { const st=getState(); const p=PROACTIVE[st.proIdx]; showBubble(w,p.acc,p.msg,5000); startSpeak(w); }, 2000);
+    // Proactivo cada 40s
+    setInterval(() => proactiveTick(w), 40000);
     // Actualizar estado cada minuto
-    setInterval(() => applyState(widget, getState()), 60000);
+    setInterval(() => applyState(w), 60000);
   }
 
-  // Esperar DOM listo
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', tryShow);
-  } else {
-    setTimeout(tryShow, 800);
-  }
+  // Tap delegado
+  document.addEventListener('click', e => {
+    const body = e.target.closest('.nxm-body');
+    if (!body) return;
+    const w = body.closest('.nx-mascot-v2');
+    if (w) onTap(w);
+  });
 
-  // ── postMessage desde UpGames ──
-  window.addEventListener('message', function(ev) {
-    const allowed = ['https://roucedevstudio.github.io','http://localhost:3000','http://localhost:5500','http://localhost:7700'];
-    if (!allowed.some(o => ev.origin.startsWith(o))) return;
-    if (!ev.data || typeof ev.data !== 'object') return;
-
-    if (ev.data.type === 'upgames_active') {
-      const widget = document.getElementById('nx-mascot-widget');
-      if (!widget) return;
-      widget.classList.add('nx-from-upgames');
-      applyState(widget, getState());
-      showBubble(widget, '¡Hola desde UpGames! 🎮', 4000);
+  // postMessage desde UpGames
+  window.addEventListener('message', ev => {
+    const ok = ['https://roucedevstudio.github.io','http://localhost:3000','http://localhost:5500','http://localhost:7700'];
+    if (!ok.some(o => ev.origin.startsWith(o))) return;
+    if (ev.data?.type === 'upgames_active') {
+      const w = document.getElementById('nx-mascot-v2');
+      if (!w) return;
+      applyState(w);
+      showBubble(w, '🎮 UpGames', '¡Conectado! ¿Qué buscas hoy?', 5000);
+      startSpeak(w);
     }
   });
 
-  // ── Tap handler (delegado) ──
-  document.addEventListener('click', function(e) {
-    const body = e.target.closest('.nx-mascot-body');
-    if (!body) return;
-    const widget = body.closest('.nx-mascot-widget');
-    if (widget) onTap(widget);
-  });
-
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else setTimeout(boot, 800);
 })();
 </script>
 
-<!-- ═══ NEXUS MASCOT WIDGET — Xuān ═══ -->
-<div id="nx-mascot-widget" class="nx-mascot-widget state-morning" style="display:none">
+<!-- ═══ NEXUS MASCOT v2 — Xuān · Anime Sun Wukong ═══ -->
+<div id="nx-mascot-v2" class="nx-mascot-v2 nxm-state-morning" style="display:none">
 
-  <div class="nx-mascot-bubble">
-    <span id="nx-mascot-msg">NEXUS online ⚡</span>
+  <!-- Bubble -->
+  <div class="nxm-bubble">
+    <span class="nxm-bubble-accent nxm-b-acc">⚡ NEXUS</span>
+    <span class="nxm-b-msg">Neural online</span>
   </div>
 
-  <div class="nx-mascot-body">
-    <svg viewBox="0 0 100 115" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+  <!-- Mascot body -->
+  <div class="nxm-body">
+    <svg viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg" overflow="visible">
       <defs>
-        <radialGradient id="mg-body" cx="38%" cy="30%" r="65%">
-          <stop offset="0%"   stop-color="#e8963a"/>
-          <stop offset="100%" stop-color="#9a5518"/>
+        <radialGradient id="nxm-skin" cx="35%" cy="28%" r="68%">
+          <stop offset="0%"   stop-color="#ffca85"/>
+          <stop offset="100%" stop-color="#c87010"/>
         </radialGradient>
-        <radialGradient id="mg-face" cx="40%" cy="35%" r="65%">
-          <stop offset="0%"   stop-color="#fdd898"/>
-          <stop offset="100%" stop-color="#e8963a"/>
+        <radialGradient id="nxm-face-grad" cx="38%" cy="32%" r="62%">
+          <stop offset="0%"   stop-color="#ffe3a8"/>
+          <stop offset="100%" stop-color="#e09838"/>
         </radialGradient>
-        <radialGradient id="mg-eye-iris" cx="35%" cy="28%" r="70%">
-          <stop offset="0%"   stop-color="#60efff"/>
-          <stop offset="55%"  stop-color="#0ea5e9"/>
-          <stop offset="100%" stop-color="#0a3a6a"/>
+        <radialGradient id="nxm-iris" cx="28%" cy="22%" r="72%">
+          <stop offset="0%"   stop-color="#b0fffe"/>
+          <stop offset="35%"  stop-color="#00d4ff"/>
+          <stop offset="70%"  stop-color="#0058c8"/>
+          <stop offset="100%" stop-color="#000e30"/>
         </radialGradient>
-        <filter id="mg-soft-shadow" x="-25%" y="-25%" width="150%" height="150%">
-          <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#000" flood-opacity=".45"/>
+        <linearGradient id="nxm-hair-g" x1="0%" y1="0%" x2="60%" y2="100%">
+          <stop offset="0%"   stop-color="#28083e"/>
+          <stop offset="100%" stop-color="#080416"/>
+        </linearGradient>
+        <linearGradient id="nxm-hair-hi" x1="20%" y1="0%" x2="80%" y2="100%">
+          <stop offset="0%"   stop-color="#9050e8" stop-opacity=".55"/>
+          <stop offset="100%" stop-color="#9050e8" stop-opacity="0"/>
+        </linearGradient>
+        <radialGradient id="nxm-body-g" cx="33%" cy="22%" r="68%">
+          <stop offset="0%"   stop-color="#d48018"/>
+          <stop offset="100%" stop-color="#7a3e00"/>
+        </radialGradient>
+        <filter id="nxm-sh" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="2" stdDeviation="2.2" flood-color="#000" flood-opacity=".5"/>
         </filter>
-        <filter id="mg-glow-f" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur stdDeviation="2.5" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        <filter id="nxm-gf" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="nxm-gf2" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="3.5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
       </defs>
 
       <!-- Ambient glow -->
-      <ellipse class="mx-glow-bg" cx="50" cy="110" rx="28" ry="7" fill="#5EFF43" opacity=".2"/>
-      <ellipse cx="50" cy="110" rx="20" ry="5" fill="#000" opacity=".28"/>
+      <ellipse class="nxm-glow-bg" cx="40" cy="97" rx="28" ry="7" fill="#5EFF43" opacity=".17"/>
+      <ellipse cx="40" cy="97" rx="20" ry="4.5" fill="#000" opacity=".28"/>
 
       <!-- Tail -->
-      <path class="mx-tail" d="M66 92 Q82 82 78 66 Q74 54 82 46"
-            stroke="#9a5518" stroke-width="7" fill="none" stroke-linecap="round" opacity=".9"/>
-      <path d="M66 92 Q82 82 78 66 Q74 54 82 46"
-            stroke="#e8963a" stroke-width="4" fill="none" stroke-linecap="round" opacity=".55"/>
+      <path class="nxm-tail"
+            d="M52 83 Q68 73 65 58 Q62 46 71 38"
+            stroke="#7a3e00" stroke-width="6.5" fill="none" stroke-linecap="round"/>
+      <path d="M52 83 Q68 73 65 58 Q62 46 71 38"
+            stroke="#d48018" stroke-width="3.5" fill="none" stroke-linecap="round" opacity=".6"/>
+      <!-- Tail curl tip -->
+      <path d="M71 38 Q76 32 71 29 Q67 27 65 32"
+            stroke="#d48018" stroke-width="3" fill="none" stroke-linecap="round"/>
 
       <!-- Body -->
-      <ellipse cx="50" cy="90" rx="21" ry="17" fill="url(#mg-body)" filter="url(#mg-soft-shadow)"/>
-      <ellipse cx="44" cy="84" rx="9" ry="6" fill="rgba(255,255,255,.13)"/>
+      <ellipse cx="40" cy="83" rx="16" ry="13" fill="url(#nxm-body-g)" filter="url(#nxm-sh)"/>
+      <ellipse cx="35" cy="77" rx="7" ry="4.5" fill="rgba(255,255,255,.13)"/>
+      <!-- Belly -->
+      <ellipse cx="40" cy="84" rx="8.5" ry="7.5" fill="#e89840" opacity=".45"/>
 
       <!-- Tech collar -->
-      <path d="M31 77 Q50 71 69 77" stroke="#0a0a14" stroke-width="5" fill="none" stroke-linecap="round"/>
-      <path class="mx-circuit" d="M31 77 Q50 71 69 77" stroke="#5EFF43" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-      <circle cx="36" cy="75.5" r="2"   fill="#0a0a14"/>
-      <circle cx="36" cy="75.5" r="1.2" class="mx-jewel" fill="#5EFF43"/>
-      <circle cx="50" cy="72.5" r="2"   fill="#0a0a14"/>
-      <circle cx="50" cy="72.5" r="1.2" class="mx-jewel" fill="#5EFF43"/>
-      <circle cx="64" cy="75.5" r="2"   fill="#0a0a14"/>
-      <circle cx="64" cy="75.5" r="1.2" class="mx-jewel" fill="#5EFF43"/>
+      <path d="M26 71 Q40 65 54 71" stroke="#05050f" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path class="nxm-circuit" d="M26 71 Q40 65 54 71" stroke="#5EFF43" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+      <circle cx="30"  cy="69.5" r="1.8" fill="#05050f"/>
+      <circle class="nxm-jewel" cx="30"  cy="69.5" r="1.1" fill="#5EFF43"/>
+      <circle cx="40"  cy="66.5" r="1.8" fill="#05050f"/>
+      <circle class="nxm-jewel" cx="40"  cy="66.5" r="1.1" fill="#5EFF43"/>
+      <circle cx="50"  cy="69.5" r="1.8" fill="#05050f"/>
+      <circle class="nxm-jewel" cx="50"  cy="69.5" r="1.1" fill="#5EFF43"/>
 
       <!-- Left ear -->
-      <circle cx="20" cy="52" r="11" fill="url(#mg-body)" filter="url(#mg-soft-shadow)"/>
-      <circle cx="20" cy="52" r="7"  fill="#f5c070"/>
-      <circle cx="20" cy="52" r="4.5" fill="#e8a050" opacity=".7"/>
-
+      <g class="nxm-ear-l">
+        <circle cx="14" cy="42" r="9"   fill="url(#nxm-skin)" filter="url(#nxm-sh)"/>
+        <circle cx="14" cy="42" r="5.5" fill="#f0b068"/>
+        <circle cx="14" cy="42" r="3"   fill="#e09060" opacity=".85"/>
+        <!-- Ear inner shine -->
+        <circle cx="12.5" cy="40" r="1.5" fill="rgba(255,255,255,.2)"/>
+      </g>
       <!-- Right ear -->
-      <circle cx="80" cy="52" r="11" fill="url(#mg-body)" filter="url(#mg-soft-shadow)"/>
-      <circle cx="80" cy="52" r="7"  fill="#f5c070"/>
-      <circle cx="80" cy="52" r="4.5" fill="#e8a050" opacity=".7"/>
+      <g class="nxm-ear-r">
+        <circle cx="66" cy="42" r="9"   fill="url(#nxm-skin)" filter="url(#nxm-sh)"/>
+        <circle cx="66" cy="42" r="5.5" fill="#f0b068"/>
+        <circle cx="66" cy="42" r="3"   fill="#e09060" opacity=".85"/>
+        <circle cx="64.5" cy="40" r="1.5" fill="rgba(255,255,255,.2)"/>
+      </g>
+
+      <!-- Hair back layer -->
+      <ellipse cx="40" cy="35" rx="26" ry="23" fill="url(#nxm-hair-g)"/>
+      <!-- Hair side strands -->
+      <path class="nxm-hair-l"
+            d="M14 34 Q9 48 11 60 Q13 65 17 63 Q14 49 16 36Z"
+            fill="url(#nxm-hair-g)"/>
+      <path class="nxm-hair-r"
+            d="M66 34 Q71 48 69 60 Q67 65 63 63 Q66 49 64 36Z"
+            fill="url(#nxm-hair-g)"/>
+      <!-- Hair top volume -->
+      <path d="M17 26 Q22 15 40 13 Q58 15 63 26 Q55 19 40 18 Q25 19 17 26Z"
+            fill="url(#nxm-hair-g)"/>
+      <!-- Hair highlight sheen -->
+      <path d="M24 17 Q40 11 56 17 Q48 14 40 14 Q32 14 24 17Z"
+            fill="url(#nxm-hair-hi)" opacity=".8"/>
+      <!-- Front hair strands -->
+      <path d="M20 34 Q21 44 23 52 Q24 56 26 55"
+            stroke="#1e0630" stroke-width="2.8" fill="none" stroke-linecap="round" opacity=".9"/>
+      <path d="M60 34 Q59 44 57 52 Q56 56 54 55"
+            stroke="#1e0630" stroke-width="2.8" fill="none" stroke-linecap="round" opacity=".9"/>
 
       <!-- Head -->
-      <ellipse cx="50" cy="50" rx="27" ry="25" fill="url(#mg-body)" filter="url(#mg-soft-shadow)"/>
-      <ellipse cx="43" cy="39" rx="13" ry="9" fill="rgba(255,255,255,.16)"/>
+      <ellipse cx="40" cy="40" rx="24" ry="22" fill="url(#nxm-skin)" filter="url(#nxm-sh)"/>
+      <!-- Head highlight -->
+      <ellipse cx="33" cy="31" rx="11" ry="7.5" fill="rgba(255,255,255,.15)"/>
 
-      <!-- Face plate -->
-      <ellipse cx="50" cy="55" rx="18" ry="13" fill="url(#mg-face)"/>
-      <ellipse cx="45" cy="50" rx="8"  ry="5"  fill="rgba(255,255,255,.18)"/>
+      <!-- Face muzzle (lighter) -->
+      <ellipse cx="40" cy="47" rx="15" ry="11" fill="url(#nxm-face-grad)"/>
+      <ellipse cx="36" cy="43" rx="6.5" ry="4" fill="rgba(255,255,255,.18)"/>
 
-      <!-- Left eye -->
-      <g class="mx-eye-group">
-        <ellipse cx="37" cy="49" rx="8.5" ry="9.5" fill="white"/>
-        <ellipse cx="37" cy="50" rx="6"   ry="7"   fill="url(#mg-eye-iris)"/>
-        <ellipse cx="37.5" cy="51" rx="3.2" ry="3.8" fill="#050510"/>
-        <circle cx="35.5" cy="48.5" r="1.8" fill="white"/>
-        <circle cx="39.5" cy="49.5" r=".9"  fill="white" opacity=".7"/>
-        <path d="M28.5 43.5 Q33 40 37 41.5 Q41 40 45.5 43.5" stroke="#2a150a" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- ── LEFT EYE ── -->
+      <g class="nxm-eye-l" style="transform-origin:30px 41px">
+        <!-- Sclera -->
+        <ellipse cx="30" cy="40" rx="8"   ry="9.5" fill="white"/>
+        <!-- Iris (large, anime) -->
+        <ellipse cx="30" cy="41.5" rx="6" ry="7.5" fill="url(#nxm-iris)"/>
+        <!-- Pupil -->
+        <ellipse cx="30.5" cy="42.5" rx="3.2" ry="4"   fill="#000818"/>
+        <!-- Catchlight star 1 (large) -->
+        <circle cx="27.5" cy="38.5" r="2.2" fill="white"/>
+        <!-- Catchlight 2 -->
+        <circle cx="32.8" cy="39.5" r="1.2" fill="rgba(255,255,255,.85)"/>
+        <!-- Catchlight 3 micro -->
+        <circle cx="27"   cy="44"   r=".7"  fill="rgba(255,255,255,.5)"/>
+        <!-- Glowing iris rim -->
+        <ellipse cx="30" cy="40" rx="8" ry="9.5" fill="none" stroke="#00d4ff" stroke-width=".5" opacity=".45"/>
+        <!-- Top lashes (thick anime style) -->
+        <path d="M21 35 Q25.5 31.5 30 33 Q34.5 31.5 39 35"
+              stroke="#1a0828" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- Extra lash tips -->
+        <line x1="22"  y1="35.5" x2="20"   y2="33"   stroke="#1a0828" stroke-width="1.3" stroke-linecap="round"/>
+        <line x1="26"  y1="33"   x2="25"   y2="30.5" stroke="#1a0828" stroke-width="1.3" stroke-linecap="round"/>
+        <line x1="38"  y1="35.5" x2="40"   y2="33"   stroke="#1a0828" stroke-width="1.3" stroke-linecap="round"/>
+        <!-- Bottom lash line -->
+        <path d="M22.5 48 Q26 50 30 50.5 Q34 50 37.5 48"
+              stroke="#1a0828" stroke-width="1" fill="none" stroke-linecap="round" opacity=".45"/>
       </g>
 
-      <!-- Right eye -->
-      <g class="mx-eye-group-r">
-        <ellipse cx="63" cy="49" rx="8.5" ry="9.5" fill="white"/>
-        <ellipse cx="63" cy="50" rx="6"   ry="7"   fill="url(#mg-eye-iris)"/>
-        <ellipse cx="63.5" cy="51" rx="3.2" ry="3.8" fill="#050510"/>
-        <circle cx="61.5" cy="48.5" r="1.8" fill="white"/>
-        <circle cx="65.5" cy="49.5" r=".9"  fill="white" opacity=".7"/>
-        <path d="M54.5 43.5 Q59 40 63 41.5 Q67 40 71.5 43.5" stroke="#2a150a" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- ── RIGHT EYE ── -->
+      <g class="nxm-eye-r" style="transform-origin:50px 41px">
+        <ellipse cx="50" cy="40" rx="8"   ry="9.5" fill="white"/>
+        <ellipse cx="50" cy="41.5" rx="6" ry="7.5" fill="url(#nxm-iris)"/>
+        <ellipse cx="50.5" cy="42.5" rx="3.2" ry="4" fill="#000818"/>
+        <circle cx="47.5" cy="38.5" r="2.2" fill="white"/>
+        <circle cx="52.8" cy="39.5" r="1.2" fill="rgba(255,255,255,.85)"/>
+        <circle cx="47"   cy="44"   r=".7"  fill="rgba(255,255,255,.5)"/>
+        <ellipse cx="50" cy="40" rx="8" ry="9.5" fill="none" stroke="#00d4ff" stroke-width=".5" opacity=".45"/>
+        <path d="M41 35 Q45.5 31.5 50 33 Q54.5 31.5 59 35"
+              stroke="#1a0828" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <line x1="42"  y1="35.5" x2="40"   y2="33"   stroke="#1a0828" stroke-width="1.3" stroke-linecap="round"/>
+        <line x1="46"  y1="33"   x2="45"   y2="30.5" stroke="#1a0828" stroke-width="1.3" stroke-linecap="round"/>
+        <line x1="58"  y1="35.5" x2="60"   y2="33"   stroke="#1a0828" stroke-width="1.3" stroke-linecap="round"/>
+        <path d="M42.5 48 Q46 50 50 50.5 Q54 50 57.5 48"
+              stroke="#1a0828" stroke-width="1" fill="none" stroke-linecap="round" opacity=".45"/>
       </g>
 
-      <!-- Nose -->
-      <ellipse cx="50" cy="59" rx="4" ry="2.8" fill="#b06820"/>
-      <ellipse cx="48.5" cy="58.2" rx="1.4" ry=".9" fill="rgba(255,255,255,.3)"/>
-      <circle cx="48" cy="59.5" r="1" fill="#8a4010" opacity=".6"/>
-      <circle cx="52" cy="59.5" r="1" fill="#8a4010" opacity=".6"/>
-
-      <!-- Mouths -->
-      <g class="mx-mouth-happy">
-        <path d="M40 65 Q50 74 60 65" stroke="#8a3a0a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-        <path d="M40 65 Q41.5 70 45.5 71 Q50 73 54.5 71 Q58.5 70 60 65" fill="#e87060" opacity=".75"/>
-        <rect x="44.5" y="65" width="5"  height="3" rx="1" fill="white" opacity=".9"/>
-        <rect x="50.5" y="65" width="5"  height="3" rx="1" fill="white" opacity=".9"/>
+      <!-- Eye lids (shown on night/battery) -->
+      <g class="nxm-eyelid">
+        <ellipse cx="30" cy="35.5" rx="8.5"   ry="5.5" fill="url(#nxm-skin)"/>
+        <path d="M21 35 Q25.5 31.5 30 33 Q34.5 31.5 39 35" stroke="#1a0828" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <ellipse cx="50" cy="35.5" rx="8.5"   ry="5.5" fill="url(#nxm-skin)"/>
+        <path d="M41 35 Q45.5 31.5 50 33 Q54.5 31.5 59 35" stroke="#1a0828" stroke-width="2.5" fill="none" stroke-linecap="round"/>
       </g>
-      <path class="mx-mouth-normal" d="M42 66 Q50 71.5 58 66" stroke="#8a3a0a" stroke-width="2"   fill="none" stroke-linecap="round"/>
-      <path class="mx-mouth-relax"  d="M43 66.5 Q50 69.5 57 66.5" stroke="#8a3a0a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-      <path class="mx-mouth-sleepy" d="M45 67 Q50 68.5 55 67" stroke="#8a3a0a" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-      <g class="mx-mouth-yawn">
-        <ellipse cx="50" cy="68" rx="8"   ry="6"   fill="#6a2808"/>
-        <ellipse cx="50" cy="67.5" rx="8" ry="5.5" fill="#c04828"/>
-        <ellipse cx="50" cy="66.5" rx="5.5" ry="3" fill="#ff9977" opacity=".6"/>
-        <text x="61" y="60" fill="#a78bfa" font-size="7"  font-weight="700" opacity=".8">z</text>
-        <text x="65" y="53" fill="#a78bfa" font-size="9"  font-weight="700" opacity=".55">z</text>
-        <text x="70" y="45" fill="#a78bfa" font-size="11" font-weight="700" opacity=".35">z</text>
+
+      <!-- Nose (small cute anime) -->
+      <path d="M35.5 51.5 Q40 54 44.5 51.5" stroke="#b86010" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <circle cx="37.2" cy="52.2" r=".9" fill="#8a3c08" opacity=".55"/>
+      <circle cx="42.8" cy="52.2" r=".9" fill="#8a3c08" opacity=".55"/>
+
+      <!-- ── MOUTHS ── -->
+      <!-- Happy -->
+      <g class="nxm-mouth-happy">
+        <path d="M29 57.5 Q40 67 51 57.5" stroke="#7a2e08" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M29 57.5 Q30.5 64 35.5 66 Q40 67.5 44.5 66 Q49.5 64 51 57.5"
+              fill="#d04030" opacity=".72"/>
+        <rect x="34.5" y="58" width="5"   height="3" rx="1.2" fill="white" opacity=".92"/>
+        <rect x="40.5" y="58" width="5"   height="3" rx="1.2" fill="white" opacity=".92"/>
+        <!-- Dimples -->
+        <circle cx="26" cy="58" r="2" fill="rgba(220,80,60,.25)"/>
+        <circle cx="54" cy="58" r="2" fill="rgba(220,80,60,.25)"/>
+      </g>
+      <!-- Normal -->
+      <path class="nxm-mouth-normal" d="M31 59 Q40 65 49 59" stroke="#7a2e08" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+      <!-- Relax -->
+      <path class="nxm-mouth-relax"  d="M33 60.5 Q40 63.5 47 60.5" stroke="#7a2e08" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+      <!-- Sleepy -->
+      <path class="nxm-mouth-sleepy" d="M35 61.5 Q40 63 45 61.5" stroke="#7a2e08" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Yawn -->
+      <g class="nxm-mouth-yawn">
+        <ellipse cx="40" cy="63" rx="7.5" ry="6" fill="#4a1408"/>
+        <ellipse cx="40" cy="62" rx="7.5" ry="5.5" fill="#b03020"/>
+        <ellipse cx="40" cy="61" rx="5"   ry="3.2" fill="#ff8866" opacity=".6"/>
+        <text x="52" y="52" fill="#a78bfa" font-size="7"  font-family="monospace" font-weight="700" opacity=".75">z</text>
+        <text x="57" y="43" fill="#a78bfa" font-size="9"  font-family="monospace" font-weight="700" opacity=".5">z</text>
+        <text x="62" y="33" fill="#a78bfa" font-size="11" font-family="monospace" font-weight="700" opacity=".3">z</text>
+      </g>
+      <!-- Speaking -->
+      <g class="nxm-mouth-speak">
+        <ellipse class="nxm-speak-oval" cx="40" cy="62" rx="5.5" ry="4" fill="#d04030"/>
+        <ellipse cx="40" cy="61" rx="3.5" ry="2" fill="#ff7055" opacity=".6"/>
       </g>
 
       <!-- Cheeks -->
-      <ellipse cx="27" cy="59" rx="6.5" ry="4.5" fill="rgba(255,140,140,.32)"/>
-      <ellipse cx="73" cy="59" rx="6.5" ry="4.5" fill="rgba(255,140,140,.32)"/>
+      <ellipse cx="21" cy="51" rx="5.5" ry="4"   fill="rgba(255,110,110,.28)"/>
+      <ellipse cx="59" cy="51" rx="5.5" ry="4"   fill="rgba(255,110,110,.28)"/>
 
-      <!-- Crown (Sun Wukong) -->
-      <g filter="url(#mg-glow-f)">
-        <path d="M25 37 Q50 26 75 37" stroke="#7a5500" stroke-width="5"   fill="none" stroke-linecap="round"/>
-        <path d="M25 37 Q50 26 75 37" stroke="#d4aa20" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-        <path d="M28 36 Q50 26 72 36" stroke="#ffe870" stroke-width="1"   fill="none" stroke-linecap="round" opacity=".6"/>
-        <!-- Circuit traces -->
-        <path class="mx-circuit" d="M30 35.5 L30 31 L34 31" stroke="#5EFF43" stroke-width=".9" fill="none" stroke-linecap="round"/>
-        <path class="mx-circuit" d="M43 32 L43 28 L47 28"   stroke="#00f2ff" stroke-width=".9" fill="none" stroke-linecap="round"/>
-        <path class="mx-circuit" d="M57 28 L60 28 L60 32"   stroke="#5EFF43" stroke-width=".9" fill="none" stroke-linecap="round"/>
-        <path class="mx-circuit" d="M66 32 L70 32 L70 35.5" stroke="#00f2ff" stroke-width=".9" fill="none" stroke-linecap="round"/>
-        <circle cx="34" cy="31"   r="1"   fill="#5EFF43" class="mx-circuit"/>
-        <circle cx="43" cy="32"   r="1"   fill="#00f2ff" class="mx-circuit"/>
-        <circle cx="57" cy="28"   r="1"   fill="#5EFF43" class="mx-circuit"/>
-        <circle cx="66" cy="32"   r="1"   fill="#00f2ff" class="mx-circuit"/>
-        <!-- Side nodes -->
-        <circle cx="32" cy="36" r="3"   fill="#c49800"/>
-        <circle cx="32" cy="36" r="1.8" fill="#ffcc30"/>
-        <circle cx="68" cy="36" r="3"   fill="#c49800"/>
-        <circle cx="68" cy="36" r="1.8" fill="#ffcc30"/>
-        <!-- Center gem -->
-        <circle cx="50" cy="26" r="6"   fill="#b08000"/>
-        <circle cx="50" cy="26" r="4.5" fill="#1a1a2e"/>
-        <ellipse class="mx-crown-glow" cx="50" cy="26" rx="16" ry="11" fill="#5EFF43" opacity=".18"/>
-        <circle class="mx-jewel" cx="50" cy="26" r="4" fill="#5EFF43"/>
-        <path d="M47 24 L50 22 L53 24 L50 28 Z" fill="rgba(255,255,255,.35)"/>
-        <circle cx="48.5" cy="24.5" r="1.3" fill="white" opacity=".75"/>
+      <!-- ── GOLDEN CROWN (Sun Wukong) ── -->
+      <g filter="url(#nxm-gf)">
+        <!-- Band shadow -->
+        <path d="M15 28 Q40 17 65 28" stroke="#503200" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <!-- Gold band -->
+        <path d="M15 28 Q40 17 65 28" stroke="#c89c14" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+        <!-- Band highlight -->
+        <path d="M18 27 Q40 17 62 27" stroke="#ffe84e" stroke-width="1.3" fill="none" stroke-linecap="round" opacity=".65"/>
+        <!-- Band lower edge -->
+        <path d="M15 28 Q40 17 65 28" stroke="#a07808" stroke-width=".6" fill="none" stroke-linecap="round" opacity=".4"/>
+
+        <!-- Circuit traces on band -->
+        <path class="nxm-circuit" d="M20 26.5 L20 22 L24 22" stroke="#5EFF43" stroke-width=".9" fill="none" stroke-linecap="round"/>
+        <path class="nxm-circuit" d="M32 21 L32 17 L36 17"   stroke="#00f2ff" stroke-width=".9" fill="none" stroke-linecap="round"/>
+        <path class="nxm-circuit" d="M48 17 L52 17 L52 21"   stroke="#5EFF43" stroke-width=".9" fill="none" stroke-linecap="round"/>
+        <path class="nxm-circuit" d="M56 22 L60 22 L60 26.5" stroke="#00f2ff" stroke-width=".9" fill="none" stroke-linecap="round"/>
+        <circle class="nxm-circuit" cx="24"  cy="22"   r="1.1" fill="#5EFF43"/>
+        <circle class="nxm-circuit" cx="32"  cy="21"   r="1.1" fill="#00f2ff"/>
+        <circle class="nxm-circuit" cx="48"  cy="17"   r="1.1" fill="#5EFF43"/>
+        <circle class="nxm-circuit" cx="56"  cy="22"   r="1.1" fill="#00f2ff"/>
+
+        <!-- Side ornaments -->
+        <circle cx="18"  cy="27" r="3.2" fill="#906000"/>
+        <circle cx="18"  cy="27" r="2"   fill="#ffd020"/>
+        <circle cx="62"  cy="27" r="3.2" fill="#906000"/>
+        <circle cx="62"  cy="27" r="2"   fill="#ffd020"/>
+
+        <!-- Center gem mount -->
+        <circle cx="40" cy="16" r="7"   fill="#806000"/>
+        <circle cx="40" cy="16" r="5.5" fill="#080816"/>
+        <!-- Crown glow -->
+        <ellipse class="nxm-crown-glow" cx="40" cy="16" rx="18" ry="13" fill="#5EFF43" opacity=".18"/>
+        <!-- Gem -->
+        <circle class="nxm-jewel" cx="40" cy="16" r="5" fill="#5EFF43" filter="url(#nxm-gf2)"/>
+        <!-- Gem facets -->
+        <path d="M37 14 L40 12 L43 14 L40 18.5 Z" fill="rgba(255,255,255,.4)"/>
+        <path d="M37 14 L40 18.5 L37 17.5 Z"       fill="rgba(0,0,0,.18)"/>
+        <!-- Gem sparkles -->
+        <circle cx="38" cy="14" r="1.7" fill="white" opacity=".85"/>
+        <circle cx="42" cy="15" r=".8"  fill="white" opacity=".6"/>
+        <!-- Gem micro sparkle -->
+        <path d="M37.5 12.5 l.4 1.2 1.2.4-1.2.4-.4 1.2-.4-1.2-1.2-.4 1.2-.4z"
+              fill="white" opacity=".5" transform="scale(.6) translate(25 10)"/>
       </g>
 
-      <!-- Neural particles -->
-      <circle class="mx-p1" cx="14" cy="30" r="2"   fill="#5EFF43" opacity=".75"/>
-      <circle class="mx-p2" cx="86" cy="30" r="2"   fill="#00f2ff" opacity=".75"/>
-      <circle class="mx-p3" cx="50" cy="12" r="2"   fill="#a78bfa" opacity=".75"/>
-      <circle class="mx-p4" cx="8"  cy="50" r="1.3" fill="#5EFF43" opacity=".5"/>
-      <circle class="mx-p5" cx="92" cy="50" r="1.3" fill="#00f2ff" opacity=".5"/>
-      <line x1="14" y1="30" x2="25" y2="37" stroke="#5EFF43" stroke-width=".5" opacity=".18"/>
-      <line x1="86" y1="30" x2="75" y2="37" stroke="#00f2ff" stroke-width=".5" opacity=".18"/>
-      <line x1="50" y1="12" x2="50" y2="24" stroke="#a78bfa" stroke-width=".5" opacity=".18"/>
+      <!-- ── ORBITAL PARTICLES ── -->
+      <g transform="translate(40,38)">
+        <circle class="nxm-orbit-p1" r="2.4" fill="#5EFF43" opacity=".85"/>
+        <circle class="nxm-orbit-p2" r="2"   fill="#00f2ff" opacity=".85"/>
+        <circle class="nxm-orbit-p3" r="1.5" fill="#a78bfa" opacity=".85"/>
+      </g>
+      <!-- Orbit ring (subtle) -->
+      <ellipse cx="40" cy="38" rx="38" ry="35" fill="none"
+               stroke="rgba(94,255,67,.04)" stroke-width="1" stroke-dasharray="3 7"/>
 
       <!-- Battery low badge -->
-      <g class="mx-batt-warn">
-        <rect x="41" y="5" width="18" height="11" rx="2.5" fill="none" stroke="#ff4444" stroke-width="1.5"/>
-        <rect x="58.5" y="8.5" width="3" height="4" rx="1" fill="#ff4444"/>
-        <rect x="42.5" y="6.5" width="5" height="8" rx="1" fill="#ff4444" opacity=".55"/>
-        <text x="50" y="26" fill="#ff4444" font-size="6" font-family="monospace" text-anchor="middle" font-weight="700">LOW</text>
+      <g class="nxm-batt-badge">
+        <rect x="54" y="4"  width="16" height="10" rx="2.2" fill="none" stroke="#ff3333" stroke-width="1.4"/>
+        <rect x="69.5" y="7" width="2.8" height="4" rx="1" fill="#ff3333"/>
+        <rect x="55.5" y="5.5" width="4.5" height="7" rx="1" fill="#ff3333" opacity=".5"/>
+        <text x="62.5" y="12" fill="#ff3333" font-size="5.5" font-family="monospace"
+              text-anchor="middle" font-weight="700">LOW</text>
       </g>
-    </svg>
-  </div>
 
-  <div class="nx-mascot-lbl">NEXUS</div>
-</div>
+    </svg>
+  </div><!-- /.nxm-body -->
+
+  <div class="nxm-label">NEXUS</div>
+</div><!-- /#nx-mascot-v2 -->
+
 </body>
 </html>

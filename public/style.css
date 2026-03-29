@@ -1254,86 +1254,161 @@ select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmln
 }
 
 /* ══════════════════════════════════════════════════════
-   NEXUS MASCOT WIDGET — Xuān · Cyber Sun Wukong
-   Aparece en UpGames (iframe) y en NEXUS directo
+   NEXUS MASCOT v2 — Xuān · Anime Sun Wukong
+   Posición: derecha, sobre el nav. Nunca tapa el input.
 ══════════════════════════════════════════════════════ */
 
-/* ── Keyframes ── */
-@keyframes nx-float    { 0%,100%{transform:translateY(0)}    50%{transform:translateY(-5px)} }
-@keyframes nx-bounce   { 0%,100%{transform:translateY(0) scaleY(1)} 45%{transform:translateY(-8px) scaleY(1.05)} 55%{transform:translateY(-8px)} 90%{transform:translateY(0) scaleY(.95)} }
-@keyframes nx-sway     { 0%,100%{transform:rotate(0deg)}     50%{transform:rotate(3deg)} }
-@keyframes nx-breathe  { 0%,100%{transform:scale(1)}         50%{transform:scale(1.03)} }
-@keyframes nx-droop    { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(2px) rotate(-1.5deg)} }
-@keyframes nx-blink    { 0%,90%,100%{transform:scaleY(1)} 95%{transform:scaleY(0.06)} }
-@keyframes nx-glow-pulse { 0%,100%{opacity:.15} 50%{opacity:.45} }
-@keyframes nx-particle { 0%{transform:translateY(0) scale(1);opacity:.7} 50%{transform:translateY(-8px) scale(1.3);opacity:1} 100%{transform:translateY(0) scale(1);opacity:.7} }
-@keyframes nx-crown-shine { 0%,100%{opacity:.6} 50%{opacity:1} }
-@keyframes nx-bubble-in { from{opacity:0;transform:scale(.85) translateY(6px)} to{opacity:1;transform:none} }
-@keyframes nx-tail-wag  { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(8deg)} }
-@keyframes nx-mascot-in { from{opacity:0;transform:translateY(20px) scale(.8)} to{opacity:1;transform:none} }
-@keyframes nx-tap-react { 0%{transform:scale(1)} 30%{transform:scale(1.15) rotate(-5deg)} 60%{transform:scale(.95) rotate(3deg)} 100%{transform:scale(1) rotate(0deg)} }
+/* ── Keyframes ────────────────────────────────────── */
+@keyframes nxm-float   { 0%,100%{transform:translateY(0)}    50%{transform:translateY(-7px)} }
+@keyframes nxm-bounce  { 0%,100%{transform:translateY(0) scaleY(1)} 38%{transform:translateY(-10px) scaleY(1.05)} 85%{transform:translateY(1px) scaleY(.95)} }
+@keyframes nxm-breathe { 0%,100%{transform:scale(1)}          50%{transform:scale(1.03)} }
+@keyframes nxm-droop   { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(4px) rotate(-2.5deg)} }
+@keyframes nxm-blink   { 0%,87%,100%{scaleY(1)} 92%{transform:scaleY(.05)} 94%{transform:scaleY(1)} }
+@keyframes nxm-tail    { 0%,100%{transform:rotate(0deg)}     50%{transform:rotate(16deg)} }
+@keyframes nxm-hair    { 0%,100%{transform:rotate(0deg)}     50%{transform:rotate(1.8deg)} }
+@keyframes nxm-gem     { 0%,100%{opacity:.85} 50%{opacity:1} }
+@keyframes nxm-glow    { 0%,100%{opacity:.1}  50%{opacity:.35} }
+@keyframes nxm-orbit1  { from{transform:rotate(0deg)   translateX(36px) rotate(0deg)}    to{transform:rotate(360deg)  translateX(36px) rotate(-360deg)}  }
+@keyframes nxm-orbit2  { from{transform:rotate(120deg) translateX(36px) rotate(-120deg)} to{transform:rotate(480deg)  translateX(36px) rotate(-480deg)}  }
+@keyframes nxm-orbit3  { from{transform:rotate(240deg) translateX(36px) rotate(-240deg)} to{transform:rotate(600deg)  translateX(36px) rotate(-600deg)}  }
+@keyframes nxm-in      { from{opacity:0;transform:translateY(28px) scale(.7)} to{opacity:1;transform:none} }
+@keyframes nxm-bubble  { from{opacity:0;transform:scale(.82) translateY(10px)} to{opacity:1;transform:none} }
+@keyframes nxm-tap     { 0%{transform:scale(1)} 22%{transform:scale(1.2) rotate(-7deg)} 55%{transform:scale(.92) rotate(5deg)} 100%{transform:scale(1)} }
+@keyframes nxm-speak   { 0%,100%{transform:scaleY(1)} 50%{transform:scaleY(.28)} }
+@keyframes nxm-ear-wig { 0%,75%,100%{transform:rotate(0deg)} 80%{transform:rotate(-10deg)} 90%{transform:rotate(6deg)} }
+@keyframes nxm-circuit { 0%,100%{opacity:.5} 50%{opacity:1} }
 
-/* ── Container ── */
-.nx-mascot-widget {
+/* ── Widget container ─────────────────────────────── */
+.nx-mascot-v2 {
   position: fixed;
-  bottom: calc(var(--nav-h) + 10px);
-  left: 12px;
-  z-index: 900;
+  right: 8px;
+  bottom: calc(var(--nav-h) + 72px); /* sobre nav + input, nunca los tapa */
+  z-index: 850;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  animation: nx-mascot-in .6s cubic-bezier(.34,1.56,.64,1) both;
+  gap: 5px;
+  animation: nxm-in .7s cubic-bezier(.34,1.56,.64,1) both;
   pointer-events: auto;
+  user-select: none;
 }
-.nx-mascot-widget.nx-hidden { display: none !important; }
+.nx-mascot-v2.nxm-hidden { display:none!important; }
 
-/* ── Speech bubble ── */
-.nx-mascot-bubble {
+/* ── Speech bubble ────────────────────────────────── */
+.nxm-bubble {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  right: 0;
   background: var(--bg2);
-  border: 1px solid var(--border2);
-  border-radius: 12px 12px 12px 4px;
-  padding: 7px 11px;
-  font-size: 11px;
+  border: 1px solid rgba(94,255,67,.25);
+  border-radius: 14px 14px 4px 14px;
+  padding: 8px 12px;
+  font-size: 11.5px;
   font-weight: 600;
   color: var(--text);
-  max-width: 160px;
-  line-height: 1.4;
-  box-shadow: 0 4px 16px rgba(0,0,0,.5);
-  animation: nx-bubble-in .4s ease both;
-  display: none;
+  max-width: 175px;
+  min-width: 100px;
+  line-height: 1.45;
+  white-space: normal;
+  box-shadow: 0 6px 20px rgba(0,0,0,.55), 0 0 0 1px rgba(94,255,67,.07);
+  animation: nxm-bubble .35s cubic-bezier(.34,1.4,.64,1) both;
   pointer-events: none;
-  white-space: nowrap;
 }
-.nx-mascot-widget:hover .nx-mascot-bubble,
-.nx-mascot-widget.nx-bubble-show .nx-mascot-bubble { display: block; }
+.nx-mascot-v2.nxm-show-bubble .nxm-bubble { display: block; }
+.nxm-bubble-accent { color: var(--accent); font-size: 10px; display: block; margin-bottom: 2px; font-family: 'Space Mono', monospace; letter-spacing: .06em; }
 
-/* ── Body wrap ── */
-.nx-mascot-body {
-  position: relative;
-  width: 68px;
-  height: 80px;
+/* ── SVG body ─────────────────────────────────────── */
+.nxm-body {
+  width: 76px;
+  height: 90px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  /* Animación idle por defecto: float suave */
+  animation: nxm-float 3.2s ease-in-out infinite;
+  transform-origin: bottom center;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,.55));
 }
-.nx-mascot-body svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
+.nxm-body svg { width:100%; height:100%; overflow:visible; }
 
-/* ── State animations ── */
-.state-morning  .nx-mascot-body { animation: nx-bounce  1.1s ease-in-out infinite; }
-.state-afternoon .nx-mascot-body { animation: nx-float   3s   ease-in-out infinite; }
-.state-evening  .nx-mascot-body  { animation: nx-sway    4s   ease-in-out infinite; transform-origin: bottom center; }
-.state-night    .nx-mascot-body  { animation: nx-breathe 5s   ease-in-out infinite; }
-.state-battery  .nx-mascot-body  { animation: nx-droop   3s   ease-in-out infinite; }
+/* ── State overrides ──────────────────────────────── */
+.nxm-state-morning  .nxm-body { animation: nxm-bounce  1.0s ease-in-out infinite; }
+.nxm-state-afternoon .nxm-body { animation: nxm-float   3.2s ease-in-out infinite; }
+.nxm-state-evening  .nxm-body  { animation: nxm-float   4.5s ease-in-out infinite; }
+.nxm-state-night    .nxm-body  { animation: nxm-breathe 5.5s ease-in-out infinite; }
+.nxm-state-battery  .nxm-body  { animation: nxm-droop   3.0s ease-in-out infinite; }
+.nxm-body.nxm-tapped           { animation: nxm-tap .45s ease both !important; }
 
-/* Tap reaction */
-.nx-mascot-body.nx-tapped { animation: nx-tap-react .45s ease both !important; }
+/* ── SVG element animations (always-on) ───────────── */
+.nxm-eye-l, .nxm-eye-r         { animation: nxm-blink 4.5s ease-in-out infinite; transform-origin: center 41px; }
+.nxm-eye-r                     { animation-delay: .15s; }
+.nxm-tail                      { animation: nxm-tail  2.8s ease-in-out infinite; transform-origin: 54px 85px; }
+.nxm-hair-l, .nxm-hair-r       { animation: nxm-hair  4.0s ease-in-out infinite; transform-origin: top center; }
+.nxm-hair-r                    { animation-direction: reverse; }
+.nxm-jewel                     { animation: nxm-gem   2.2s ease-in-out infinite; }
+.nxm-glow-bg                   { animation: nxm-glow  2.5s ease-in-out infinite; }
+.nxm-circuit                   { animation: nxm-circuit 2.0s ease-in-out infinite; }
+.nxm-orbit-p1                  { animation: nxm-orbit1 6s linear infinite; }
+.nxm-orbit-p2                  { animation: nxm-orbit2 8s linear infinite; }
+.nxm-orbit-p3                  { animation: nxm-orbit3 10s linear infinite; }
+.nxm-ear-l                     { animation: nxm-ear-wig 5s ease-in-out infinite; transform-origin: 14px 44px; }
+.nxm-ear-r                     { animation: nxm-ear-wig 5s ease-in-out .3s infinite; transform-origin: 66px 44px; }
 
-/* ── Label ── */
-.nx-mascot-lbl {
+/* ── Mouth visibility per state ───────────────────── */
+.nxm-mouth-happy, .nxm-mouth-normal,
+.nxm-mouth-relax, .nxm-mouth-sleepy,
+.nxm-mouth-yawn, .nxm-mouth-speak { display:none; }
+
+.nxm-state-morning  .nxm-mouth-happy  { display:block; }
+.nxm-state-afternoon .nxm-mouth-normal { display:block; }
+.nxm-state-evening  .nxm-mouth-relax  { display:block; }
+.nxm-state-night    .nxm-mouth-sleepy { display:block; }
+.nxm-state-battery  .nxm-mouth-yawn   { display:block; }
+.nxm-speaking       .nxm-mouth-speak  { display:block; }
+.nxm-speaking       .nxm-mouth-happy,
+.nxm-speaking       .nxm-mouth-normal,
+.nxm-speaking       .nxm-mouth-relax,
+.nxm-speaking       .nxm-mouth-sleepy,
+.nxm-speaking       .nxm-mouth-yawn   { display:none!important; }
+.nxm-speak-oval { animation: nxm-speak .35s ease-in-out infinite; transform-origin: center; }
+
+/* ── Eye droops for night/battery ────────────────── */
+.nxm-state-night   .nxm-eyelid,
+.nxm-state-battery .nxm-eyelid { display:block!important; }
+.nxm-eyelid { display:none; }
+
+/* ── Jewel & glow color per state ────────────────── */
+.nxm-state-morning  .nxm-jewel { fill:#5EFF43; }
+.nxm-state-afternoon .nxm-jewel { fill:#22d3ee; }
+.nxm-state-evening  .nxm-jewel  { fill:#a78bfa; }
+.nxm-state-night    .nxm-jewel  { fill:#6090ff; }
+.nxm-state-battery  .nxm-jewel  { fill:#ff4444; }
+
+.nxm-state-morning  .nxm-glow-color,.nxm-state-morning  .nxm-glow-bg { fill:#5EFF43; }
+.nxm-state-afternoon .nxm-glow-color,.nxm-state-afternoon .nxm-glow-bg { fill:#22d3ee; }
+.nxm-state-evening  .nxm-glow-color,.nxm-state-evening  .nxm-glow-bg  { fill:#a78bfa; }
+.nxm-state-night    .nxm-glow-color,.nxm-state-night    .nxm-glow-bg  { fill:#4466ff; }
+.nxm-state-battery  .nxm-glow-color,.nxm-state-battery  .nxm-glow-bg  { fill:#ff4444; }
+
+.nxm-state-morning  .nxm-crown-glow { fill:#5EFF43; }
+.nxm-state-afternoon .nxm-crown-glow { fill:#22d3ee; }
+.nxm-state-evening  .nxm-crown-glow  { fill:#c084fc; }
+.nxm-state-night    .nxm-crown-glow  { fill:#6090ff; }
+.nxm-state-battery  .nxm-crown-glow  { fill:#ff4444; }
+
+/* ── Circuit color per state ─────────────────────── */
+.nxm-state-morning  .nxm-circuit { stroke:#5EFF43!important; fill:#5EFF43!important; }
+.nxm-state-afternoon .nxm-circuit { stroke:#22d3ee!important; fill:#22d3ee!important; }
+.nxm-state-evening  .nxm-circuit  { stroke:#a78bfa!important; fill:#a78bfa!important; }
+.nxm-state-night    .nxm-circuit  { stroke:#6090ff!important; fill:#6090ff!important; }
+.nxm-state-battery  .nxm-circuit  { stroke:#ff6666!important; fill:#ff6666!important; }
+
+/* ── Battery badge ───────────────────────────────── */
+.nxm-batt-badge { display:none; }
+.nxm-state-battery .nxm-batt-badge { display:block; }
+
+/* ── Label ───────────────────────────────────────── */
+.nxm-label {
   font-family: 'Space Mono', monospace;
   font-size: 9px;
   font-weight: 700;
@@ -1342,80 +1417,4 @@ select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmln
   text-transform: uppercase;
 }
 
-/* ── SVG element animations ── */
-.mx-eye-group { animation: nx-blink 4s ease-in-out infinite; transform-origin: center; }
-.mx-eye-group-r { animation: nx-blink 4s ease-in-out 0.1s infinite; transform-origin: center; }
-.mx-tail { animation: nx-tail-wag 2.5s ease-in-out infinite; transform-origin: 68px 85px; }
-.mx-glow-bg { animation: nx-glow-pulse 2.5s ease-in-out infinite; }
-.mx-crown-glow { animation: nx-crown-shine 2s ease-in-out infinite; }
-.mx-p1 { animation: nx-particle 2.2s ease-in-out infinite; }
-.mx-p2 { animation: nx-particle 2.2s ease-in-out .4s infinite; }
-.mx-p3 { animation: nx-particle 2.2s ease-in-out .8s infinite; }
-.mx-p4 { animation: nx-particle 2.2s ease-in-out 1.2s infinite; }
-.mx-p5 { animation: nx-particle 2.2s ease-in-out 1.6s infinite; }
-
-/* ── Mouth visibility per state ── */
-.mx-mouth-happy,
-.mx-mouth-normal,
-.mx-mouth-relax,
-.mx-mouth-sleepy,
-.mx-mouth-yawn { display: none; }
-
-.state-morning  .mx-mouth-happy  { display: block; }
-.state-afternoon .mx-mouth-normal { display: block; }
-.state-evening  .mx-mouth-relax  { display: block; }
-.state-night    .mx-mouth-sleepy { display: block; }
-.state-battery  .mx-mouth-yawn   { display: block; }
-
-/* ── Eye state overrides ── */
-.state-night .mx-eye-lid {
-  transform: scaleY(.45);
-  transform-origin: center top;
-}
-.state-battery .mx-eye-lid {
-  transform: scaleY(.35);
-  transform-origin: center top;
-}
-
-/* ── Crown jewel color per state ── */
-.state-morning  .mx-jewel { fill: #5EFF43; filter: drop-shadow(0 0 5px #5EFF43); }
-.state-afternoon .mx-jewel { fill: #22d3ee; filter: drop-shadow(0 0 5px #22d3ee); }
-.state-evening  .mx-jewel  { fill: #a78bfa; filter: drop-shadow(0 0 5px #a78bfa); }
-.state-night    .mx-jewel  { fill: #6090ff; filter: drop-shadow(0 0 4px #6090ff); }
-.state-battery  .mx-jewel  { fill: #ff4444; filter: drop-shadow(0 0 5px #ff4444); }
-
-/* ── Crown glow color per state ── */
-.state-morning  .mx-crown-glow { fill: #5EFF43; }
-.state-afternoon .mx-crown-glow { fill: #22d3ee; }
-.state-evening  .mx-crown-glow  { fill: #c084fc; }
-.state-night    .mx-crown-glow  { fill: #6090ff; }
-.state-battery  .mx-crown-glow  { fill: #ff4444; }
-
-/* ── Battery warning icon ── */
-.state-battery  .mx-batt-warn { display: block; }
-.mx-batt-warn { display: none; }
-
-/* ── Crown circuit lines ── */
-.state-morning  .mx-circuit { stroke: #5EFF43; }
-.state-afternoon .mx-circuit { stroke: #22d3ee; }
-.state-evening  .mx-circuit  { stroke: #a78bfa; }
-.state-night    .mx-circuit  { stroke: #6090ff; }
-.state-battery  .mx-circuit  { stroke: #ff6666; }
-
-/* ── Ambient glow bg color per state ── */
-.state-morning  .mx-glow-bg { fill: #5EFF43; }
-.state-afternoon .mx-glow-bg { fill: #22d3ee; }
-.state-evening  .mx-glow-bg  { fill: #a78bfa; }
-.state-night    .mx-glow-bg  { fill: #4466ff; }
-.state-battery  .mx-glow-bg  { fill: #ff4444; }
-
-/* ── UpGames badge ── */
-.nx-mascot-widget.nx-from-upgames .nx-mascot-lbl::after {
-  content: ' · UG';
-  color: #5EFF43;
-}
-
-/* ── Hide mascot on tiny screens if chat is active and crowded ── */
-@media (max-height: 500px) {
-  .nx-mascot-widget { display: none !important; }
-}
+@media (max-height:480px) { .nx-mascot-v2 { display:none!important; } }
