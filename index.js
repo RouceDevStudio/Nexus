@@ -1855,6 +1855,23 @@ app.get('/api/generated/:filename', requireAuth, async (req, res) => {
 });
 
 // ══════════════════════════════════════════════════════════════════
+//  INTEGRACIÓN NEXUS ↔ UPGAMES — RUTAS EXTENDIDAS
+// ══════════════════════════════════════════════════════════════════
+const { registerNexusUpgamesRoutes } = require('./rutas/nexusUpgames');
+registerNexusUpgamesRoutes(app, {
+    brainVip,
+    db,
+    requireAuth,
+    fetchUpGamesUserStats,
+    buildBehavioralNarrative,
+    UPGAMES_API_BASE,
+    axios,
+    isCreatorAccount,
+    JWT_SECRET,
+    jwt,
+});
+
+// ══════════════════════════════════════════════════════════════════
 //  INICIO
 // ══════════════════════════════════════════════════════════════════
 async function start() {
