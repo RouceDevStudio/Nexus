@@ -193,7 +193,7 @@ Responde ÚNICAMENTE con un JSON válido con esta estructura exacta (sin backtic
     //                              ipsDiferentes, actividadNocturna, descargasSinView } }
     // Requiere: verificarAdmin
     // ────────────────────────────────────────────────────────────────
-    app.post('/api/nexus/fraud-analyze', verificarAdmin, async (req, res) => {
+    app.post('/api/nexus/fraud-analyze', requireCreator, async (req, res) => {
         try {
             const { usuario, patrones = {} } = req.body;
             if (!usuario) return res.status(400).json({ error: 'usuario requerido' });
